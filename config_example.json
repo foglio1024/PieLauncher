@@ -1,0 +1,14 @@
+{
+  "$type": "System.Collections.ObjectModel.ObservableCollection`1[[PieLauncher.IPieItem, PieLauncher]], System.ObjectModel",
+  "$values": [
+    {
+      "$type": "PieLauncher.AppViewModel, PieLauncher",
+      "Name": "APP_NAME",
+      "Uri": "URL/PATH",
+      "IconPath": "PATH/TO/IMAGE/FILE"
+    },
+    {
+      "$type": "PieLauncher.AppSeparator, PieLauncher"
+    }
+  ]
+}

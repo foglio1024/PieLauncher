@@ -1,0 +1,30 @@
+﻿<UserControl x:Class="PieLauncher.Controls.SeekBar"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:PieLauncher.Controls" xmlns:pielauncher="clr-namespace:PieLauncher" d:DataContext="{d:DesignInstance Type=pielauncher:MainViewModel}"
+             mc:Ignorable="d" 
+             d:Width="200"
+             FontFamily="{StaticResource K2DRegular}">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Line X1="0" Y1="0" X2="1" Y2="0" Stroke="#2fff" HorizontalAlignment="Stretch" Stretch="Uniform" Width="{Binding ActualWidth, RelativeSource={RelativeSource AncestorType=local:SeekBar}}" 
+              StrokeThickness="6" Grid.Row="1"
+              StrokeStartLineCap="Round" StrokeEndLineCap="Round"
+              x:Name="BarBackground">
+        </Line>
+        <Line X1="0" Y1="0" X2="1" Y2="0" Stroke="#afff" HorizontalAlignment="Left" Stretch="UniformToFill" Width="6" 
+              StrokeThickness="6" Grid.Row="1"
+              StrokeStartLineCap="Round" StrokeEndLineCap="Round"
+              x:Name="BarForeground">
+        </Line>
+
+        <TextBlock Text="{Binding MediaInfo.Position}" Foreground="#3fff" FontSize="10" HorizontalAlignment="Left" Margin="0 0 0 1" />
+        <TextBlock Text="{Binding MediaInfo.Duration}" Foreground="#3fff" FontSize="10" HorizontalAlignment="Right" Margin="0 0 0 1"/>
+
+    </Grid>
+</UserControl>

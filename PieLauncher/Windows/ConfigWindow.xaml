@@ -1,0 +1,30 @@
+﻿<Window x:Class="PieLauncher.ConfigWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PieLauncher" xmlns:dragablz="http://dragablz.net/winfx/xaml/dragablz"
+        d:DataContext="{d:DesignInstance Type=local:MainViewModel}"
+        mc:Ignorable="d"
+        Title="ConfigWindow" Height="450" Width="800">
+    <Grid>
+        <dragablz:DragablzItemsControl ItemsSource="{Binding Apps}" 
+                                       x:Name="ItemsList"
+                                       Margin="20"
+                                       >
+            <dragablz:DragablzItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Grid Margin="20 10 10 10">
+                        <TextBlock Text="{Binding Name}"/>
+                    </Grid>
+                </DataTemplate>
+            </dragablz:DragablzItemsControl.ItemTemplate>
+            <dragablz:DragablzItemsControl.ItemsOrganiser>
+                <dragablz:VerticalOrganiser />
+            </dragablz:DragablzItemsControl.ItemsOrganiser>
+            <dragablz:DragablzItemsControl.PositionMonitor>
+                <dragablz:VerticalPositionMonitor OrderChanged="HorizontalPositionMonitor_OrderChanged"/>
+            </dragablz:DragablzItemsControl.PositionMonitor>
+        </dragablz:DragablzItemsControl> 
+    </Grid>
+</Window>

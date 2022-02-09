@@ -1,0 +1,161 @@
+﻿<Window x:Class="PieLauncher.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:nostrumExt="clr-namespace:Nostrum.WPF.Extensions;assembly=Nostrum.WPF"
+        xmlns:pielauncher="clr-namespace:PieLauncher"
+        xmlns:controls="clr-namespace:PieLauncher.Controls" xmlns:converters="clr-namespace:Nostrum.WPF.Converters;assembly=Nostrum.WPF"
+        d:DataContext="{d:DesignInstance Type=pielauncher:MainViewModel}"
+        WindowStyle="None"
+        ShowInTaskbar="False"
+        ResizeMode="NoResize"
+        AllowsTransparency="True"
+        Background="Transparent"
+        mc:Ignorable="d"
+        Topmost="True"
+        WindowStartupLocation="CenterScreen"
+        Title="MainWindow" Height="700" Width="700"
+        ToolTipService.InitialShowDelay="0" >
+    <Window.Resources>
+        <DataTemplate x:Key="ShortcutDataTemplate" DataType="{x:Type pielauncher:ShortcutViewModel}">
+            <Button Style="{StaticResource ButtonMainStyle}" FocusVisualStyle="{x:Null}" nostrumExt:ButtonExtensions.CornerRadius="40" 
+                            MouseEnter="Button_MouseEnter" MouseLeave="Button_MouseLeave" RenderTransformOrigin=".5 .5" ToolTip="{Binding Name}"
+                            Command="{Binding LaunchCommand}">
+                <Grid>
+                    <Ellipse Width="80" Height="80" Stroke="#1fff">
+                        <Ellipse.Effect>
+                            <DropShadowEffect Opacity=".5" BlurRadius="30"/>
+                        </Ellipse.Effect>
+                        <Ellipse.Fill>
+                            <RadialGradientBrush Center="0.8 0.8" RadiusX="1" RadiusY="1">
+                                <GradientStop Color="#dd292b2d" Offset="0.4"/>
+                                <GradientStop Color="#dd393b3d" Offset="1"/>
+                            </RadialGradientBrush>
+                        </Ellipse.Fill>
+
+                    </Ellipse>
+                    <Image Source="{Binding IconPath}" Width="54" Height="54" Stretch="Uniform" StretchDirection="Both" RenderOptions.BitmapScalingMode="HighQuality" Visibility="Visible"></Image>
+                    <!--<TextBlock Text="{Binding Name}" Foreground="White" HorizontalAlignment="Center" TextWrapping="Wrap" TextAlignment="Center" Width="Auto" VerticalAlignment="Center"
+                                   FontSize="16" FontWeight="DemiBold"/>-->
+
+                </Grid>
+            </Button>
+        </DataTemplate>
+        <DataTemplate x:Key="SeparatorDataTemplate" DataType="{x:Type pielauncher:SeparatorViewModel}">
+            <Ellipse Width="16" Height="16" Fill="#1fff"/>
+        </DataTemplate>
+        <DataTemplate x:Key="FolderDataTemplate" DataType="{x:Type pielauncher:FolderViewModel}">
+            <Grid>
+                    <Ellipse Width="80" Height="80" Stroke="#1fff">
+                        <Ellipse.Effect>
+                            <DropShadowEffect Opacity=".5" BlurRadius="30"/>
+                        </Ellipse.Effect>
+                        <Ellipse.Fill>
+                            <RadialGradientBrush Center="0.8 0.8" RadiusX="1" RadiusY="1">
+                                <GradientStop Color="#dd292b2d" Offset="0.4"/>
+                                <GradientStop Color="#dd393b3d" Offset="1"/>
+                            </RadialGradientBrush>
+                        </Ellipse.Fill>
+
+                    </Ellipse>
+
+                    <Path Data="{StaticResource SvgFolder}" Width="44" Height="44"/>
+
+                <Popup x:Name="popup" Placement="Center" AllowsTransparency="True" PopupAnimation="Fade">
+                    <Grid Margin="30">
+                        
+                        
+                    <Ellipse StrokeThickness="100" Fill="#2000" Width="300" Height="300" Visibility="Visible" Margin="30">
+                        <Ellipse.Effect>
+                            <DropShadowEffect ShadowDepth="0" BlurRadius="180" Opacity="1"/>
+                        </Ellipse.Effect>
+                        <Ellipse.Stroke>
+                            <RadialGradientBrush>
+                                <GradientStop Color="#dd393b3d" Offset=".5"/>
+                                <GradientStop Color="#dd292b2d" Offset="1"/>
+                            </RadialGradientBrush>
+                        </Ellipse.Stroke>
+                    </Ellipse>
+                        <ItemsControl ItemsSource="{Binding Apps}" Margin="62" ItemTemplateSelector="{DynamicResource PieItemTemplateSelector}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <pielauncher:RadialPanel TotalAngle="360" AngleOffset="0" SwipeDirection="Clockwise"/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                        </ItemsControl>
+                    </Grid>
+                </Popup>
+            </Grid>
+            <DataTemplate.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter TargetName="popup" Property="IsOpen" Value="True"></Setter>
+                </Trigger>
+            </DataTemplate.Triggers>
+        </DataTemplate>
+        <pielauncher:PieItemTemplateSelector x:Key="PieItemTemplateSelector" 
+                                         ShortcutDataTemplate="{StaticResource ShortcutDataTemplate}"
+                                         SeparatorDataTemplate="{StaticResource SeparatorDataTemplate}"
+                                         FolderDataTemplate="{StaticResource FolderDataTemplate}"
+                                         />
+
+
+    </Window.Resources>
+    <Grid>
+        <Ellipse Margin="60"  StrokeThickness="100" Visibility="Visible">
+            <Ellipse.Effect>
+                <DropShadowEffect ShadowDepth="0" BlurRadius="100" Opacity=".7"/>
+            </Ellipse.Effect>
+            <Ellipse.Stroke>
+                <RadialGradientBrush>
+                    <GradientStop Color="#dd393b3d" Offset=".5"/>
+                    <GradientStop Color="#dd292b2d" Offset="1"/>
+                </RadialGradientBrush>
+            </Ellipse.Stroke>
+        </Ellipse>
+        <Ellipse Margin="60"  StrokeThickness="1" Stroke="#19ffffff" Visibility="Visible"/>
+        <Ellipse Margin="160"  StrokeThickness="1" Stroke="#3fff" Visibility="Visible"/>
+        <!--<nostrum:Arc Margin="60" StrokeThickness="100" Stroke="#259" StrokeStartLineCap="Round" StrokeEndLineCap="Round" EndAngle="52"/>-->
+        <ItemsControl ItemsSource="{Binding Apps}" Margin="64" ItemTemplateSelector="{StaticResource PieItemTemplateSelector}">
+
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <pielauncher:RadialPanel TotalAngle="360" AngleOffset="0" SwipeDirection="Clockwise"/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+        </ItemsControl>
+        <Ellipse Width="300" Height="300" Stroke="#3fff">
+            <Ellipse.Effect>
+                <DropShadowEffect Opacity=".5" BlurRadius="30"/>
+            </Ellipse.Effect>
+            <Ellipse.Fill>
+                <RadialGradientBrush Center="0.8 0.8" RadiusX="1" RadiusY="1">
+                    <GradientStop Color="#dd292b2d" Offset="0.4"/>
+                    <GradientStop Color="#dd393b3d" Offset="1"/>
+                </RadialGradientBrush>
+            </Ellipse.Fill>
+        </Ellipse>
+        <Grid VerticalAlignment="Stretch" HorizontalAlignment="Center">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Button VerticalAlignment="Center" Margin="0 110 0 0" Style="{StaticResource ButtonMainStyle}" Height="30" Width="30" Padding="8" 
+                    nostrumExt:ButtonExtensions.CornerRadius="15" FocusVisualStyle="{x:Null}"
+                    Command="{Binding OpenSettingsCommand}">
+                <Path Data="{StaticResource SvgSettings}"/>
+            </Button>
+            <TextBlock VerticalAlignment="Bottom" FontFamily="{StaticResource K2DRegular}" FontWeight="Thin" HorizontalAlignment="Center" Foreground="White" FontSize="42"
+                       Margin="0 0 0 20" TextAlignment="Center">
+                <Run Text="{Binding Time, Mode=OneWay}" />
+                <LineBreak/>
+                <Run Text="{Binding Date, Mode=OneWay}" FontSize="24" Foreground="#6fff"/>
+            </TextBlock>
+            <Line X1="0" Y1="0" X2="1" Y2="0" Stroke="#2fff" Grid.Row="1" HorizontalAlignment="Stretch" Stretch="Uniform" Width="299"/>
+            <controls:MediaControls Visibility="{Binding MediaInfo.IsEmpty, Converter={converters:BoolToVisibility Invert=True}}" VerticalAlignment="Top" 
+                                    HorizontalAlignment="Center" Grid.Row="2" Margin="0 5 0 0 "/>
+
+        </Grid>
+    </Grid>
+</Window>
