@@ -1,7 +1,10 @@
 ﻿using Dragablz;
 using Nostrum.Extensions;
+using Nostrum.WPF.Extensions;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Linq;
 using System.Windows;
 
 namespace PieLauncher
@@ -17,41 +20,37 @@ namespace PieLauncher
 
         void ItemDragCompleted(object sender, DragablzDragCompletedEventArgs e)
         {
-            var d = (MainViewModel)DataContext;
-
-            var list = d.Apps;
-            Debug.WriteLine($"Applying order: {_order.ToCSV()}");
+            var ic = e.DragablzItem.FindVisualParent<DragablzItemsControl>();
+            if (ic == null) return;
+            var src = (ObservableCollection<IPieItem>)ic.ItemsSource;
             var done = false;
+            if (!_order.Any(x => src.Contains(x))) return;
             while (!done)
             {
-                for (int i = 0; i < list.Count; i++)
+                for (int i = 0; i < src.Count; i++)
                 {
-                    var newIndex = _order.IndexOf(list[i]);
+                    var newIndex = _order.IndexOf(src[i]);
                     var oldIndex = i;
                     if (newIndex != oldIndex)
                     {
-                        list.Move(oldIndex, newIndex);
+                        src.Move(oldIndex, newIndex);
                         break;
                     }
-                    if (i == list.Count - 1)
+                    if (i == src.Count - 1)
                     {
                         done = true;
                     }
                 }
             }
 
-            var src = d.Apps;// ItemsList.ItemsSource;
-            ItemsList.ItemsSource = null;
-            ItemsList.ItemsSource = src;
-            Debug.WriteLine($"Apps order: {d.Apps.ToCSV()}");
-
+            //ic.ItemsSource = null;
+            //ic.ItemsSource = src;
         }
 
-        void HorizontalPositionMonitor_OrderChanged(object sender, Dragablz.OrderChangedEventArgs e)
+        void OnOrderChanged(object sender, OrderChangedEventArgs e)
         {
             _order.Clear();
             _order.AddRange(e.NewOrder);
         }
-
     }
 }

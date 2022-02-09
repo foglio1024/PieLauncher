@@ -6,8 +6,19 @@ namespace PieLauncher
 {
     public class FolderViewModel : ObservableObject, IPieItem
     {
+        string _name = "";
+        public string Name
+        {
+            get => _name;
+            set
+            {
+                if (_name == value) return;
+                _name = value;
+                N();
+            }
+        }
+
         public ObservableCollection<IPieItem> Apps { get; }
-        public string Name { get; set; } = "New folder";
 
         public FolderViewModel(IList<IPieItem> apps)
         {

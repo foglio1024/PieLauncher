@@ -12,14 +12,36 @@ namespace PieLauncher
     //https://stackoverflow.com/questions/11607133/global-mouse-event-handler
     public class ShortcutViewModel : ObservableObject, IPieItem
     {
+        string _name = "";
+        string _uri = "";
         string _iconPath = "";
 
-        public string Name { get; set; } = "";
-        public string Uri { get; set; } = "";
+        public string Name
+        {
+            get => _name;
+            set
+            {
+                if (_name == value) return;
+                _name = value;
+                N();
+            }
+        }
+        public string Uri
+        {
+            get => _uri;
+            set
+            {
+                if (_uri == value) return;
+                _uri = value;
+                N();
+            }
+        }
         public string IconPath
         {
-            get => _iconPath; set
+            get => _iconPath; 
+            set
             {
+                if(_iconPath == value) return;
                 if (value.EndsWith(".exe"))
                 {
                     if (File.Exists(IconNameFromName))
@@ -40,6 +62,8 @@ namespace PieLauncher
                 {
                     _iconPath = value;
                 }
+                N();
+
             }
         }
 
