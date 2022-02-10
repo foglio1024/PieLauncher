@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.Win32;
+using Newtonsoft.Json;
 using Nostrum.WPF;
 using System;
 using System.Diagnostics;
@@ -69,6 +70,11 @@ namespace PieLauncher
 
         [JsonIgnore]
         public ICommand LaunchCommand { get; }
+        [JsonIgnore]
+        public ICommand BrowseUriCommand { get; }
+        [JsonIgnore]
+        public ICommand BrowseIconCommand { get; }
+
 
         string IconNameFromName => $"./{Name.ToLower().Replace(" ", "_")}.png";
         bool IsVbScript => Uri.EndsWith("vbs");
@@ -76,6 +82,8 @@ namespace PieLauncher
         public ShortcutViewModel()
         {
             LaunchCommand = new RelayCommand(Launch);
+            BrowseUriCommand = new RelayCommand(BrowseUri);
+            BrowseIconCommand = new RelayCommand(BrowseIcon);
         }
 
         void Launch()
@@ -100,6 +108,34 @@ namespace PieLauncher
         public override string ToString()
         {
             return Name;
+        }
+
+
+        void BrowseUri()
+        {
+            var ofd = new OpenFileDialog();
+            ofd.ShowDialog();
+            if (string.IsNullOrWhiteSpace(ofd.FileName)) return;
+            Uri = ofd.FileName;
+        }
+
+
+        void BrowseIcon()
+        {
+            var ofd = new OpenFileDialog();
+            ofd.ShowDialog();
+            if (string.IsNullOrWhiteSpace(ofd.FileName)) return;
+            IconPath = ofd.FileName;
+        }
+
+        public override IPieItem Clone()
+        {
+            return new ShortcutViewModel
+            {
+                Name = Name,
+                Uri = Uri,
+                IconPath = IconPath
+            };
         }
     }
 }

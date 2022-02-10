@@ -20,6 +20,11 @@ namespace PieLauncher
         void ItemDragCompleted(object sender, DragablzDragCompletedEventArgs e)
         {
             var ic = e.DragablzItem.FindVisualParent<DragablzItemsControl>();
+            ForceReorder(ic);
+        }
+
+        void ForceReorder(DragablzItemsControl? ic)
+        {
             if (ic == null) return;
             var src = (ObservableCollection<IPieItem>)ic.ItemsSource;
             var done = false;
@@ -41,6 +46,13 @@ namespace PieLauncher
                     }
                 }
             }
+        }
+
+        public void ForceRootReorder()
+        {
+            var src = RootFolder.ItemsSource;
+            RootFolder.ItemsSource = null;
+            RootFolder.ItemsSource = src;
         }
 
         void OnOrderChanged(object sender, OrderChangedEventArgs e)

@@ -5,27 +5,34 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PieLauncher"
+        xmlns:nsEx="clr-namespace:Nostrum.WPF.Extensions;assembly=Nostrum.WPF"
         d:DataContext="{d:DesignInstance Type=local:MainViewModel}"
         mc:Ignorable="d" Background="#222" Foreground="White"
-        Title="ConfigWindow" Height="450" Width="800">
+        FontFamily="{StaticResource K2DRegular}"
+        Title="ConfigWindow" Height="800" Width="900">
     <Window.Resources>
         <dragablz:VerticalOrganiser x:Key="VerticalOrganizer" />
         <dragablz:VerticalPositionMonitor x:Key="VerticalPositionMonitor" OrderChanged="OnOrderChanged"/>
         <Style x:Key="ButtonsStyle" BasedOn="{StaticResource ButtonMainStyle}" TargetType="Button">
             <Setter Property="Width" Value="100"/>
             <Setter Property="Padding" Value="10 5"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Background" Value="#1fff"/>
+            <Setter Property="nsEx:ButtonExtensions.CornerRadius" Value="5"/>
             <Setter Property="HorizontalContentAlignment" Value="Center"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
         </Style>
         <Style TargetType="{x:Type TextBox}">
             <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="Foreground" Value="White"/>
-            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Foreground" Value="#9fff"/>
+            <Setter Property="Margin" Value="0 2"/>
+            <Setter Property="BorderThickness" Value="0 0 0 1"/>
+            <Setter Property="BorderBrush" Value="#2fff"/>
             <Setter Property="CaretBrush" Value="MediumSeaGreen"/>
         </Style>
 
         <DataTemplate x:Key="PieItemDataTemplate" DataType="{x:Type local:IPieItem}">
-            <Grid>
+            <Grid >
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
                     <ColumnDefinition Width="Auto"/>
@@ -33,9 +40,18 @@
                 <ContentControl Content="{Binding}"
                                 ContentTemplateSelector="{DynamicResource TemplateSelector}"
                                 VerticalAlignment="Center" VerticalContentAlignment="Center"/>
-                <Button Style="{StaticResource ButtonContentOpacityStyle}" Padding="5" Command="{Binding DeleteCommand}" Grid.Column="1">
+                <Button Style="{StaticResource ButtonContentOpacityStyle}" Padding="5" Margin="10 0 0 0" Command="{Binding DeleteCommand}" Grid.Column="1"
+                        VerticalAlignment="Center">
                     <Path Data="{StaticResource SvgClose}"/>
                 </Button>
+                <Grid.ContextMenu>
+                    <ContextMenu UseLayoutRounding="True">
+                        <MenuItem Header="Copy" Command="{Binding CopyCommand}"/>
+                        <MenuItem Header="Cut" Command="{Binding CutCommand}"/>
+                        <MenuItem Header="Paste" Command="{Binding PasteCommand}"/>
+                        <MenuItem Header="Move to root" Command="{Binding MoveToRootCommand}"/>
+                    </ContextMenu>
+                </Grid.ContextMenu>
             </Grid>
         </DataTemplate>
         <DataTemplate x:Key="ShortcutDataTemplate" DataType="{x:Type local:ShortcutViewModel}">
@@ -45,9 +61,56 @@
                     <RowDefinition/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
-                <TextBox Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                <TextBox Text="{Binding Uri, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1"/>
-                <TextBox Text="{Binding IconPath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="2"/>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="40"/>
+                    <ColumnDefinition Width="60"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="20"/>
+                </Grid.ColumnDefinitions>
+                <Grid.Resources>
+                    <Style TargetType="{x:Type Path}" BasedOn="{StaticResource {x:Type Path}}">
+                        <Setter Property="Grid.Column" Value="2"/>
+                        <Setter Property="Margin" Value="2 0 4 0"/>
+                        <Setter Property="VerticalAlignment" Value="Center"/>
+                        <Setter Property="Width" Value="12"/>
+                        <Setter Property="Height" Value="12"/>
+                    </Style>
+                    <Style TargetType="{x:Type TextBlock}">
+                        <Setter Property="Foreground" Value="#5fff"/>
+                        <Setter Property="HorizontalAlignment" Value="Right"/>
+                        <Setter Property="VerticalAlignment" Value="Center"/>
+                        <Setter Property="Margin" Value="0 0 6 0"/>
+                        <Setter Property="Grid.Column" Value="1"/>
+                    </Style>
+                    <Style x:Key="BrowseButtonStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource ButtonMainStyle}">
+                        <Setter Property="Content" Value="..."/>
+                        <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                        <Setter Property="VerticalAlignment" Value="Center"/>
+                        <Setter Property="Grid.Column" Value="4"/>
+                        <Setter Property="Margin" Value="2 0 0 0"/>
+                        <Setter Property="Background" Value="#1fff"/>
+                        <Setter Property="nsEx:ButtonExtensions.CornerRadius" Value="2"/>
+
+                    </Style>
+                </Grid.Resources>
+                <Image Source="{Binding IconPath}" Grid.RowSpan="3" RenderOptions.BitmapScalingMode="HighQuality" Margin="5"/>
+
+                <TextBlock Text="Name" />
+                <TextBlock Text="Uri" Grid.Row="1"/>
+                <TextBlock Text="Icon path" Grid.Row="2"/>
+
+                <Path Data="{StaticResource SvgLabel}" />
+                <Path Data="{StaticResource SvgLink}"   Grid.Row="1"/>
+                <Path Data="{StaticResource SvgImage}"  Grid.Row="2"/>
+
+                <TextBox Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="3" Grid.ColumnSpan="2"/>
+                <TextBox Text="{Binding Uri, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="3" Grid.Row="1"/>
+                <TextBox Text="{Binding IconPath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="3" Grid.Row="2"/>
+
+                <Button Style="{StaticResource BrowseButtonStyle}" Grid.Row="1" Command="{Binding BrowseUriCommand}"/>
+                <Button Style="{StaticResource BrowseButtonStyle}" Grid.Row="2" Command="{Binding BrowseIconCommand}"/>
             </Grid>
         </DataTemplate>
         <DataTemplate x:Key="SeparatorDataTemplate" DataType="{x:Type local:SeparatorViewModel}">
@@ -75,12 +138,12 @@
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
                     <dragablz:DragablzItemsControl ItemsSource="{Binding Apps}" 
-                                               ItemContainerStyle="{DynamicResource DragableItemContainerStyle}" 
+                                               ItemContainerStyle="{DynamicResource NestedItemContainerStyle}" 
                                                ItemsOrganiser="{StaticResource VerticalOrganizer}"
                                                PositionMonitor="{StaticResource VerticalPositionMonitor}"
                                                ItemTemplate="{StaticResource PieItemDataTemplate}"
                                                />
-                    <UniformGrid Grid.Row="1" Rows="1" HorizontalAlignment="Center">
+                    <UniformGrid Grid.Row="1" Rows="1" HorizontalAlignment="Left" Margin="-5 0">
                         <Button Style="{StaticResource ButtonsStyle}" Content="Add shortcut" Command="{Binding AddShortcutCommand}"/>
                         <Button Style="{StaticResource ButtonsStyle}" Content="Add folder" Command="{Binding AddFolderCommand}"/>
                         <Button Style="{StaticResource ButtonsStyle}" Content="Add separator" Command="{Binding AddSeparatorCommand}" />
@@ -95,30 +158,34 @@
                                        SeparatorDataTemplate="{StaticResource SeparatorDataTemplate}"
                                        FolderDataTemplate="{StaticResource FolderDataTemplate}"/>
         <Style x:Key="DragableItemContainerStyle" TargetType="{x:Type dragablz:DragablzItem}">
+            <Setter Property="Width" Value="810"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type dragablz:DragablzItem}">
-                        <Grid Margin="0 5">
+                        <Grid Margin="0 5" >
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition/>
                             </Grid.ColumnDefinitions>
-                            <Thumb x:Name="Thumb" dragablz:DragablzItem.IsCustomThumb="True">
+                            <Border BorderBrush="#2fff" BorderThickness="1" CornerRadius="5" Grid.ColumnSpan="2"/>
+                            <Thumb x:Name="Thumb" dragablz:DragablzItem.IsCustomThumb="True" Margin="10 0 0 0">
                                 <Thumb.Template>
                                     <ControlTemplate>
                                         <Grid Background="Transparent" >
-                                            <Ellipse Width="28" Height="28" Fill="#1fff" />
+                                            <!--<Ellipse Width="28" Height="28" Fill="#1fff" />-->
                                             <Path Data="{StaticResource SvgDrag}" Width="16" Height="16" Margin="4"/>
                                         </Grid>
                                     </ControlTemplate>
                                 </Thumb.Template>
                             </Thumb>
-                            <ContentPresenter Content="{Binding}" ContentTemplate="{TemplateBinding ContentTemplate}" Grid.Column="1"/>
-
+                            <ContentPresenter Content="{Binding}" ContentTemplate="{TemplateBinding ContentTemplate}" Grid.Column="1" Margin="10"/>
                         </Grid>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
+        </Style>
+        <Style x:Key="NestedItemContainerStyle" TargetType="{x:Type dragablz:DragablzItem}" BasedOn="{StaticResource DragableItemContainerStyle}">
+            <Setter Property="Width" Value="700"/>
         </Style>
     </Window.Resources>
     <Grid>
@@ -126,14 +193,17 @@
             <RowDefinition/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <dragablz:DragablzItemsControl Margin="20"
+        <dragablz:DragablzItemsControl x:Name="RootFolder"
+                                       Margin="20"
                                        ItemsSource="{Binding Root.Apps}" 
                                        ItemContainerStyle="{StaticResource DragableItemContainerStyle}"
                                        ItemsOrganiser="{StaticResource VerticalOrganizer}"
                                        PositionMonitor="{StaticResource VerticalPositionMonitor}"
-                                       ItemTemplate="{StaticResource PieItemDataTemplate}"/>
+                                       ItemTemplate="{StaticResource PieItemDataTemplate}"
+                                       />
 
-        <UniformGrid Grid.Row="1" Rows="1" HorizontalAlignment="Center">
+
+        <UniformGrid Grid.Row="1" Rows="1" HorizontalAlignment="Left" Margin="0">
             <Button Style="{StaticResource ButtonsStyle}" Content="Add shortcut" Command="{Binding Root.AddShortcutCommand}" />
             <Button Style="{StaticResource ButtonsStyle}" Content="Add folder" Command="{Binding Root.AddFolderCommand}" />
             <Button Style="{StaticResource ButtonsStyle}" Content="Add separator" Command="{Binding Root.AddSeparatorCommand}"/>

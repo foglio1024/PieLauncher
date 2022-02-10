@@ -1,4 +1,7 @@
-﻿using Nostrum.WinAPI;
+﻿#if !DEBUG
+using Microsoft.Win32;
+#endif
+using Nostrum.WinAPI;
 using System;
 using System.Diagnostics;
 using System.Drawing;

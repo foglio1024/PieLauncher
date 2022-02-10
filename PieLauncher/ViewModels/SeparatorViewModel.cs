@@ -11,5 +11,10 @@ namespace PieLauncher
         {
             return Name;
         }
+
+        public override IPieItem Clone()
+        {
+            return new SeparatorViewModel();
+        }
     }
 }

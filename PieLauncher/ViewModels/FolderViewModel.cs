@@ -24,6 +24,9 @@ namespace PieLauncher
         public ObservableCollection<IPieItem> Apps { get; }
 
         [JsonIgnore]
+        public bool IsRoot { get; set; }
+
+        [JsonIgnore]
         public ICommand AddShortcutCommand { get; }
         [JsonIgnore]
         public ICommand AddFolderCommand { get; }
@@ -66,6 +69,22 @@ namespace PieLauncher
         public override string ToString()
         {
             return Name;
+        }
+
+        public override IPieItem Clone()
+        {
+            var ret = new FolderViewModel
+            {
+                Name = Name,
+                IsRoot = IsRoot
+            };
+
+            foreach (var app in Apps)
+            {
+                ret.Apps.Add(app.Clone());
+            }
+
+            return ret;
         }
     }
 }
