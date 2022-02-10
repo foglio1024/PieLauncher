@@ -1,9 +1,7 @@
 ﻿using Dragablz;
-using Nostrum.Extensions;
 using Nostrum.WPF.Extensions;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 
@@ -11,7 +9,8 @@ namespace PieLauncher
 {
     public partial class ConfigWindow : Window
     {
-        List<object> _order = new();
+        readonly List<object> _order = new();
+
         public ConfigWindow()
         {
             InitializeComponent();
@@ -42,9 +41,6 @@ namespace PieLauncher
                     }
                 }
             }
-
-            //ic.ItemsSource = null;
-            //ic.ItemsSource = src;
         }
 
         void OnOrderChanged(object sender, OrderChangedEventArgs e)

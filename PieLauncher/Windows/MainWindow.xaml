@@ -98,8 +98,6 @@
                                          SeparatorDataTemplate="{StaticResource SeparatorDataTemplate}"
                                          FolderDataTemplate="{StaticResource FolderDataTemplate}"
                                          />
-
-
     </Window.Resources>
     <Grid>
         <Ellipse Margin="60"  StrokeThickness="100" Visibility="Visible">
@@ -116,7 +114,7 @@
         <Ellipse Margin="60"  StrokeThickness="1" Stroke="#19ffffff" Visibility="Visible"/>
         <Ellipse Margin="160"  StrokeThickness="1" Stroke="#3fff" Visibility="Visible"/>
         <!--<nostrum:Arc Margin="60" StrokeThickness="100" Stroke="#259" StrokeStartLineCap="Round" StrokeEndLineCap="Round" EndAngle="52"/>-->
-        <ItemsControl ItemsSource="{Binding Apps}" Margin="64" ItemTemplateSelector="{StaticResource PieItemTemplateSelector}">
+        <ItemsControl ItemsSource="{Binding Root.Apps}" Margin="64" ItemTemplateSelector="{StaticResource PieItemTemplateSelector}">
 
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
@@ -143,7 +141,7 @@
             </Grid.RowDefinitions>
             <Button VerticalAlignment="Center" Margin="0 110 0 0" Style="{StaticResource ButtonMainStyle}" Height="30" Width="30" Padding="8" 
                     nostrumExt:ButtonExtensions.CornerRadius="15" FocusVisualStyle="{x:Null}"
-                    Command="{Binding OpenSettingsCommand}">
+                    Command="{Binding OpenConfigWindowCommand}">
                 <Path Data="{StaticResource SvgSettings}"/>
             </Button>
             <TextBlock VerticalAlignment="Bottom" FontFamily="{StaticResource K2DRegular}" FontWeight="Thin" HorizontalAlignment="Center" Foreground="White" FontSize="42"

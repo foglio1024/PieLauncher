@@ -15,30 +15,33 @@ namespace PieLauncher
 {
     public class MainViewModel : ObservableObject
     {
-        DispatcherTimer _clockUpdateTimer;
+        public static List<FolderViewModel> FolderRegistry { get; } = new List<FolderViewModel>();
 
-        public ObservableCollection<IPieItem> Apps { get; }
+        static readonly string ConfigFilePath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!, @".\config.json");
+        static readonly JsonSerializerSettings DefaultJsonSettings = new() { TypeNameHandling = TypeNameHandling.Auto };
+        static readonly DateTimeFormatInfo DateTimeFormat = CultureInfo.CurrentCulture.DateTimeFormat;
+        readonly DispatcherTimer _clockUpdateTimer;
 
+        public FolderViewModel Root { get; }
         public MediaInfoViewModel MediaInfo { get; set; } = new();
 
-        public ICommand OpenSettingsCommand { get; }
-
         public string Time => DateTime.Now.ToShortTimeString();
-        public string Date => $"{CultureInfo.CurrentCulture.DateTimeFormat.GetDayName(DateTime.Now.DayOfWeek)}, {DateTime.Now.Day} {CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(DateTime.Now.Month)}";
+        public string Date => $"{DateTimeFormat.GetDayName(DateTime.Now.DayOfWeek)}, {DateTime.Now.Day} {DateTimeFormat.GetMonthName(DateTime.Now.Month)}";
+
+        public ICommand OpenConfigWindowCommand { get; }
+        public ICommand SaveConfigCommand { get; }
 
         public MainViewModel()
         {
-            Apps = JsonConvert.DeserializeObject<ObservableCollection<IPieItem>>(File.ReadAllText(
-                    Path.Combine(
-                        Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!, @".\config.json")
-                    ),
-                new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Auto })!;
+            var configFileData = File.ReadAllText(ConfigFilePath);
+            Root = JsonConvert.DeserializeObject<FolderViewModel>(configFileData, DefaultJsonSettings)!;
 
-            OpenSettingsCommand = new RelayCommand(OpenSettings);
-        
-            _clockUpdateTimer = new DispatcherTimer(DispatcherPriority.Background) { Interval = TimeSpan.FromSeconds(0.5)};
-            _clockUpdateTimer.Start();
+            OpenConfigWindowCommand = new RelayCommand(OpenConfigWindow);
+            SaveConfigCommand = new RelayCommand(SaveConfig);
+
+            _clockUpdateTimer = new DispatcherTimer(DispatcherPriority.Background) { Interval = TimeSpan.FromSeconds(0.5) };
             _clockUpdateTimer.Tick += OnClockUpdateTick;
+            _clockUpdateTimer.Start();
         }
 
         void OnClockUpdateTick(object? sender, EventArgs e)
@@ -47,7 +50,13 @@ namespace PieLauncher
             N(nameof(Date));
         }
 
-        void OpenSettings()
+        void SaveConfig()
+        {
+            var file = JsonConvert.SerializeObject(Root, DefaultJsonSettings);
+            File.WriteAllText(ConfigFilePath, file);
+        }
+
+        void OpenConfigWindow()
         {
             new ConfigWindow { DataContext = this }.ShowDialog();
         }

@@ -9,6 +9,29 @@
         mc:Ignorable="d" Background="#222" Foreground="White"
         Title="ConfigWindow" Height="450" Width="800">
     <Window.Resources>
+        <dragablz:VerticalOrganiser x:Key="VerticalOrganizer" />
+        <dragablz:VerticalPositionMonitor x:Key="VerticalPositionMonitor" OrderChanged="OnOrderChanged"/>
+        <Style x:Key="ButtonsStyle" BasedOn="{StaticResource ButtonMainStyle}" TargetType="Button">
+            <Setter Property="Width" Value="100"/>
+            <Setter Property="Padding" Value="10 5"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+
+        <DataTemplate x:Key="PieItemDataTemplate" DataType="{x:Type local:IPieItem}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <ContentControl Content="{Binding}"
+                                ContentTemplateSelector="{DynamicResource TemplateSelector}"
+                                VerticalAlignment="Center" VerticalContentAlignment="Center"/>
+                <Button Style="{StaticResource ButtonContentOpacityStyle}" Padding="5" Command="{Binding DeleteCommand}" Grid.Column="1">
+                    <Path Data="{StaticResource SvgClose}"/>
+                </Button>
+            </Grid>
+        </DataTemplate>
         <DataTemplate x:Key="ShortcutDataTemplate" DataType="{x:Type local:ShortcutViewModel}">
             <Grid>
                 <Grid.RowDefinitions>
@@ -40,29 +63,31 @@
                         <TextBox Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                     </DataTemplate>
                 </Expander.HeaderTemplate>
-                <dragablz:DragablzItemsControl ItemsSource="{Binding Apps}" ItemContainerStyle="{DynamicResource DragableItemContainerStyle}" >
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate DataType="{x:Type local:IPieItem}">
-                            <ContentControl ContentTemplateSelector="{DynamicResource TemplateSelector}"
-                                    Content="{Binding}"
-                                    VerticalAlignment="Center" VerticalContentAlignment="Center"/>
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <dragablz:DragablzItemsControl ItemsSource="{Binding Apps}" 
+                                               ItemContainerStyle="{DynamicResource DragableItemContainerStyle}" 
+                                               ItemsOrganiser="{StaticResource VerticalOrganizer}"
+                                               PositionMonitor="{StaticResource VerticalPositionMonitor}"
+                                               ItemTemplate="{StaticResource PieItemDataTemplate}"
+                                               />
+                    <UniformGrid Grid.Row="1" Rows="1" HorizontalAlignment="Center">
+                        <Button Style="{StaticResource ButtonsStyle}" Content="Add shortcut" Command="{Binding AddShortcutCommand}"/>
+                        <Button Style="{StaticResource ButtonsStyle}" Content="Add folder" Command="{Binding AddFolderCommand}"/>
+                        <Button Style="{StaticResource ButtonsStyle}" Content="Add separator" Command="{Binding AddSeparatorCommand}" />
+                    </UniformGrid>
 
-                    <dragablz:DragablzItemsControl.ItemsOrganiser>
-                        <dragablz:VerticalOrganiser />
-                    </dragablz:DragablzItemsControl.ItemsOrganiser>
-                    <dragablz:DragablzItemsControl.PositionMonitor>
-                        <dragablz:VerticalPositionMonitor OrderChanged="OnOrderChanged"/>
-                    </dragablz:DragablzItemsControl.PositionMonitor>
-                </dragablz:DragablzItemsControl>
+                </Grid>
+
             </Expander>
         </DataTemplate>
         <local:PieItemTemplateSelector x:Key="TemplateSelector"
                                        ShortcutDataTemplate="{StaticResource ShortcutDataTemplate}"
                                        SeparatorDataTemplate="{StaticResource SeparatorDataTemplate}"
                                        FolderDataTemplate="{StaticResource FolderDataTemplate}"/>
-
         <Style x:Key="DragableItemContainerStyle" TargetType="{x:Type dragablz:DragablzItem}">
             <Setter Property="Template">
                 <Setter.Value>
@@ -76,7 +101,6 @@
                                 <Thumb.Template>
                                     <ControlTemplate>
                                         <Grid Background="Transparent" >
-
                                             <Ellipse Width="28" Height="28" Fill="#1fff" />
                                             <Path Data="{StaticResource SvgDrag}" Width="16" Height="16" Margin="4"></Path>
                                         </Grid>
@@ -84,6 +108,7 @@
                                 </Thumb.Template>
                             </Thumb>
                             <ContentPresenter Content="{Binding}" ContentTemplate="{TemplateBinding ContentTemplate}" Grid.Column="1"/>
+
                         </Grid>
                     </ControlTemplate>
                 </Setter.Value>
@@ -91,24 +116,23 @@
         </Style>
     </Window.Resources>
     <Grid>
-        <dragablz:DragablzItemsControl ItemsSource="{Binding Apps}" 
-                                       x:Name="ItemsList"
-                                       Margin="20"
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <dragablz:DragablzItemsControl Margin="20"
+                                       ItemsSource="{Binding Root.Apps}" 
                                        ItemContainerStyle="{StaticResource DragableItemContainerStyle}"
-                                       >
-            <ItemsControl.ItemTemplate>
-                <DataTemplate DataType="{x:Type local:IPieItem}">
-                    <ContentControl ContentTemplateSelector="{StaticResource TemplateSelector}"
-                                    Content="{Binding}"
-                                    VerticalAlignment="Center" VerticalContentAlignment="Center"/>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-            <dragablz:DragablzItemsControl.ItemsOrganiser>
-                <dragablz:VerticalOrganiser />
-            </dragablz:DragablzItemsControl.ItemsOrganiser>
-            <dragablz:DragablzItemsControl.PositionMonitor>
-                <dragablz:VerticalPositionMonitor OrderChanged="OnOrderChanged"/>
-            </dragablz:DragablzItemsControl.PositionMonitor>
-        </dragablz:DragablzItemsControl>
+                                       ItemsOrganiser="{StaticResource VerticalOrganizer}"
+                                       PositionMonitor="{StaticResource VerticalPositionMonitor}"
+                                       ItemTemplate="{StaticResource PieItemDataTemplate}"/>
+
+        <UniformGrid Grid.Row="1" Rows="1" HorizontalAlignment="Center">
+            <Button Style="{StaticResource ButtonsStyle}" Content="Add shortcut" Command="{Binding Root.AddShortcutCommand}" />
+            <Button Style="{StaticResource ButtonsStyle}" Content="Add folder" Command="{Binding Root.AddFolderCommand}" />
+            <Button Style="{StaticResource ButtonsStyle}" Content="Add separator" Command="{Binding Root.AddSeparatorCommand}"/>
+            <Button Style="{StaticResource ButtonsStyle}" Content="Save config" Command="{Binding SaveConfigCommand}" Background="MediumSeaGreen"/>
+        </UniformGrid>
+
     </Grid>
 </Window>

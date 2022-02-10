@@ -1,5 +1,4 @@
-﻿using Microsoft.Win32;
-using Nostrum.WinAPI;
+﻿using Nostrum.WinAPI;
 using System;
 using System.Diagnostics;
 using System.Drawing;
@@ -89,24 +88,12 @@ namespace PieLauncher
                 if (msg == User32.WindowsMessages.WM_KEYDOWN && Keyboard.IsKeyDown(Key.LWin))
                 {
                     _keyDown = true;
-                    ((MainWindow)MainWindow).FadeIn();
-                    //return (IntPtr)(-1);
                 }
                 else if (msg == User32.WindowsMessages.WM_KEYUP && _keyDown)
                 {
                     _keyDown = false;
                     ((MainWindow)MainWindow).FadeOut();
-                    //return (IntPtr)(-1);
                 }
-            }
-            else if (key == Keys.LWin && msg == User32.WindowsMessages.WM_KEYDOWN)
-            {
-                //return (IntPtr)(-1);
-            }
-            else if (key == Keys.LWin && msg == User32.WindowsMessages.WM_KEYUP)
-            {
-                //if (_keyDown)
-                    //return (IntPtr)(-1);
             }
             return nextCallback;
         }

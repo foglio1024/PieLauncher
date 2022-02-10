@@ -10,13 +10,13 @@ using System.Windows.Input;
 namespace PieLauncher
 {
     //https://stackoverflow.com/questions/11607133/global-mouse-event-handler
-    public class ShortcutViewModel : ObservableObject, IPieItem
+    public class ShortcutViewModel : PieItemBase
     {
         string _name = "";
         string _uri = "";
         string _iconPath = "";
 
-        public string Name
+        public override string Name
         {
             get => _name;
             set
@@ -78,7 +78,7 @@ namespace PieLauncher
             LaunchCommand = new RelayCommand(Launch);
         }
 
-        void Launch(object? obj)
+        void Launch()
         {
             try
             {
@@ -97,15 +97,6 @@ namespace PieLauncher
             }
         }
 
-        public override string ToString()
-        {
-            return Name;
-        }
-    }
-
-    public class SeparatorViewModel : IPieItem
-    {
-        public string Name { get; set; } = "---";
         public override string ToString()
         {
             return Name;
