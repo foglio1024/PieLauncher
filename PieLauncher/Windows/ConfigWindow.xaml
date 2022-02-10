@@ -17,6 +17,12 @@
             <Setter Property="HorizontalContentAlignment" Value="Center"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
         </Style>
+        <Style TargetType="{x:Type TextBox}">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="CaretBrush" Value="MediumSeaGreen"/>
+        </Style>
 
         <DataTemplate x:Key="PieItemDataTemplate" DataType="{x:Type local:IPieItem}">
             <Grid>
@@ -102,7 +108,7 @@
                                     <ControlTemplate>
                                         <Grid Background="Transparent" >
                                             <Ellipse Width="28" Height="28" Fill="#1fff" />
-                                            <Path Data="{StaticResource SvgDrag}" Width="16" Height="16" Margin="4"></Path>
+                                            <Path Data="{StaticResource SvgDrag}" Width="16" Height="16" Margin="4"/>
                                         </Grid>
                                     </ControlTemplate>
                                 </Thumb.Template>
