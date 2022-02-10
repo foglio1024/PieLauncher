@@ -34,7 +34,14 @@ namespace PieLauncher
         public MainViewModel()
         {
             var configFileData = File.ReadAllText(ConfigFilePath);
-            Root = JsonConvert.DeserializeObject<FolderViewModel>(configFileData, DefaultJsonSettings)!;
+            try
+            {
+                Root = JsonConvert.DeserializeObject<FolderViewModel>(configFileData, DefaultJsonSettings)!;
+            }
+            catch (Exception)
+            {
+                Root= new FolderViewModel();
+            }
             Root.IsRoot = true;
 
             OpenConfigWindowCommand = new RelayCommand(OpenConfigWindow);

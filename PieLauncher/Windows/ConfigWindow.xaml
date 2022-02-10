@@ -1,18 +1,15 @@
 ﻿<Window x:Class="PieLauncher.ConfigWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:dragablz="http://dragablz.net/winfx/xaml/dragablz"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PieLauncher"
         xmlns:nsEx="clr-namespace:Nostrum.WPF.Extensions;assembly=Nostrum.WPF"
         d:DataContext="{d:DesignInstance Type=local:MainViewModel}"
-        mc:Ignorable="d" Background="#222" Foreground="White"
+        mc:Ignorable="d" Background="#202325" Foreground="White"
         FontFamily="{StaticResource K2DRegular}"
         Title="ConfigWindow" Height="800" Width="900">
     <Window.Resources>
-        <dragablz:VerticalOrganiser x:Key="VerticalOrganizer" />
-        <dragablz:VerticalPositionMonitor x:Key="VerticalPositionMonitor" OrderChanged="OnOrderChanged"/>
         <Style x:Key="ButtonsStyle" BasedOn="{StaticResource ButtonMainStyle}" TargetType="Button">
             <Setter Property="Width" Value="100"/>
             <Setter Property="Padding" Value="10 5"/>
@@ -32,20 +29,28 @@
         </Style>
 
         <DataTemplate x:Key="PieItemDataTemplate" DataType="{x:Type local:IPieItem}">
-            <Grid >
+            <Grid Background="Transparent" Margin="5">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
+                <Border Background="#292b2d" Grid.ColumnSpan="2"
+                        BorderBrush="#444" BorderThickness="1"
+                        CornerRadius="5">
+
+                </Border>
                 <ContentControl Content="{Binding}"
+                                Margin="10"
                                 ContentTemplateSelector="{DynamicResource TemplateSelector}"
-                                VerticalAlignment="Center" VerticalContentAlignment="Center"/>
-                <Button Style="{StaticResource ButtonContentOpacityStyle}" Padding="5" Margin="10 0 0 0" Command="{Binding DeleteCommand}" Grid.Column="1"
-                        VerticalAlignment="Center">
-                    <Path Data="{StaticResource SvgClose}"/>
+                                VerticalAlignment="Stretch" VerticalContentAlignment="Stretch"/>
+                <Button Style="{StaticResource ButtonMainStyle}"
+                        Padding="8" Margin="0 1 1 0" Command="{Binding DeleteCommand}" Grid.Column="1"
+                        VerticalAlignment="Top" nsEx:ButtonExtensions.RippleEnabled="False"
+                        Background="#1fff" nsEx:ButtonExtensions.CornerRadius="0 5 0 20">
+                    <Path Data="{StaticResource SvgClose}" Margin="3 -1 -3 1"/>
                 </Button>
                 <Grid.ContextMenu>
-                    <ContextMenu UseLayoutRounding="True">
+                    <ContextMenu UseLayoutRounding="True" Foreground="White">
                         <MenuItem Header="Copy" Command="{Binding CopyCommand}"/>
                         <MenuItem Header="Cut" Command="{Binding CutCommand}"/>
                         <MenuItem Header="Paste" Command="{Binding PasteCommand}"/>
@@ -96,16 +101,31 @@
                     </Style>
                 </Grid.Resources>
                 <Image Source="{Binding IconPath}" Grid.RowSpan="3" RenderOptions.BitmapScalingMode="HighQuality" Margin="5"/>
+                <Grid Grid.ColumnSpan="6">
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Grid
+                         Grid.Row="1"
+                        >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="1"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
 
-                <TextBlock Text="Name" />
+                    </Grid>
+
+                </Grid>
+                <TextBlock Text="Name"/>
                 <TextBlock Text="Uri" Grid.Row="1"/>
                 <TextBlock Text="Icon path" Grid.Row="2"/>
 
-                <Path Data="{StaticResource SvgLabel}" />
-                <Path Data="{StaticResource SvgLink}"   Grid.Row="1"/>
-                <Path Data="{StaticResource SvgImage}"  Grid.Row="2"/>
+                <Path Data="{StaticResource SvgLabel}" Grid.Row="0"/>
+                <Path Data="{StaticResource SvgLink}"  Grid.Row="1"/>
+                <Path Data="{StaticResource SvgImage}" Grid.Row="2"/>
 
-                <TextBox Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="3" Grid.ColumnSpan="2"/>
+                <TextBox Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="3"/>
                 <TextBox Text="{Binding Uri, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="3" Grid.Row="1"/>
                 <TextBox Text="{Binding IconPath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="3" Grid.Row="2"/>
 
@@ -137,10 +157,7 @@
                         <RowDefinition/>
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
-                    <dragablz:DragablzItemsControl ItemsSource="{Binding Apps}" 
-                                               ItemContainerStyle="{DynamicResource NestedItemContainerStyle}" 
-                                               ItemsOrganiser="{StaticResource VerticalOrganizer}"
-                                               PositionMonitor="{StaticResource VerticalPositionMonitor}"
+                    <ItemsControl ItemsSource="{Binding Apps}" 
                                                ItemTemplate="{StaticResource PieItemDataTemplate}"
                                                />
                     <UniformGrid Grid.Row="1" Rows="1" HorizontalAlignment="Left" Margin="-5 0">
@@ -157,50 +174,18 @@
                                        ShortcutDataTemplate="{StaticResource ShortcutDataTemplate}"
                                        SeparatorDataTemplate="{StaticResource SeparatorDataTemplate}"
                                        FolderDataTemplate="{StaticResource FolderDataTemplate}"/>
-        <Style x:Key="DragableItemContainerStyle" TargetType="{x:Type dragablz:DragablzItem}">
-            <Setter Property="Width" Value="810"/>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type dragablz:DragablzItem}">
-                        <Grid Margin="0 5" >
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition/>
-                            </Grid.ColumnDefinitions>
-                            <Border BorderBrush="#2fff" BorderThickness="1" CornerRadius="5" Grid.ColumnSpan="2"/>
-                            <Thumb x:Name="Thumb" dragablz:DragablzItem.IsCustomThumb="True" Margin="10 0 0 0">
-                                <Thumb.Template>
-                                    <ControlTemplate>
-                                        <Grid Background="Transparent" >
-                                            <!--<Ellipse Width="28" Height="28" Fill="#1fff" />-->
-                                            <Path Data="{StaticResource SvgDrag}" Width="16" Height="16" Margin="4"/>
-                                        </Grid>
-                                    </ControlTemplate>
-                                </Thumb.Template>
-                            </Thumb>
-                            <ContentPresenter Content="{Binding}" ContentTemplate="{TemplateBinding ContentTemplate}" Grid.Column="1" Margin="10"/>
-                        </Grid>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-        <Style x:Key="NestedItemContainerStyle" TargetType="{x:Type dragablz:DragablzItem}" BasedOn="{StaticResource DragableItemContainerStyle}">
-            <Setter Property="Width" Value="700"/>
-        </Style>
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <dragablz:DragablzItemsControl x:Name="RootFolder"
+        <ItemsControl x:Name="RootFolder" 
                                        Margin="20"
                                        ItemsSource="{Binding Root.Apps}" 
-                                       ItemContainerStyle="{StaticResource DragableItemContainerStyle}"
-                                       ItemsOrganiser="{StaticResource VerticalOrganizer}"
-                                       PositionMonitor="{StaticResource VerticalPositionMonitor}"
-                                       ItemTemplate="{StaticResource PieItemDataTemplate}"
-                                       />
+                                       ItemTemplate="{StaticResource PieItemDataTemplate}"  
+                                       >
+        </ItemsControl>
 
 
         <UniformGrid Grid.Row="1" Rows="1" HorizontalAlignment="Left" Margin="0">
