@@ -6,6 +6,7 @@ using System;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows;
@@ -29,8 +30,12 @@ namespace PieLauncher
             MainWindow = new MainWindow();
             MainWindow.Show();
             MainWindow.Hide();
-
-            var bmp = new Bitmap(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!, @".\donut.png"));
+            var assembly = Assembly.GetExecutingAssembly();
+            var resourceName = assembly.GetManifestResourceNames().Single(str => str.EndsWith("donut.png"));
+            using var stream = assembly.GetManifestResourceStream(resourceName);
+            using var reader = new StreamReader(stream);
+            reader.ReadToEnd();
+            var bmp = new Bitmap(stream);
             var hIcon = bmp.GetHicon();
             _tray.Icon = Icon.FromHandle(hIcon);
             _tray.MouseClick += OnTrayClick;
@@ -40,7 +45,8 @@ namespace PieLauncher
 
             KeyboardHook.Instance.RegisterCallback(new HotKey(Keys.OemBackslash, ModifierKeys.Windows), OnHotKeyPressed);
             KeyboardHook.Instance.Enable();
-            if(!Debugger.IsAttached) AppDomain.CurrentDomain.UnhandledException += OnUnhandledException;
+            //if(!Debugger.IsAttached) 
+                AppDomain.CurrentDomain.UnhandledException += OnUnhandledException;
 
             base.OnStartup(e);
         }
@@ -55,6 +61,7 @@ namespace PieLauncher
 
         void OnUnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
+            File.WriteAllText(Path.Combine(Path.GetDirectoryName(Environment.ProcessPath),"error.txt"), e.ToString());
             System.Windows.MessageBox.Show(e.ToString(), "Pie launcher", MessageBoxButton.OK);
             App.Current.Shutdown();
         }

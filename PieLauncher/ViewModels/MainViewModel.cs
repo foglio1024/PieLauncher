@@ -21,7 +21,7 @@ namespace PieLauncher
         public static readonly List<FolderViewModel> FolderRegistry = new();
         public static readonly JsonSerializerSettings DefaultJsonSettings = new() { TypeNameHandling = TypeNameHandling.Auto };
 
-        static readonly string ConfigFilePath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!, @".\config.json");
+        static readonly string ConfigFilePath = Path.Combine(Path.GetDirectoryName(Environment.ProcessPath), @".\config.json");
         static readonly DateTimeFormatInfo DateTimeFormat = CultureInfo.CurrentCulture.DateTimeFormat;
         readonly DispatcherTimer _clockUpdateTimer;
 
@@ -49,9 +49,9 @@ namespace PieLauncher
 
         public MainViewModel()
         {
-            var configFileData = File.ReadAllText(ConfigFilePath);
             try
             {
+                var configFileData = File.ReadAllText(ConfigFilePath);
                 _root = JsonConvert.DeserializeObject<FolderViewModel>(configFileData, DefaultJsonSettings)!;
             }
             catch (Exception)
