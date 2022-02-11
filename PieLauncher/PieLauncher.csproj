@@ -7,42 +7,53 @@
 		<UseWPF>true</UseWPF>
 		<UseWindowsForms>true</UseWindowsForms>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<PublishSingleFile Condition="'$(Configuration)' == 'Release'">true</PublishSingleFile>
+		<SelfContained>true</SelfContained>
+		<PublishReadyToRun>true</PublishReadyToRun>
+		<RuntimeIdentifier>win-x64</RuntimeIdentifier>
+		<IncludeAllContentForSelfExtract>true</IncludeAllContentForSelfExtract>
+		<DebugType>Embedded</DebugType>
 	</PropertyGroup>
 
+
 	<ItemGroup>
-	  <None Include="..\.editorconfig" Link=".editorconfig" />
+	  <Content Include="donut.png" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Resource Include="Resources\Fonts\K2D-Bold.ttf" />
-	  <Resource Include="Resources\Fonts\K2D-BoldItalic.ttf" />
-	  <Resource Include="Resources\Fonts\K2D-ExtraBold.ttf" />
-	  <Resource Include="Resources\Fonts\K2D-ExtraBoldItalic.ttf" />
-	  <Resource Include="Resources\Fonts\K2D-ExtraLight.ttf" />
-	  <Resource Include="Resources\Fonts\K2D-ExtraLightItalic.ttf" />
-	  <Resource Include="Resources\Fonts\K2D-Italic.ttf" />
-	  <Resource Include="Resources\Fonts\K2D-Light.ttf" />
-	  <Resource Include="Resources\Fonts\K2D-LightItalic.ttf" />
-	  <Resource Include="Resources\Fonts\K2D-Medium.ttf" />
-	  <Resource Include="Resources\Fonts\K2D-MediumItalic.ttf" />
-	  <Resource Include="Resources\Fonts\K2D-Regular.ttf" />
-	  <Resource Include="Resources\Fonts\K2D-SemiBold.ttf" />
-	  <Resource Include="Resources\Fonts\K2D-SemiBoldItalic.ttf" />
-	  <Resource Include="Resources\Fonts\K2D-Thin.ttf" />
-	  <Resource Include="Resources\Fonts\K2D-ThinItalic.ttf" />
+	  <EmbeddedResource Include="donut.png">
+	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+	  </EmbeddedResource>
 	</ItemGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="gong-wpf-dragdrop" Version="3.1.1" />
-	  <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-	  <PackageReference Include="Nostrum" Version="2.0.5" />
-	  <PackageReference Include="Nostrum.WPF" Version="1.2.13" />
+		<None Include="..\.editorconfig" Link=".editorconfig" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <None Update="donut.png">
-	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  </None>
+		<Resource Include="Resources\Fonts\K2D-Bold.ttf" />
+		<Resource Include="Resources\Fonts\K2D-BoldItalic.ttf" />
+		<Resource Include="Resources\Fonts\K2D-ExtraBold.ttf" />
+		<Resource Include="Resources\Fonts\K2D-ExtraBoldItalic.ttf" />
+		<Resource Include="Resources\Fonts\K2D-ExtraLight.ttf" />
+		<Resource Include="Resources\Fonts\K2D-ExtraLightItalic.ttf" />
+		<Resource Include="Resources\Fonts\K2D-Italic.ttf" />
+		<Resource Include="Resources\Fonts\K2D-Light.ttf" />
+		<Resource Include="Resources\Fonts\K2D-LightItalic.ttf" />
+		<Resource Include="Resources\Fonts\K2D-Medium.ttf" />
+		<Resource Include="Resources\Fonts\K2D-MediumItalic.ttf" />
+		<Resource Include="Resources\Fonts\K2D-Regular.ttf" />
+		<Resource Include="Resources\Fonts\K2D-SemiBold.ttf" />
+		<Resource Include="Resources\Fonts\K2D-SemiBoldItalic.ttf" />
+		<Resource Include="Resources\Fonts\K2D-Thin.ttf" />
+		<Resource Include="Resources\Fonts\K2D-ThinItalic.ttf" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="gong-wpf-dragdrop" Version="3.1.1" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+		<PackageReference Include="Nostrum" Version="2.0.5" />
+		<PackageReference Include="Nostrum.WPF" Version="1.2.13" />
 	</ItemGroup>
 
 </Project>
