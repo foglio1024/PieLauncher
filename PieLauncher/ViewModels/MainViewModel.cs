@@ -1,18 +1,18 @@
 ﻿using Microsoft.Win32;
 using Newtonsoft.Json;
+using Nostrum.WinAPI;
 using Nostrum.WPF;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Globalization;
 using System.IO;
-using System.Reflection;
-using System.Threading.Tasks;
+using System.Runtime.InteropServices;
 using System.Windows;
+using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Threading;
-using Windows.Media.Control;
+using MessageBox = System.Windows.MessageBox;
+using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
 
 namespace PieLauncher
 {
@@ -24,6 +24,9 @@ namespace PieLauncher
         static readonly string ConfigFilePath = Path.Combine(Path.GetDirectoryName(Environment.ProcessPath), @".\config.json");
         static readonly DateTimeFormatInfo DateTimeFormat = CultureInfo.CurrentCulture.DateTimeFormat;
         readonly DispatcherTimer _clockUpdateTimer;
+        IntPtr _hookID = IntPtr.Zero;
+        readonly User32.LowLevelKeyboardProc _callback;
+        bool _keyDown = false;
 
         FolderViewModel _root;
         public FolderViewModel Root
@@ -38,6 +41,41 @@ namespace PieLauncher
             }
         }
 
+        bool _topmost = true;
+        public bool Topmost
+        {
+            get => _topmost;
+            set
+            {
+                if (_topmost == value) return;
+                _topmost = value;
+                N();
+            }
+        }
+
+        bool _isVisible;
+        public bool IsVisible
+        {
+            get => _isVisible;
+            set
+            {
+                if (_isVisible == value) return;
+                _isVisible = value;
+                N();
+            }
+        }
+
+        bool _forceVisible;
+        public bool ForceVisible
+        {
+            get => _forceVisible;
+            set
+            {
+                if (_forceVisible == value) return;
+                _forceVisible = value;
+            }
+        }
+
         public MediaInfoViewModel MediaInfo { get; set; } = new();
 
         public string Time => DateTime.Now.ToShortTimeString();
@@ -49,16 +87,25 @@ namespace PieLauncher
 
         public MainViewModel()
         {
+            _callback = HookCallback; // needed to avoid being GC'd
+            _hookID = Utils.SetHook(_callback);
+
+            KeyboardHook.Instance.RegisterCallback(new HotKey(Keys.OemBackslash, ModifierKeys.Windows), OnHotKeyPressed);
+            KeyboardHook.Instance.Enable();
+
+            App.Current.Exit += OnExit;
+
+
             try
             {
                 var configFileData = File.ReadAllText(ConfigFilePath);
                 _root = JsonConvert.DeserializeObject<FolderViewModel>(configFileData, DefaultJsonSettings)!;
+                _root.IsRoot = true;
             }
             catch (Exception)
             {
-                _root = new FolderViewModel();
+                _root = new FolderViewModel() { IsRoot = true };
             }
-            Root.IsRoot = true;
 
             OpenConfigWindowCommand = new RelayCommand(OpenConfigWindow);
             SaveConfigCommand = new RelayCommand(SaveConfig);
@@ -67,7 +114,19 @@ namespace PieLauncher
             _clockUpdateTimer = new DispatcherTimer(DispatcherPriority.Background) { Interval = TimeSpan.FromSeconds(0.5) };
             _clockUpdateTimer.Tick += OnClockUpdateTick;
             _clockUpdateTimer.Start();
+
         }
+
+        void OnExit(object sender, ExitEventArgs e)
+        {
+            User32.UnhookWindowsHookEx(_hookID);
+        }
+
+        void OnHotKeyPressed()
+        {
+            IsVisible = true;
+        }
+
 
         void OnClockUpdateTick(object? sender, EventArgs e)
         {
@@ -104,7 +163,36 @@ namespace PieLauncher
 
         void OpenConfigWindow()
         {
+            ForceVisible = true;
+            Topmost = false;
             new ConfigWindow { DataContext = this }.ShowDialog();
+            ForceVisible = false;
+            IsVisible = false;
+            Topmost = true;
+        }
+
+        IntPtr HookCallback(int nCode, IntPtr wParam, IntPtr lParam)
+        {
+            var nextCallback = User32.CallNextHookEx(_hookID, nCode, wParam, lParam);
+            if (ForceVisible) return nextCallback;
+            if (nCode < 0) return nextCallback;
+
+            var key = (Keys)(Marshal.ReadInt32(lParam));
+            var msg = (User32.WindowsMessages)wParam;
+
+            if (key == Keys.OemBackslash)
+            {
+                if (msg == User32.WindowsMessages.WM_KEYDOWN && Keyboard.IsKeyDown(Key.LWin))
+                {
+                    _keyDown = true;
+                }
+                else if (msg == User32.WindowsMessages.WM_KEYUP && _keyDown)
+                {
+                    _keyDown = false;
+                    IsVisible = false;
+                }
+            }
+            return nextCallback;
         }
     }
 }

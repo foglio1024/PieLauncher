@@ -1,16 +1,12 @@
-﻿using Newtonsoft.Json;
-using Nostrum.WinAPI;
+﻿using Nostrum.WinAPI;
 using Nostrum.WPF.Factories;
 using System;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
-using Windows.Media.Control;
 
 namespace PieLauncher
 {
@@ -22,6 +18,8 @@ namespace PieLauncher
         readonly DoubleAnimation _expandButton;
         readonly DoubleAnimation _shrinkButton;
 
+        readonly MainViewModel _dc;
+
         public MainWindow()
         {
             _fadeIn = AnimationFactory.CreateDoubleAnimation(150, to: 1, easing: true);
@@ -29,52 +27,44 @@ namespace PieLauncher
             _expandButton = AnimationFactory.CreateDoubleAnimation(150, to: 1.1, from: 1.0, easing: true);
             _shrinkButton = AnimationFactory.CreateDoubleAnimation(250, to: 1.0, from: 1.1, easing: true);
 
-            this.DataContext = new MainViewModel
-            {
-                
-            };
+            _dc = new MainViewModel();
+            this.DataContext = _dc;
+            _dc.PropertyChanged += OnDataContextPropertyChanged;
+
+            Opacity = 0;
 
             InitializeComponent();
-            Opacity = 0;
+        }
+
+        void OnDataContextPropertyChanged(object? sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(MainViewModel.IsVisible))
+            {
+                if (_dc.IsVisible)
+                {
+                    Show();
+                    BeginAnimation(OpacityProperty, _fadeIn);
+                    ((RotateTransform)MainContainer.RenderTransform).BeginAnimation(RotateTransform.AngleProperty,
+                        AnimationFactory.CreateDoubleAnimation(300, from: -10, to: 0, easing: true));
+                }
+                else
+                {
+                    BeginAnimation(OpacityProperty, _fadeOut);
+                    ((RotateTransform)MainContainer.RenderTransform).BeginAnimation(RotateTransform.AngleProperty,
+                         AnimationFactory.CreateDoubleAnimation(200, from: 0, to: -10, easing: true));
+
+                }
+            }
         }
 
         protected override void OnClosing(CancelEventArgs e)
         {
             e.Cancel = true;
-            FadeOut();
         }
 
         void OnFadeOutCompleted(object? sender, EventArgs e)
         {
             Hide();
-        }
-
-        public void FadeIn()
-        {
-            //PlaceWindow();
-            Show();
-            BeginAnimation(OpacityProperty, _fadeIn);
-        }
-
-        void PlaceWindow()
-        {
-            User32.GetCursorPos(out var p);
-            Debug.WriteLine("{0} {1}", p.X, p.Y);
-            PresentationSource source = PresentationSource.FromVisual(this);
-
-            double dpiX = 1, dpiY = 1;
-            if (source != null)
-            {
-                dpiX = source.CompositionTarget.TransformToDevice.M11;
-                dpiY = source.CompositionTarget.TransformToDevice.M22;
-            }
-            this.Top = p.Y / dpiY - this.Height / 2;
-            this.Left = p.X / dpiX - this.Width / 2;
-        }
-
-        internal void FadeOut()
-        {
-            BeginAnimation(OpacityProperty, _fadeOut);
         }
 
         void Button_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)

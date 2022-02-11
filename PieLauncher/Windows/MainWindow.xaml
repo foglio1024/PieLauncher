@@ -6,8 +6,7 @@
         xmlns:converters="clr-namespace:Nostrum.WPF.Converters;assembly=Nostrum.WPF"
         xmlns:nostrumExt="clr-namespace:Nostrum.WPF.Extensions;assembly=Nostrum.WPF"
         xmlns:pielauncher="clr-namespace:PieLauncher"
-        xmlns:controls="clr-namespace:PieLauncher.Controls"
-        xmlns:dd="urn:gong-wpf-dragdrop"
+        xmlns:controls="clr-namespace:PieLauncher.Controls" xmlns:system="clr-namespace:System;assembly=System.Runtime"
         d:DataContext="{d:DesignInstance Type=pielauncher:MainViewModel}"
         WindowStyle="None"
         ShowInTaskbar="False"
@@ -15,10 +14,11 @@
         AllowsTransparency="True"
         Background="Transparent"
         mc:Ignorable="d"
-        Topmost="True"
+        Topmost="{Binding Topmost}"
         WindowStartupLocation="CenterScreen"
         Title="MainWindow" Height="700" Width="700"
-        ToolTipService.InitialShowDelay="0" >
+        ToolTipService.InitialShowDelay="0" 
+        >
     <Window.Resources>
         <DataTemplate x:Key="ShortcutDataTemplate" DataType="{x:Type pielauncher:ShortcutViewModel}">
             <Button Style="{StaticResource ButtonMainStyle}" FocusVisualStyle="{x:Null}" nostrumExt:ButtonExtensions.CornerRadius="40" 
@@ -49,36 +49,36 @@
         </DataTemplate>
         <DataTemplate x:Key="FolderDataTemplate" DataType="{x:Type pielauncher:FolderViewModel}">
             <Grid>
-                    <Ellipse Width="80" Height="80" Stroke="#1fff">
-                        <Ellipse.Effect>
-                            <DropShadowEffect Opacity=".5" BlurRadius="30"/>
-                        </Ellipse.Effect>
-                        <Ellipse.Fill>
-                            <RadialGradientBrush Center="0.8 0.8" RadiusX="1" RadiusY="1">
-                                <GradientStop Color="#dd292b2d" Offset="0.4"/>
-                                <GradientStop Color="#dd393b3d" Offset="1"/>
-                            </RadialGradientBrush>
-                        </Ellipse.Fill>
+                <Ellipse Width="80" Height="80" Stroke="#1fff">
+                    <Ellipse.Effect>
+                        <DropShadowEffect Opacity=".5" BlurRadius="30"/>
+                    </Ellipse.Effect>
+                    <Ellipse.Fill>
+                        <RadialGradientBrush Center="0.8 0.8" RadiusX="1" RadiusY="1">
+                            <GradientStop Color="#dd292b2d" Offset="0.4"/>
+                            <GradientStop Color="#dd393b3d" Offset="1"/>
+                        </RadialGradientBrush>
+                    </Ellipse.Fill>
 
-                    </Ellipse>
+                </Ellipse>
 
-                    <Path Data="{StaticResource SvgFolder}" Width="44" Height="44"/>
+                <Path Data="{StaticResource SvgFolder}" Width="44" Height="44"/>
 
                 <Popup x:Name="popup" Placement="Center" AllowsTransparency="True" PopupAnimation="Fade">
                     <Grid Margin="30">
-                        
-                        
-                    <Ellipse StrokeThickness="100" Fill="#2000" Width="300" Height="300" Visibility="Visible" Margin="30">
-                        <Ellipse.Effect>
-                            <DropShadowEffect ShadowDepth="0" BlurRadius="180" Opacity="1"/>
-                        </Ellipse.Effect>
-                        <Ellipse.Stroke>
-                            <RadialGradientBrush>
-                                <GradientStop Color="#dd393b3d" Offset=".5"/>
-                                <GradientStop Color="#dd292b2d" Offset="1"/>
-                            </RadialGradientBrush>
-                        </Ellipse.Stroke>
-                    </Ellipse>
+
+
+                        <Ellipse StrokeThickness="100" Fill="#2000" Width="300" Height="300" Visibility="Visible" Margin="30">
+                            <Ellipse.Effect>
+                                <DropShadowEffect ShadowDepth="0" BlurRadius="180" Opacity="1"/>
+                            </Ellipse.Effect>
+                            <Ellipse.Stroke>
+                                <RadialGradientBrush>
+                                    <GradientStop Color="#dd393b3d" Offset=".5"/>
+                                    <GradientStop Color="#dd292b2d" Offset="1"/>
+                                </RadialGradientBrush>
+                            </Ellipse.Stroke>
+                        </Ellipse>
                         <ItemsControl ItemsSource="{Binding Apps}" Margin="62" ItemTemplateSelector="{DynamicResource PieItemTemplateSelector}">
                             <ItemsControl.ItemsPanel>
                                 <ItemsPanelTemplate>
@@ -116,8 +116,11 @@
         <Ellipse Margin="60"  StrokeThickness="1" Stroke="#19ffffff" Visibility="Visible"/>
         <Ellipse Margin="160"  StrokeThickness="1" Stroke="#3fff" Visibility="Visible"/>
         <!--<nostrum:Arc Margin="60" StrokeThickness="100" Stroke="#259" StrokeStartLineCap="Round" StrokeEndLineCap="Round" EndAngle="52"/>-->
-        <ItemsControl ItemsSource="{Binding Root.Apps}" Margin="64" ItemTemplateSelector="{StaticResource PieItemTemplateSelector}"
-                      >
+        <ItemsControl x:Name="MainContainer"  ItemsSource="{Binding Root.Apps}" Margin="64" ItemTemplateSelector="{StaticResource PieItemTemplateSelector}"
+                      RenderTransformOrigin=".5 .5">
+            <ItemsControl.RenderTransform>
+                <RotateTransform/>
+            </ItemsControl.RenderTransform>
 
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
@@ -136,7 +139,8 @@
                 </RadialGradientBrush>
             </Ellipse.Fill>
         </Ellipse>
-        <Grid VerticalAlignment="Stretch" HorizontalAlignment="Center">
+        <Grid x:Name="InnerContainer" VerticalAlignment="Stretch" HorizontalAlignment="Center" RenderTransformOrigin=".5 .5">
+
             <Grid.RowDefinitions>
                 <RowDefinition/>
                 <RowDefinition Height="Auto"/>
