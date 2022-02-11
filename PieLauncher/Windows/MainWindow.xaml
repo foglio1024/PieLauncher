@@ -3,9 +3,11 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:converters="clr-namespace:Nostrum.WPF.Converters;assembly=Nostrum.WPF"
         xmlns:nostrumExt="clr-namespace:Nostrum.WPF.Extensions;assembly=Nostrum.WPF"
         xmlns:pielauncher="clr-namespace:PieLauncher"
-        xmlns:controls="clr-namespace:PieLauncher.Controls" xmlns:converters="clr-namespace:Nostrum.WPF.Converters;assembly=Nostrum.WPF"
+        xmlns:controls="clr-namespace:PieLauncher.Controls"
+        xmlns:dd="urn:gong-wpf-dragdrop"
         d:DataContext="{d:DesignInstance Type=pielauncher:MainViewModel}"
         WindowStyle="None"
         ShowInTaskbar="False"
@@ -114,7 +116,8 @@
         <Ellipse Margin="60"  StrokeThickness="1" Stroke="#19ffffff" Visibility="Visible"/>
         <Ellipse Margin="160"  StrokeThickness="1" Stroke="#3fff" Visibility="Visible"/>
         <!--<nostrum:Arc Margin="60" StrokeThickness="100" Stroke="#259" StrokeStartLineCap="Round" StrokeEndLineCap="Round" EndAngle="52"/>-->
-        <ItemsControl ItemsSource="{Binding Root.Apps}" Margin="64" ItemTemplateSelector="{StaticResource PieItemTemplateSelector}">
+        <ItemsControl ItemsSource="{Binding Root.Apps}" Margin="64" ItemTemplateSelector="{StaticResource PieItemTemplateSelector}"
+                      >
 
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>

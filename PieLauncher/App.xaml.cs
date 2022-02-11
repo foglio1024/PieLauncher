@@ -5,6 +5,8 @@ using Nostrum.WinAPI;
 using System;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Forms;
@@ -28,7 +30,7 @@ namespace PieLauncher
             MainWindow.Show();
             MainWindow.Hide();
 
-            var bmp = new Bitmap(@".\donut.png");
+            var bmp = new Bitmap(Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)!, @".\donut.png"));
             var hIcon = bmp.GetHicon();
             _tray.Icon = Icon.FromHandle(hIcon);
             _tray.MouseClick += OnTrayClick;

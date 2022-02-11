@@ -3,12 +3,13 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:PieLauncher"
         xmlns:nsEx="clr-namespace:Nostrum.WPF.Extensions;assembly=Nostrum.WPF"
+        xmlns:local="clr-namespace:PieLauncher"
+        xmlns:dd="urn:gong-wpf-dragdrop"
         d:DataContext="{d:DesignInstance Type=local:MainViewModel}"
         mc:Ignorable="d" Background="#202325" Foreground="White"
         FontFamily="{StaticResource K2DRegular}"
-        Title="ConfigWindow" Height="800" Width="900">
+        Title="Pie launcher settings" Height="800" Width="900">
     <Window.Resources>
         <Style x:Key="ButtonsStyle" BasedOn="{StaticResource ButtonMainStyle}" TargetType="Button">
             <Setter Property="Width" Value="100"/>
@@ -158,7 +159,13 @@
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
                     <ItemsControl ItemsSource="{Binding Apps}" 
-                                               ItemTemplate="{StaticResource PieItemDataTemplate}"
+                                  ItemTemplate="{StaticResource PieItemDataTemplate}"
+                                  dd:DragDrop.IsDragSource="True"
+                                  dd:DragDrop.IsDropTarget="True"
+                                  dd:DragDrop.DropTargetAdornerBrush="DarkOrange"
+                                  MinHeight="20"
+                                  Background="Transparent"
+
                                                />
                     <UniformGrid Grid.Row="1" Rows="1" HorizontalAlignment="Left" Margin="-5 0">
                         <Button Style="{StaticResource ButtonsStyle}" Content="Add shortcut" Command="{Binding AddShortcutCommand}"/>
@@ -180,18 +187,23 @@
             <RowDefinition/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
+        <ScrollViewer>
+            
         <ItemsControl x:Name="RootFolder" 
-                                       Margin="20"
-                                       ItemsSource="{Binding Root.Apps}" 
-                                       ItemTemplate="{StaticResource PieItemDataTemplate}"  
-                                       >
-        </ItemsControl>
-
+                      Margin="20"
+                      ItemsSource="{Binding Root.Apps}" 
+                      ItemTemplate="{StaticResource PieItemDataTemplate}"
+                      dd:DragDrop.IsDragSource="True"
+                      dd:DragDrop.IsDropTarget="True"
+                      dd:DragDrop.DropTargetAdornerBrush="DarkOrange"
+                      />
+        </ScrollViewer>
 
         <UniformGrid Grid.Row="1" Rows="1" HorizontalAlignment="Left" Margin="0">
             <Button Style="{StaticResource ButtonsStyle}" Content="Add shortcut" Command="{Binding Root.AddShortcutCommand}" />
             <Button Style="{StaticResource ButtonsStyle}" Content="Add folder" Command="{Binding Root.AddFolderCommand}" />
             <Button Style="{StaticResource ButtonsStyle}" Content="Add separator" Command="{Binding Root.AddSeparatorCommand}"/>
+            <Button Style="{StaticResource ButtonsStyle}" Content="Load config" Command="{Binding LoadConfigCommand}" Background="Coral"/>
             <Button Style="{StaticResource ButtonsStyle}" Content="Save config" Command="{Binding SaveConfigCommand}" Background="MediumSeaGreen"/>
         </UniformGrid>
 
