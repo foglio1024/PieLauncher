@@ -203,8 +203,11 @@
             <Button Style="{StaticResource ButtonsStyle}" Content="Add shortcut" Command="{Binding Root.AddShortcutCommand}" />
             <Button Style="{StaticResource ButtonsStyle}" Content="Add folder" Command="{Binding Root.AddFolderCommand}" />
             <Button Style="{StaticResource ButtonsStyle}" Content="Add separator" Command="{Binding Root.AddSeparatorCommand}"/>
-            <Button Style="{StaticResource ButtonsStyle}" Content="Load config" Command="{Binding LoadConfigCommand}" Background="Coral"/>
+            <Button Style="{StaticResource ButtonsStyle}" Content="Import config" Command="{Binding ImportConfigCommand}" Background="DarkSlateGray"/>
+            <Button Style="{StaticResource ButtonsStyle}" Content="Export config" Command="{Binding ExportConfigCommand}" Background="CadetBlue"/>
             <Button Style="{StaticResource ButtonsStyle}" Content="Save config" Command="{Binding SaveConfigCommand}" Background="MediumSeaGreen"/>
+            <CheckBox Content="Start with Windows" IsChecked="{Binding StartWithWindows, Mode=TwoWay}"
+                      Foreground="#9fff" VerticalAlignment="Center" HorizontalAlignment="Center"/>
         </UniformGrid>
 
     </Grid>

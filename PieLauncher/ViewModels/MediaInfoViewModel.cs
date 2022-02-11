@@ -123,6 +123,7 @@ namespace PieLauncher
                 return;
             }
             IsEmpty = _currentSession.SourceAppUserModelId == "Chrome"; // todo: better handling of other media sources
+            if (IsEmpty) return;
 
             _currentSession.MediaPropertiesChanged += OnMediaPropertiesChanged;
             _currentSession.PlaybackInfoChanged += OnPlaybackInfoChanged;
@@ -171,6 +172,7 @@ namespace PieLauncher
             {
                 var actualPosition = timelineProperties.Position.Add(TimeSpan.FromSeconds(++_addedSeconds));
                 Position = actualPosition.ToString("mm\\:ss");
+                if (timelineProperties.MaxSeekTime.TotalSeconds == 0) return;
                 Completion = (actualPosition.TotalSeconds) / timelineProperties.MaxSeekTime.TotalSeconds;
             }
 
@@ -193,6 +195,7 @@ namespace PieLauncher
             }
 
             IsEmpty = _currentSession.SourceAppUserModelId == "Chrome"; // todo: better handling of other media sources
+            if (IsEmpty) return;
             _currentSession.MediaPropertiesChanged += OnMediaPropertiesChanged;
             _currentSession.PlaybackInfoChanged += OnPlaybackInfoChanged;
             _currentSession.TimelinePropertiesChanged += OnTimelinePropertiesChanged;

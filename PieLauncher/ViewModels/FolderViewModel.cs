@@ -23,7 +23,6 @@ namespace PieLauncher
 
         public ObservableCollection<IPieItem> Apps { get; }
 
-        [JsonIgnore]
         public bool IsRoot { get; set; }
 
         [JsonIgnore]

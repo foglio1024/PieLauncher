@@ -4,6 +4,7 @@ using Nostrum.WinAPI;
 using Nostrum.WPF;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Runtime.InteropServices;
@@ -19,9 +20,7 @@ namespace PieLauncher
     public class MainViewModel : ObservableObject
     {
         public static readonly List<FolderViewModel> FolderRegistry = new();
-        public static readonly JsonSerializerSettings DefaultJsonSettings = new() { TypeNameHandling = TypeNameHandling.Auto };
 
-        static readonly string ConfigFilePath = Path.Combine(Path.GetDirectoryName(Environment.ProcessPath), @".\config.json");
         static readonly DateTimeFormatInfo DateTimeFormat = CultureInfo.CurrentCulture.DateTimeFormat;
         readonly DispatcherTimer _clockUpdateTimer;
         IntPtr _hookID = IntPtr.Zero;
@@ -76,6 +75,21 @@ namespace PieLauncher
             }
         }
 
+
+        bool _startWithWindows;
+        public bool StartWithWindows
+        {
+            get => _startWithWindows;
+            set
+            {
+                if (_startWithWindows == value) return;
+                _startWithWindows = value;
+
+                N();
+            }
+        }
+
+
         public MediaInfoViewModel MediaInfo { get; set; } = new();
 
         public string Time => DateTime.Now.ToShortTimeString();
@@ -83,7 +97,8 @@ namespace PieLauncher
 
         public ICommand OpenConfigWindowCommand { get; }
         public ICommand SaveConfigCommand { get; }
-        public ICommand LoadConfigCommand { get; }
+        public ICommand ExportConfigCommand { get; }
+        public ICommand ImportConfigCommand { get; }
 
         public MainViewModel()
         {
@@ -95,27 +110,28 @@ namespace PieLauncher
 
             App.Current.Exit += OnExit;
 
-
             try
             {
-                var configFileData = File.ReadAllText(ConfigFilePath);
-                _root = JsonConvert.DeserializeObject<FolderViewModel>(configFileData, DefaultJsonSettings)!;
-                _root.IsRoot = true;
+                var settings = Settings.Load();
+                Root = settings.Root ?? new FolderViewModel() { IsRoot = true };
+                StartWithWindows = settings.StartWithWindows;
             }
             catch (Exception)
             {
-                _root = new FolderViewModel() { IsRoot = true };
+                Root = new FolderViewModel() { IsRoot = true };
             }
 
             OpenConfigWindowCommand = new RelayCommand(OpenConfigWindow);
             SaveConfigCommand = new RelayCommand(SaveConfig);
-            LoadConfigCommand = new RelayCommand(LoadConfig);
+            ImportConfigCommand = new RelayCommand(ImportConfig);
+            ExportConfigCommand = new RelayCommand(ExportConfig);
 
             _clockUpdateTimer = new DispatcherTimer(DispatcherPriority.Background) { Interval = TimeSpan.FromSeconds(0.5) };
             _clockUpdateTimer.Tick += OnClockUpdateTick;
             _clockUpdateTimer.Start();
 
         }
+
 
         void OnExit(object sender, ExitEventArgs e)
         {
@@ -136,11 +152,26 @@ namespace PieLauncher
 
         void SaveConfig()
         {
-            var file = JsonConvert.SerializeObject(Root, DefaultJsonSettings);
-            File.WriteAllText(ConfigFilePath, file);
+            var rk = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
+            var path = Process.GetCurrentProcess().MainModule?.FileName;
+
+            if (StartWithWindows)
+            {
+                rk?.SetValue(nameof(PieLauncher), path!);
+            }
+            else
+            {
+                rk?.DeleteValue(nameof(PieLauncher), false);
+            }
+
+            new Settings
+            {
+                Root = Root,
+                StartWithWindows = StartWithWindows
+            }.Save();
         }
 
-        void LoadConfig()
+        void ImportConfig()
         {
             try
             {
@@ -150,15 +181,18 @@ namespace PieLauncher
                 var path = ofd.FileName;
 
                 var configFileData = File.ReadAllText(path);
-                Root = JsonConvert.DeserializeObject<FolderViewModel>(configFileData, DefaultJsonSettings)!;
+                Root = JsonConvert.DeserializeObject<FolderViewModel>(configFileData, Settings.DefaultJsonSettings)!;
                 Root.IsRoot = true;
-
-                File.Copy(Path.GetFullPath(path), ConfigFilePath, true);
             }
             catch (Exception e)
             {
                 MessageBox.Show(e.Message);
             }
+        }
+        void ExportConfig()
+        {
+            var file = JsonConvert.SerializeObject(Root, Settings.DefaultJsonSettings);
+            File.WriteAllText(Settings.ConfigFilePath, file);
         }
 
         void OpenConfigWindow()
