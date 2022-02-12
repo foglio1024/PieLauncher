@@ -6,12 +6,13 @@
         xmlns:converters="clr-namespace:Nostrum.WPF.Converters;assembly=Nostrum.WPF"
         xmlns:nostrumExt="clr-namespace:Nostrum.WPF.Extensions;assembly=Nostrum.WPF"
         xmlns:pielauncher="clr-namespace:PieLauncher"
-        xmlns:controls="clr-namespace:PieLauncher.Controls" xmlns:system="clr-namespace:System;assembly=System.Runtime"
+        xmlns:controls="clr-namespace:PieLauncher.Controls"
         d:DataContext="{d:DesignInstance Type=pielauncher:MainViewModel}"
         WindowStyle="None"
         ShowInTaskbar="False"
         ResizeMode="NoResize"
         AllowsTransparency="True"
+        ShowActivated="True"
         Background="Transparent"
         mc:Ignorable="d"
         Topmost="{Binding Topmost}"
@@ -20,27 +21,48 @@
         ToolTipService.InitialShowDelay="0" 
         >
     <Window.Resources>
+        <LinearGradientBrush x:Key="BorderBrush">
+            <GradientStop Color="#85D8CE" Offset="0"/>
+            <GradientStop Color="#085078" Offset="1"/>
+        </LinearGradientBrush>
+        <GradientStopCollection x:Key="DefaultGradientStops">
+            <GradientStop Color="#dd393b3d" Offset=".5"/>
+            <GradientStop Color="#dd292b2d" Offset="1"/>
+        </GradientStopCollection>
+        <RadialGradientBrush x:Key="DefaultBackgroundBrush"  Center="0.5 0.5" RadiusX="1" RadiusY="1" GradientOrigin="-1 -1" GradientStops="{StaticResource DefaultGradientStops}"/>
+        <RadialGradientBrush x:Key="RingBackgroundBrush" GradientStops="{StaticResource DefaultGradientStops}"/>
+
+        <Style x:Key="DefaultButtonEllipseStyle" TargetType="Ellipse">
+            <Setter Property="Width" Value="80"/>
+            <Setter Property="Height" Value="80"/>
+            <Setter Property="Stroke" Value="#2fff"/>
+            <Setter Property="Fill" Value="{StaticResource DefaultBackgroundBrush}"/>
+            <Setter Property="Effect" >
+                <Setter.Value>
+                    <DropShadowEffect Opacity=".5" BlurRadius="30"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="MainRingStyle" TargetType="Ellipse">
+            <Setter Property="Margin" Value="60"/>
+            <Setter Property="StrokeThickness" Value="100"/>
+            <Setter Property="Stroke" Value="{StaticResource RingBackgroundBrush}"/>
+            <Setter Property="Effect" >
+                <Setter.Value>
+                    <DropShadowEffect ShadowDepth="0" BlurRadius="100" Opacity=".7"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
         <DataTemplate x:Key="ShortcutDataTemplate" DataType="{x:Type pielauncher:ShortcutViewModel}">
             <Button Style="{StaticResource ButtonMainStyle}" FocusVisualStyle="{x:Null}" nostrumExt:ButtonExtensions.CornerRadius="40" 
                             MouseEnter="Button_MouseEnter" MouseLeave="Button_MouseLeave" RenderTransformOrigin=".5 .5" ToolTip="{Binding Name}"
                             Command="{Binding LaunchCommand}">
                 <Grid>
-                    <Ellipse Width="80" Height="80" Stroke="#1fff">
-                        <Ellipse.Effect>
-                            <DropShadowEffect Opacity=".5" BlurRadius="30"/>
-                        </Ellipse.Effect>
-                        <Ellipse.Fill>
-                            <RadialGradientBrush Center="0.8 0.8" RadiusX="1" RadiusY="1">
-                                <GradientStop Color="#dd292b2d" Offset="0.4"/>
-                                <GradientStop Color="#dd393b3d" Offset="1"/>
-                            </RadialGradientBrush>
-                        </Ellipse.Fill>
-
-                    </Ellipse>
+                    <Ellipse Style="{StaticResource DefaultButtonEllipseStyle}"/>
                     <Image Source="{Binding IconPath}" Width="54" Height="54" Stretch="Uniform" StretchDirection="Both" RenderOptions.BitmapScalingMode="HighQuality" Visibility="Visible"></Image>
                     <!--<TextBlock Text="{Binding Name}" Foreground="White" HorizontalAlignment="Center" TextWrapping="Wrap" TextAlignment="Center" Width="Auto" VerticalAlignment="Center"
                                    FontSize="16" FontWeight="DemiBold"/>-->
-
                 </Grid>
             </Button>
         </DataTemplate>
@@ -49,18 +71,7 @@
         </DataTemplate>
         <DataTemplate x:Key="FolderDataTemplate" DataType="{x:Type pielauncher:FolderViewModel}">
             <Grid>
-                <Ellipse Width="80" Height="80" Stroke="#1fff">
-                    <Ellipse.Effect>
-                        <DropShadowEffect Opacity=".5" BlurRadius="30"/>
-                    </Ellipse.Effect>
-                    <Ellipse.Fill>
-                        <RadialGradientBrush Center="0.8 0.8" RadiusX="1" RadiusY="1">
-                            <GradientStop Color="#dd292b2d" Offset="0.4"/>
-                            <GradientStop Color="#dd393b3d" Offset="1"/>
-                        </RadialGradientBrush>
-                    </Ellipse.Fill>
-
-                </Ellipse>
+                <Ellipse Style="{StaticResource DefaultButtonEllipseStyle}"/>
 
                 <Path Data="{StaticResource SvgFolder}" Width="44" Height="44"/>
 
@@ -100,22 +111,12 @@
                                          SeparatorDataTemplate="{StaticResource SeparatorDataTemplate}"
                                          FolderDataTemplate="{StaticResource FolderDataTemplate}"
                                          />
+
     </Window.Resources>
     <Grid>
-        <Ellipse Margin="60"  StrokeThickness="100" Visibility="Visible">
-            <Ellipse.Effect>
-                <DropShadowEffect ShadowDepth="0" BlurRadius="100" Opacity=".7"/>
-            </Ellipse.Effect>
-            <Ellipse.Stroke>
-                <RadialGradientBrush>
-                    <GradientStop Color="#dd393b3d" Offset=".5"/>
-                    <GradientStop Color="#dd292b2d" Offset="1"/>
-                </RadialGradientBrush>
-            </Ellipse.Stroke>
-        </Ellipse>
-        <Ellipse Margin="60"  StrokeThickness="1" Stroke="#19ffffff" Visibility="Visible"/>
-        <Ellipse Margin="160"  StrokeThickness="1" Stroke="#3fff" Visibility="Visible"/>
-        <!--<nostrum:Arc Margin="60" StrokeThickness="100" Stroke="#259" StrokeStartLineCap="Round" StrokeEndLineCap="Round" EndAngle="52"/>-->
+        <Ellipse Style="{StaticResource MainRingStyle}"/>
+        <Ellipse Margin="60"  StrokeThickness="1" Stroke="#19ffffff" />
+        <Ellipse Margin="160"  StrokeThickness="1" Stroke="#3fff" />
         <ItemsControl x:Name="MainContainer"  ItemsSource="{Binding Root.Apps}" Margin="64" ItemTemplateSelector="{StaticResource PieItemTemplateSelector}"
                       RenderTransformOrigin=".5 .5">
             <ItemsControl.RenderTransform>
@@ -128,7 +129,14 @@
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
         </ItemsControl>
-        <Ellipse Width="300" Height="300" Stroke="#3fff">
+
+        <Ellipse Width="300" Height="300" StrokeThickness="5" Opacity=".5" Stroke="{StaticResource BorderBrush}">
+            <Ellipse.Effect>
+                <BlurEffect Radius="30"/>
+            </Ellipse.Effect>
+
+        </Ellipse>
+        <Ellipse Width="300" Height="300" Stroke="{StaticResource BorderBrush}" StrokeThickness="1">
             <Ellipse.Effect>
                 <DropShadowEffect Opacity=".5" BlurRadius="30"/>
             </Ellipse.Effect>
@@ -138,28 +146,64 @@
                     <GradientStop Color="#dd393b3d" Offset="1"/>
                 </RadialGradientBrush>
             </Ellipse.Fill>
+
         </Ellipse>
         <Grid x:Name="InnerContainer" VerticalAlignment="Stretch" HorizontalAlignment="Center" RenderTransformOrigin=".5 .5">
-
             <Grid.RowDefinitions>
                 <RowDefinition/>
                 <RowDefinition Height="Auto"/>
-                <RowDefinition/>
+                <RowDefinition />
             </Grid.RowDefinitions>
-            <Button VerticalAlignment="Center" Margin="0 110 0 0" Style="{StaticResource ButtonMainStyle}" Height="30" Width="30" Padding="8" 
-                    nostrumExt:ButtonExtensions.CornerRadius="15" FocusVisualStyle="{x:Null}"
-                    Command="{Binding OpenConfigWindowCommand}">
+            <Grid.Resources>
+                <Style x:Key="SettingsButtonStyle" TargetType="Button" BasedOn="{StaticResource ButtonMainStyle}">
+                    <Setter Property="VerticalAlignment" Value="Center"/>
+                    <Setter Property="Height" Value="30"/>
+                    <Setter Property="Margin" Value="0 110 0 0"/>
+                    <Setter Property="Width" Value="30"/>
+                    <Setter Property="Padding" Value="8"/>
+                    <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+                    <Setter Property="Command" Value="{Binding OpenConfigWindowCommand}"/>
+                    <Setter Property="nostrumExt:ButtonExtensions.CornerRadius" Value="15"/>
+                </Style>
+                <Style x:Key="ClockTextBlockStyle" TargetType="TextBlock">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding MediaInfo.IsEmpty}" Value="True">
+                            <DataTrigger.EnterActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation From="0"  To="60" Duration="0:0:0.25" EasingFunction="{StaticResource QuadraticEase}"
+                                                         Storyboard.TargetProperty="(RenderTransform).(TranslateTransform.Y)"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </DataTrigger.EnterActions>
+                            <DataTrigger.ExitActions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <DoubleAnimation From="60"  To="0" Duration="0:0:0.25" EasingFunction="{StaticResource QuadraticEase}"
+                                                         Storyboard.TargetProperty="(RenderTransform).(TranslateTransform.Y)"/>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </DataTrigger.ExitActions>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Grid.Resources>
+            <Button Style="{StaticResource SettingsButtonStyle}">
                 <Path Data="{StaticResource SvgSettings}"/>
             </Button>
-            <TextBlock VerticalAlignment="Bottom" FontFamily="{StaticResource K2DRegular}" FontWeight="Thin" HorizontalAlignment="Center" Foreground="White" FontSize="42"
+            <TextBlock Style="{StaticResource ClockTextBlockStyle}" VerticalAlignment="Bottom" FontFamily="{StaticResource K2DRegular}" FontWeight="Thin" HorizontalAlignment="Center" Foreground="White" FontSize="42"
                        Margin="0 0 0 20" TextAlignment="Center">
+                <TextBlock.RenderTransform>
+                    <TranslateTransform Y="0"/>
+                </TextBlock.RenderTransform>
                 <Run Text="{Binding Time, Mode=OneWay}" />
                 <LineBreak/>
                 <Run Text="{Binding Date, Mode=OneWay}" FontSize="24" Foreground="#6fff"/>
             </TextBlock>
-            <Line X1="0" Y1="0" X2="1" Y2="0" Stroke="#2fff" Grid.Row="1" HorizontalAlignment="Stretch" Stretch="Uniform" Width="299"/>
+            <Line X1="0" Y1="0" X2="1" Y2="0" Stroke="#2fff" Grid.Row="1" HorizontalAlignment="Stretch" Stretch="Uniform" Width="299"
+                  Visibility="{Binding MediaInfo.IsEmpty, Converter={converters:BoolToVisibility Invert=True}}"/>
             <controls:MediaControls Visibility="{Binding MediaInfo.IsEmpty, Converter={converters:BoolToVisibility Invert=True}}" VerticalAlignment="Top" 
-                                    HorizontalAlignment="Center" Grid.Row="2" Margin="0 5 0 0 "/>
+                                    HorizontalAlignment="Center" Grid.Row="2" Margin="0 10 0 0 "/>
 
         </Grid>
     </Grid>
