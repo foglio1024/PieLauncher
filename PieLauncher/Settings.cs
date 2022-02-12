@@ -12,6 +12,7 @@ namespace PieLauncher
 
         public FolderViewModel? Root { get; set; }
         public bool StartWithWindows { get; set; }
+        public HotKey HotKey { get; set; }
 
         public static Settings Load()
         {

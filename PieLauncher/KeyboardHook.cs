@@ -46,6 +46,15 @@ namespace PieLauncher
         }
 
 
+        public void ChangeHotkey(HotKey oldHk, HotKey newHk)
+        {
+            if (!_callbacks.TryGetValue(oldHk, out var cb)) return;
+            _callbacks[newHk] = cb;
+            _callbacks.Remove(oldHk);
+            Enable();
+        }
+
+
         public void RegisterCallback(HotKey hk, Action callback)
         {
             _callbacks[hk] = callback;

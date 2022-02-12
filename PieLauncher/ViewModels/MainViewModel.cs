@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Forms;
@@ -36,6 +37,19 @@ namespace PieLauncher
                 if (_root == value) return;
                 FolderRegistry?.Clear();
                 _root = value;
+                N();
+            }
+        }
+
+        HotKey _hotKey;
+        public HotKey HotKey
+        {
+            get => _hotKey;
+            set
+            {
+                if (_hotKey == value) return;
+                KeyboardHook.Instance.ChangeHotkey(_hotKey, value);
+                _hotKey = value;
                 N();
             }
         }
@@ -75,7 +89,6 @@ namespace PieLauncher
             }
         }
 
-
         bool _startWithWindows;
         public bool StartWithWindows
         {
@@ -105,8 +118,6 @@ namespace PieLauncher
             _callback = HookCallback; // needed to avoid being GC'd
             _hookID = Utils.SetHook(_callback);
 
-            KeyboardHook.Instance.RegisterCallback(new HotKey(Keys.OemBackslash, ModifierKeys.Windows), OnHotKeyPressed);
-            KeyboardHook.Instance.Enable();
 
             App.Current.Exit += OnExit;
 
@@ -115,11 +126,17 @@ namespace PieLauncher
                 var settings = Settings.Load();
                 Root = settings.Root ?? new FolderViewModel() { IsRoot = true };
                 StartWithWindows = settings.StartWithWindows;
+                HotKey = settings.HotKey;
             }
             catch (Exception)
             {
                 Root = new FolderViewModel() { IsRoot = true };
+                HotKey = new HotKey(Keys.OemBackslash, ModifierKeys.Windows);
             }
+
+            KeyboardHook.Instance.RegisterCallback(HotKey, OnHotKeyPressed);
+            KeyboardHook.Instance.Enable();
+
 
             OpenConfigWindowCommand = new RelayCommand(OpenConfigWindow);
             SaveConfigCommand = new RelayCommand(SaveConfig);
@@ -167,7 +184,8 @@ namespace PieLauncher
             new Settings
             {
                 Root = Root,
-                StartWithWindows = StartWithWindows
+                StartWithWindows = StartWithWindows,
+                HotKey = HotKey
             }.Save();
         }
 
@@ -214,9 +232,11 @@ namespace PieLauncher
             var key = (Keys)(Marshal.ReadInt32(lParam));
             var msg = (User32.WindowsMessages)wParam;
 
-            if (key == Keys.OemBackslash)
+            if (key == HotKey.Key /*Keys.OemBackslash*/)
             {
-                if (msg == User32.WindowsMessages.WM_KEYDOWN && Keyboard.IsKeyDown(Key.LWin))
+                if (msg == User32.WindowsMessages.WM_KEYDOWN &&
+                    (HotKey.ModifierList.Count== 0 || HotKey.ModifierList.Any(mk =>Keyboard.IsKeyDown(mk)))
+                    )
                 {
                     _keyDown = true;
                 }
