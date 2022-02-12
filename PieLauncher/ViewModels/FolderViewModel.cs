@@ -1,7 +1,11 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.Win32;
+using Newtonsoft.Json;
 using Nostrum.WPF;
+using Nostrum.WPF.Factories;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.IO;
 using System.Windows.Input;
 
 namespace PieLauncher
@@ -22,8 +26,25 @@ namespace PieLauncher
         }
 
         public ObservableCollection<IPieItem> Apps { get; }
+        [JsonIgnore]
+        public ICollectionView AppsPreview { get; }
 
         public bool IsRoot { get; set; }
+
+        string _iconPath = "";
+        public string IconPath
+        {
+            get => _iconPath;
+            set
+            {
+                if (_iconPath == value) return;
+                _iconPath = value;
+                N();
+                N(nameof(IsIconValid));
+            }
+        }
+
+        public bool IsIconValid => File.Exists(_iconPath);
 
         [JsonIgnore]
         public ICommand AddShortcutCommand { get; }
@@ -31,6 +52,9 @@ namespace PieLauncher
         public ICommand AddFolderCommand { get; }
         [JsonIgnore]
         public ICommand AddSeparatorCommand { get; }
+        [JsonIgnore]
+        public ICommand BrowseIconCommand { get; }
+
 
         public FolderViewModel()
         {
@@ -38,6 +62,9 @@ namespace PieLauncher
             AddFolderCommand = new RelayCommand(AddFolder);
             AddSeparatorCommand = new RelayCommand(AddSeparator);
             AddShortcutCommand = new RelayCommand(AddShortcut);
+            BrowseIconCommand = new RelayCommand(BrowseIcon);
+
+            AppsPreview = CollectionViewFactory.CreateCollectionView(Apps, a => a is ShortcutViewModel);
 
             MainViewModel.FolderRegistry.Add(this);
         }
@@ -63,6 +90,14 @@ namespace PieLauncher
         void AddSeparator()
         {
             Apps.Add(new SeparatorViewModel());
+        }
+
+        void BrowseIcon()
+        {
+            var ofd = new OpenFileDialog();
+            ofd.ShowDialog();
+            if (string.IsNullOrWhiteSpace(ofd.FileName)) return;
+            IconPath = ofd.FileName;
         }
 
         public override string ToString()

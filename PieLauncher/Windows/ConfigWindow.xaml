@@ -30,6 +30,31 @@
             <Setter Property="CaretBrush" Value="MediumSeaGreen"/>
         </Style>
 
+        <Style x:Key="FieldIconPathStyle" TargetType="{x:Type Path}" BasedOn="{StaticResource {x:Type Path}}">
+            <Setter Property="Grid.Column" Value="2"/>
+            <Setter Property="Margin" Value="2 0 4 0"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Width" Value="12"/>
+            <Setter Property="Height" Value="12"/>
+        </Style>
+        <Style x:Key="FieldLabelStyle" TargetType="{x:Type TextBlock}">
+            <Setter Property="Foreground" Value="#5fff"/>
+            <Setter Property="HorizontalAlignment" Value="Right"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="0 0 6 0"/>
+            <Setter Property="Grid.Column" Value="1"/>
+        </Style>
+        <Style x:Key="BrowseButtonStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource ButtonMainStyle}">
+            <Setter Property="Content" Value="..."/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Grid.Column" Value="4"/>
+            <Setter Property="Margin" Value="2 0 0 0"/>
+            <Setter Property="Background" Value="#1fff"/>
+            <Setter Property="nsEx:ButtonExtensions.CornerRadius" Value="2"/>
+        </Style>
+
         <DataTemplate x:Key="PieItemDataTemplate" DataType="{x:Type local:IPieItem}">
             <Grid Background="Transparent" Margin="5">
                 <Grid.ColumnDefinitions>
@@ -75,33 +100,6 @@
                     <ColumnDefinition/>
                     <ColumnDefinition Width="20"/>
                 </Grid.ColumnDefinitions>
-                <Grid.Resources>
-                    <Style TargetType="{x:Type Path}" BasedOn="{StaticResource {x:Type Path}}">
-                        <Setter Property="Grid.Column" Value="2"/>
-                        <Setter Property="Margin" Value="2 0 4 0"/>
-                        <Setter Property="VerticalAlignment" Value="Center"/>
-                        <Setter Property="Width" Value="12"/>
-                        <Setter Property="Height" Value="12"/>
-                    </Style>
-                    <Style TargetType="{x:Type TextBlock}">
-                        <Setter Property="Foreground" Value="#5fff"/>
-                        <Setter Property="HorizontalAlignment" Value="Right"/>
-                        <Setter Property="VerticalAlignment" Value="Center"/>
-                        <Setter Property="Margin" Value="0 0 6 0"/>
-                        <Setter Property="Grid.Column" Value="1"/>
-                    </Style>
-                    <Style x:Key="BrowseButtonStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource ButtonMainStyle}">
-                        <Setter Property="Content" Value="..."/>
-                        <Setter Property="HorizontalAlignment" Value="Stretch"/>
-                        <Setter Property="HorizontalContentAlignment" Value="Center"/>
-                        <Setter Property="VerticalAlignment" Value="Center"/>
-                        <Setter Property="Grid.Column" Value="4"/>
-                        <Setter Property="Margin" Value="2 0 0 0"/>
-                        <Setter Property="Background" Value="#1fff"/>
-                        <Setter Property="nsEx:ButtonExtensions.CornerRadius" Value="2"/>
-
-                    </Style>
-                </Grid.Resources>
                 <Image Source="{Binding IconPath}" Grid.RowSpan="3" RenderOptions.BitmapScalingMode="HighQuality" Margin="5"/>
                 <Grid Grid.ColumnSpan="6">
                     <Grid.RowDefinitions>
@@ -119,13 +117,13 @@
                     </Grid>
 
                 </Grid>
-                <TextBlock Text="Name"/>
-                <TextBlock Text="Uri" Grid.Row="1"/>
-                <TextBlock Text="Icon path" Grid.Row="2"/>
+                <TextBlock Style="{StaticResource FieldLabelStyle}" Text="Name"/>
+                <TextBlock Style="{StaticResource FieldLabelStyle}" Text="Uri" Grid.Row="1"/>
+                <TextBlock Style="{StaticResource FieldLabelStyle}" Text="Icon path" Grid.Row="2"/>
 
-                <Path Data="{StaticResource SvgLabel}" Grid.Row="0"/>
-                <Path Data="{StaticResource SvgLink}"  Grid.Row="1"/>
-                <Path Data="{StaticResource SvgImage}" Grid.Row="2"/>
+                <Path Data="{StaticResource SvgLabel}" Grid.Row="0" Style="{StaticResource FieldIconPathStyle}"/>
+                <Path Data="{StaticResource SvgLink}"  Grid.Row="1" Style="{StaticResource FieldIconPathStyle}"/>
+                <Path Data="{StaticResource SvgImage}" Grid.Row="2" Style="{StaticResource FieldIconPathStyle}"/>
 
                 <TextBox Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="3"/>
                 <TextBox Text="{Binding Uri, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="3" Grid.Row="1"/>
@@ -151,7 +149,19 @@
             <Expander Header="{Binding}">
                 <Expander.HeaderTemplate>
                     <DataTemplate>
-                        <TextBox Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                        <UniformGrid Rows="1">
+                            <TextBox Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="40"/>
+                                </Grid.ColumnDefinitions>
+
+                                <TextBox Text="{Binding IconPath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                <Button Style="{StaticResource BrowseButtonStyle}" Grid.Row="1" Command="{Binding BrowseIconCommand}"/>
+
+                            </Grid>
+                        </UniformGrid>
                     </DataTemplate>
                 </Expander.HeaderTemplate>
                 <Grid>
@@ -190,8 +200,8 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <ScrollViewer>
-            
-        <ItemsControl x:Name="RootFolder" 
+
+            <ItemsControl x:Name="RootFolder" 
                       Margin="20"
                       ItemsSource="{Binding Root.Apps}" 
                       ItemTemplate="{StaticResource PieItemDataTemplate}"

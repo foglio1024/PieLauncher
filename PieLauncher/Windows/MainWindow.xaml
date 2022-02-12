@@ -21,16 +21,24 @@
         ToolTipService.InitialShowDelay="0" 
         >
     <Window.Resources>
+        <Color x:Key="BaseGradient1" >#2f3740</Color>
+        <Color x:Key="BaseGradient2" >#29323c</Color>
+        <Color x:Key="AccentGradient1" >#85D8CE</Color>
+        <Color x:Key="AccentGradient2" >#085078</Color>
         <LinearGradientBrush x:Key="BorderBrush">
-            <GradientStop Color="#85D8CE" Offset="0"/>
-            <GradientStop Color="#085078" Offset="1"/>
+            <GradientStop Color="{StaticResource AccentGradient1}" Offset="0"/>
+            <GradientStop Color="{StaticResource AccentGradient2}" Offset="1"/>
         </LinearGradientBrush>
         <GradientStopCollection x:Key="DefaultGradientStops">
-            <GradientStop Color="#dd393b3d" Offset=".5"/>
-            <GradientStop Color="#dd292b2d" Offset="1"/>
+            <GradientStop Color="{StaticResource BaseGradient1}" Offset="0.5"/>
+            <GradientStop Color="{StaticResource BaseGradient2}" Offset="1.0"/>
         </GradientStopCollection>
         <RadialGradientBrush x:Key="DefaultBackgroundBrush"  Center="0.5 0.5" RadiusX="1" RadiusY="1" GradientOrigin="-1 -1" GradientStops="{StaticResource DefaultGradientStops}"/>
         <RadialGradientBrush x:Key="RingBackgroundBrush" GradientStops="{StaticResource DefaultGradientStops}"/>
+
+        <ItemsPanelTemplate x:Key="RadialPanelTemplate">
+            <pielauncher:RadialPanel TotalAngle="360" AngleOffset="0" SwipeDirection="Clockwise"/>
+        </ItemsPanelTemplate>
 
         <Style x:Key="DefaultButtonEllipseStyle" TargetType="Ellipse">
             <Setter Property="Width" Value="80"/>
@@ -46,7 +54,7 @@
         <Style x:Key="MainRingStyle" TargetType="Ellipse">
             <Setter Property="Margin" Value="60"/>
             <Setter Property="StrokeThickness" Value="100"/>
-            <Setter Property="Stroke" Value="{StaticResource RingBackgroundBrush}"/>
+            <Setter Property="Stroke" Value="{StaticResource DefaultBackgroundBrush}"/>
             <Setter Property="Effect" >
                 <Setter.Value>
                     <DropShadowEffect ShadowDepth="0" BlurRadius="100" Opacity=".7"/>
@@ -60,7 +68,10 @@
                             Command="{Binding LaunchCommand}">
                 <Grid>
                     <Ellipse Style="{StaticResource DefaultButtonEllipseStyle}"/>
-                    <Image Source="{Binding IconPath}" Width="54" Height="54" Stretch="Uniform" StretchDirection="Both" RenderOptions.BitmapScalingMode="HighQuality" Visibility="Visible"></Image>
+                    <Image Source="{Binding IconPath}" 
+                           Width="54" 
+                           Height="54"
+                           Stretch="Uniform" StretchDirection="Both" RenderOptions.BitmapScalingMode="HighQuality" />
                     <!--<TextBlock Text="{Binding Name}" Foreground="White" HorizontalAlignment="Center" TextWrapping="Wrap" TextAlignment="Center" Width="Auto" VerticalAlignment="Center"
                                    FontSize="16" FontWeight="DemiBold"/>-->
                 </Grid>
@@ -71,32 +82,73 @@
         </DataTemplate>
         <DataTemplate x:Key="FolderDataTemplate" DataType="{x:Type pielauncher:FolderViewModel}">
             <Grid>
-                <Ellipse Style="{StaticResource DefaultButtonEllipseStyle}"/>
 
-                <Path Data="{StaticResource SvgFolder}" Width="44" Height="44"/>
+                <Ellipse Style="{StaticResource DefaultButtonEllipseStyle}" Opacity=".8"/>
+
+
+
+                <!--<ItemsControl ItemsSource="{Binding AppsPreview}" 
+                                      IsHitTestVisible="False"
+                                      ItemTemplateSelector="{DynamicResource PieItemTemplateSelector}" 
+                                      RenderTransformOrigin=".5 .5"
+                              >
+                    <ItemsControl.RenderTransform>
+                        <ScaleTransform ScaleX=".4" ScaleY=".4"/>
+                    </ItemsControl.RenderTransform>
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <pielauncher:RadialPanel Margin="-20"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>-->
+                <Grid VerticalAlignment="Center">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <Path Data="{StaticResource SvgFolder}" Width="32" Height="32" Opacity="1" Margin="0 0 0 0"
+                          Visibility="{Binding IsIconValid, Converter={converters:BoolToVisibility Invert=True}}"/>
+                    <Image Source="{Binding IconPath}" Width="32" Height="32" Opacity="1" Margin="0 0 0 0" RenderOptions.BitmapScalingMode="HighQuality"/>
+
+                    <TextBlock Text="{Binding Name}" 
+                               Grid.Row="1"
+                               HorizontalAlignment="Center" 
+                               VerticalAlignment="Top"
+                               Foreground="White" 
+                               FontSize="12"
+                               FontWeight="DemiBold"
+                               MaxWidth="70"
+                               TextWrapping="WrapWithOverflow"
+                               TextAlignment="Center"
+                               TextTrimming="CharacterEllipsis"
+                               Opacity="1"
+                               IsHitTestVisible="False" 
+                               Margin="0 0 0 0"/>
+
+                </Grid>
 
                 <Popup x:Name="popup" Placement="Center" AllowsTransparency="True" PopupAnimation="Fade">
                     <Grid Margin="30">
-
-
-                        <Ellipse StrokeThickness="100" Fill="#2000" Width="300" Height="300" Visibility="Visible" Margin="30">
+                        <Ellipse StrokeThickness="100" Fill="#9000" Width="300" Height="300" Visibility="Visible" Margin="30" Stroke="{StaticResource RingBackgroundBrush}">
                             <Ellipse.Effect>
                                 <DropShadowEffect ShadowDepth="0" BlurRadius="180" Opacity="1"/>
                             </Ellipse.Effect>
-                            <Ellipse.Stroke>
-                                <RadialGradientBrush>
-                                    <GradientStop Color="#dd393b3d" Offset=".5"/>
-                                    <GradientStop Color="#dd292b2d" Offset="1"/>
-                                </RadialGradientBrush>
-                            </Ellipse.Stroke>
                         </Ellipse>
-                        <ItemsControl ItemsSource="{Binding Apps}" Margin="62" ItemTemplateSelector="{DynamicResource PieItemTemplateSelector}">
-                            <ItemsControl.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <pielauncher:RadialPanel TotalAngle="360" AngleOffset="0" SwipeDirection="Clockwise"/>
-                                </ItemsPanelTemplate>
-                            </ItemsControl.ItemsPanel>
-                        </ItemsControl>
+                        <ItemsControl ItemsSource="{Binding Apps}" 
+                                      ItemTemplateSelector="{DynamicResource PieItemTemplateSelector}" 
+                                      ItemsPanel="{StaticResource RadialPanelTemplate}"
+                                      Margin="62" 
+                                      />
+
+                        <TextBlock Text="{Binding Name}" 
+                                   HorizontalAlignment="Center" 
+                                   VerticalAlignment="Center"
+                                   Foreground="White" 
+                                   FontSize="18" 
+                                   IsHitTestVisible="False" 
+                                   Margin="0 0 0 0"/>
+
                     </Grid>
                 </Popup>
             </Grid>
@@ -117,17 +169,15 @@
         <Ellipse Style="{StaticResource MainRingStyle}"/>
         <Ellipse Margin="60"  StrokeThickness="1" Stroke="#19ffffff" />
         <Ellipse Margin="160"  StrokeThickness="1" Stroke="#3fff" />
-        <ItemsControl x:Name="MainContainer"  ItemsSource="{Binding Root.Apps}" Margin="64" ItemTemplateSelector="{StaticResource PieItemTemplateSelector}"
+        <ItemsControl x:Name="MainContainer"
+                      ItemsSource="{Binding Root.Apps}" 
+                      ItemTemplateSelector="{StaticResource PieItemTemplateSelector}"
+                      ItemsPanel="{StaticResource RadialPanelTemplate}"
+                      Margin="64" 
                       RenderTransformOrigin=".5 .5">
             <ItemsControl.RenderTransform>
                 <RotateTransform/>
             </ItemsControl.RenderTransform>
-
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <pielauncher:RadialPanel TotalAngle="360" AngleOffset="0" SwipeDirection="Clockwise"/>
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
         </ItemsControl>
 
         <Ellipse Width="300" Height="300" StrokeThickness="5" Opacity=".5" Stroke="{StaticResource BorderBrush}">
@@ -136,17 +186,10 @@
             </Ellipse.Effect>
 
         </Ellipse>
-        <Ellipse Width="300" Height="300" Stroke="{StaticResource BorderBrush}" StrokeThickness="1">
+        <Ellipse Width="300" Height="300" Stroke="{StaticResource BorderBrush}" StrokeThickness="1" Fill="{StaticResource BorderBrush}">
             <Ellipse.Effect>
                 <DropShadowEffect Opacity=".5" BlurRadius="30"/>
             </Ellipse.Effect>
-            <Ellipse.Fill>
-                <RadialGradientBrush Center="0.8 0.8" RadiusX="1" RadiusY="1">
-                    <GradientStop Color="#dd292b2d" Offset="0.4"/>
-                    <GradientStop Color="#dd393b3d" Offset="1"/>
-                </RadialGradientBrush>
-            </Ellipse.Fill>
-
         </Ellipse>
         <Grid x:Name="InnerContainer" VerticalAlignment="Stretch" HorizontalAlignment="Center" RenderTransformOrigin=".5 .5">
             <Grid.RowDefinitions>

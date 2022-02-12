@@ -56,7 +56,7 @@
                         Margin="0 0 0 3"/>
 
             <TextBlock Text="{Binding MediaInfo.Artist}"  TextAlignment="Center" Foreground="White" TextTrimming="CharacterEllipsis" 
-                       FontWeight="DemiBold" FontSize="16" Width="250" ToolTip="{Binding Text, RelativeSource={RelativeSource Self}}"
+                       FontWeight="DemiBold" FontSize="16" Width="230" ToolTip="{Binding Text, RelativeSource={RelativeSource Self}}"
                        />
         </StackPanel>
 

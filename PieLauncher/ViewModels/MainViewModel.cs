@@ -35,7 +35,6 @@ namespace PieLauncher
             private set
             {
                 if (_root == value) return;
-                FolderRegistry?.Clear();
                 _root = value;
                 N();
             }
@@ -199,6 +198,7 @@ namespace PieLauncher
                 var path = ofd.FileName;
 
                 var configFileData = File.ReadAllText(path);
+                FolderRegistry?.Clear();
                 Root = JsonConvert.DeserializeObject<FolderViewModel>(configFileData, Settings.DefaultJsonSettings)!;
                 Root.IsRoot = true;
             }
