@@ -27,6 +27,7 @@ namespace PieLauncher
         IntPtr _hookID = IntPtr.Zero;
         readonly User32.LowLevelKeyboardProc _callback;
         bool _keyDown = false;
+        ConfigWindow? _configWindow;
 
         FolderViewModel _root;
         public FolderViewModel Root
@@ -123,13 +124,13 @@ namespace PieLauncher
             try
             {
                 var settings = Settings.Load();
-                Root = settings.Root ?? new FolderViewModel() { IsRoot = true };
+                _root = settings.Root ?? new FolderViewModel() { IsRoot = true };
                 StartWithWindows = settings.StartWithWindows;
                 HotKey = settings.HotKey;
             }
             catch (Exception)
             {
-                Root = new FolderViewModel() { IsRoot = true };
+                _root = new FolderViewModel() { IsRoot = true };
                 HotKey = new HotKey(Keys.OemBackslash, ModifierKeys.Windows);
             }
 
@@ -212,15 +213,20 @@ namespace PieLauncher
             var file = JsonConvert.SerializeObject(Root, Settings.DefaultJsonSettings);
             File.WriteAllText(Settings.ConfigFilePath, file);
         }
-
         void OpenConfigWindow()
         {
+            if (_configWindow != null) return;
             ForceVisible = true;
             Topmost = false;
-            new ConfigWindow { DataContext = this }.ShowDialog();
-            ForceVisible = false;
-            IsVisible = false;
-            Topmost = true;
+            _configWindow = new ConfigWindow { DataContext = this };
+            _configWindow.Closed += (o, e) =>
+            {
+                _configWindow = null;
+                ForceVisible = false;
+                IsVisible = false;
+                Topmost = true;
+            };
+            _configWindow.Show();
         }
 
         IntPtr HookCallback(int nCode, IntPtr wParam, IntPtr lParam)
@@ -235,7 +241,7 @@ namespace PieLauncher
             if (key == HotKey.Key /*Keys.OemBackslash*/)
             {
                 if (msg == User32.WindowsMessages.WM_KEYDOWN &&
-                    (HotKey.ModifierList.Count== 0 || HotKey.ModifierList.Any(mk =>Keyboard.IsKeyDown(mk)))
+                    (HotKey.ModifierList.Count == 0 || HotKey.ModifierList.Any(mk => Keyboard.IsKeyDown(mk)))
                     )
                 {
                     _keyDown = true;
