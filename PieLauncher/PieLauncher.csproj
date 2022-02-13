@@ -13,17 +13,12 @@
 		<RuntimeIdentifier>win-x64</RuntimeIdentifier>
 		<IncludeAllContentForSelfExtract>true</IncludeAllContentForSelfExtract>
 		<DebugType>Embedded</DebugType>
+		<ApplicationIcon>icon.ico</ApplicationIcon>
 	</PropertyGroup>
 
 
 	<ItemGroup>
-	  <Content Include="donut.png" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <EmbeddedResource Include="donut.png">
-	    <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-	  </EmbeddedResource>
+	  <EmbeddedResource Include="icon.ico" />
 	</ItemGroup>
 
 	<ItemGroup>
