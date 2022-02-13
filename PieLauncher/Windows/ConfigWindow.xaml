@@ -70,10 +70,11 @@
                                 ContentTemplateSelector="{DynamicResource TemplateSelector}"
                                 VerticalAlignment="Stretch" VerticalContentAlignment="Stretch"/>
                 <Button Style="{StaticResource ButtonMainStyle}"
-                        Padding="8" Margin="0 1 1 0" Command="{Binding DeleteCommand}" Grid.Column="1"
-                        VerticalAlignment="Top" nsEx:ButtonExtensions.RippleEnabled="False"
-                        Background="#1fff" nsEx:ButtonExtensions.CornerRadius="0 5 0 20">
-                    <Path Data="{StaticResource SvgClose}" Margin="3 -1 -3 1"/>
+                        Padding="8" Margin="0 1 1 1" Command="{Binding DeleteCommand}" Grid.Column="1"
+                        VerticalAlignment="Stretch" nsEx:ButtonExtensions.RippleEnabled="False"
+                        VerticalContentAlignment="Center"
+                        Background="#1999" nsEx:ButtonExtensions.CornerRadius="0 5 5 0">
+                    <Path Data="{StaticResource SvgDeleteRounded}" Margin="0" Width="12" Height="12" />
                 </Button>
                 <Grid.ContextMenu>
                     <ContextMenu UseLayoutRounding="True" Foreground="White">
@@ -101,7 +102,6 @@
                     <ColumnDefinition Width="20"/>
                 </Grid.ColumnDefinitions>
 
-
                 <Image Source="{Binding ImageSource}" Grid.RowSpan="3" 
                        RenderOptions.BitmapScalingMode="HighQuality" 
                        Margin="5"
@@ -116,8 +116,53 @@
                 <TextBox Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="3"/>
                 <TextBox Text="{Binding Uri, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="3" Grid.Row="1"/>
 
-                <Button Style="{StaticResource BrowseButtonStyle}" Grid.Row="1" Command="{Binding BrowseUriCommand}"/>
-                
+                <Button Style="{StaticResource BrowseButtonStyle}" Grid.Row="1"
+                        x:Name="BrowseButton">
+                    <Grid>
+                        <Grid.Resources>
+                            <Style x:Key="BrowseOptionButtonStyle" TargetType="Button" BasedOn="{StaticResource ButtonMainStyle}">
+                                <Setter Property="Padding" Value="10 8"/>
+                                <Setter Property="nsEx:ButtonExtensions.CornerRadius" Value="5"/>
+                            </Style>
+                        </Grid.Resources>
+                        <Path Data="{StaticResource SvgSearch}" Margin="4"/>
+                        <Popup x:Name="BrowseOptionsPopup" Placement="Center" AllowsTransparency="True" PopupAnimation="Fade">
+                            <Grid Margin="50">
+                                <Border Background="#202325" CornerRadius="5" BorderBrush="#444" BorderThickness="1">
+                                    <Border.Effect>
+                                        <DropShadowEffect ShadowDepth="0" BlurRadius="20" Opacity=".5"/>
+                                    </Border.Effect>
+                                </Border>
+                                <StackPanel Margin="0">
+                                    <Button Command="{Binding BrowseFileCommand}" Style="{StaticResource BrowseOptionButtonStyle}" 
+                                            nsEx:ButtonExtensions.CornerRadius="5 5 0 0">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition/>
+                                            </Grid.ColumnDefinitions>
+                                            <Path Data="{StaticResource SvgFileRounded}" Width="16" Height="16" Margin="0 0 8 0"/>
+                                            <TextBlock Text="Browse file" Grid.Column="1" VerticalAlignment="Center"/>
+                                        </Grid>
+                                    </Button>
+                                    <Button Command="{Binding BrowseFolderCommand}" Style="{StaticResource BrowseOptionButtonStyle}" Margin="0 0 0 0"
+                                            nsEx:ButtonExtensions.CornerRadius="0 0 5 5">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition/>
+                                            </Grid.ColumnDefinitions>
+                                            <Path Data="{StaticResource SvgFolderRounded}" Width="16" Height="16" Margin="0 0 8 0"/>
+                                            <TextBlock Text="Browse folder" Grid.Column="1" VerticalAlignment="Center"/>
+                                        </Grid>
+
+                                    </Button>
+                                </StackPanel>
+                            </Grid>
+                        </Popup>
+                    </Grid>
+                </Button>
+
                 <Expander Header="Advanced settings" Grid.ColumnSpan="5" Grid.Row="3" Foreground="White"
                           Padding="0 2">
                     <Grid>
@@ -131,11 +176,19 @@
                         <TextBlock Style="{StaticResource FieldLabelStyle}" Text="Icon path" Grid.Row="2"/>
                         <Path Data="{StaticResource SvgImage}" Grid.Row="2" Style="{StaticResource FieldIconPathStyle}"/>
                         <TextBox Text="{Binding IconPath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="3" Grid.Row="2"/>
-                        <Button Style="{StaticResource BrowseButtonStyle}" Grid.Row="2" Command="{Binding BrowseIconCommand}"/>
+                        <Button  Style="{StaticResource BrowseButtonStyle}" Grid.Row="2">
+                            <Path Data="{StaticResource SvgSearchImage}" Margin="4"/>
+                        </Button>
+
 
                     </Grid>
                 </Expander>
             </Grid>
+            <DataTemplate.Triggers>
+                <Trigger SourceName="BrowseButton" Property="IsMouseOver" Value="True">
+                    <Setter TargetName="BrowseOptionsPopup" Property="IsOpen" Value="True"/>
+                </Trigger>
+            </DataTemplate.Triggers>
         </DataTemplate>
         <DataTemplate x:Key="SeparatorDataTemplate" DataType="{x:Type local:SeparatorViewModel}">
             <Grid HorizontalAlignment="Center">
@@ -158,11 +211,13 @@
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="40"/>
+                                    <ColumnDefinition Width="20"/>
                                 </Grid.ColumnDefinitions>
 
                                 <TextBox Text="{Binding IconPath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                                <Button Style="{StaticResource BrowseButtonStyle}" Grid.Row="1" Command="{Binding BrowseIconCommand}"/>
+                                <Button Style="{StaticResource BrowseButtonStyle}" Grid.Row="1" Command="{Binding BrowseIconCommand}">
+                                    <Path Data="{StaticResource SvgSearchImage}" Margin="4"/>
+                                </Button>
                             </Grid>
                         </UniformGrid>
                     </DataTemplate>
