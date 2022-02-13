@@ -7,7 +7,7 @@ namespace PieLauncher
     {
         public DataTemplate? ShortcutDataTemplate { get; set; }
         public DataTemplate? SeparatorDataTemplate { get; set; }
-        public DataTemplate? FolderDataTemplate { get; set; }
+        public DataTemplate? GroupDataTemplate { get; set; }
 
         public override DataTemplate? SelectTemplate(object item, DependencyObject container)
         {
@@ -15,7 +15,7 @@ namespace PieLauncher
             {
                 ShortcutViewModel => ShortcutDataTemplate,
                 SeparatorViewModel => SeparatorDataTemplate,
-                FolderViewModel => FolderDataTemplate,
+                FolderViewModel => GroupDataTemplate,
                 _ => null
             };
         }

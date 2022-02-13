@@ -185,7 +185,7 @@
         <pielauncher:PieItemTemplateSelector x:Key="PieItemTemplateSelector" 
                                          ShortcutDataTemplate="{StaticResource ShortcutDataTemplate}"
                                          SeparatorDataTemplate="{StaticResource SeparatorDataTemplate}"
-                                         FolderDataTemplate="{StaticResource FolderDataTemplate}"
+                                         GroupDataTemplate="{StaticResource FolderDataTemplate}"
                                          />
 
     </Window.Resources>
