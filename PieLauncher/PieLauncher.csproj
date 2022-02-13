@@ -52,8 +52,9 @@
 	<ItemGroup>
 		<PackageReference Include="gong-wpf-dragdrop" Version="3.1.1" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-		<PackageReference Include="Nostrum" Version="2.0.5" />
-		<PackageReference Include="Nostrum.WPF" Version="1.2.13" />
+		<PackageReference Include="Nostrum" Version="2.0.6" />
+		<PackageReference Include="Nostrum.WPF" Version="1.2.14" />
+		<PackageReference Include="Ookii.Dialogs.Wpf" Version="5.0.1" />
 	</ItemGroup>
 
 </Project>

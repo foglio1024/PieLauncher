@@ -1,12 +1,16 @@
-﻿using Nostrum.WinAPI;
+﻿using Microsoft.Win32;
+using Nostrum.WinAPI;
 using System;
 using System.Diagnostics;
+using System.Text;
 using System.Windows;
+using System.Windows.Interop;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace PieLauncher
 {
-    public class Utils
+    public static class Utils
     {
         public static IntPtr SetHook(User32.LowLevelKeyboardProc proc)
         {
@@ -29,7 +33,7 @@ namespace PieLauncher
             User32.SetWindowLong(hwnd, (int)User32.GWL.GWL_EXSTYLE, extendedStyle | (int)User32.ExtendedWindowStyles.WS_EX_NOACTIVATE);
         }
 
-        public static ScaleTransform GetOrCreateTransform(FrameworkElement elem)
+        public static ScaleTransform GetOrCreateScaleTransform(FrameworkElement elem)
         {
             var xform = new ScaleTransform();
             if (elem.RenderTransform is not ScaleTransform sc)
@@ -50,5 +54,31 @@ namespace PieLauncher
             return xform;
         }
 
+        public static string BrowseIcon(string name = "")
+        {
+            var ofd = new OpenFileDialog
+            {
+                Title = $"Browse icon{(string.IsNullOrWhiteSpace(name) ? "" : $" for {name}")}",
+                Filter = "Image Files(*.jpg;*.png;*.gif;*.webp;*.bmp;*.ico)|*.jpg;*.png;*.gif;*.webp;*.bmp;*.ico|Assemblies (*.exe;*.dll)|*.exe;*.dll|All files (*.*)|*.*"
+            };
+            ofd.ShowDialog();
+            if (string.IsNullOrWhiteSpace(ofd.FileName)) return "";
+            if (ofd.FileName.EndsWith(".exe") || ofd.FileName.EndsWith(".dll"))
+            {
+                var sb = new StringBuilder(ofd.FileName, 256);
+                if (!Shell32.SHPickIconDialog(IntPtr.Zero, sb, 256, out var idx)) return "";
+                return sb.ToString() + "|" + idx;
+            }
+            else
+            {
+                return ofd.FileName;
+            }
+        }
+        public static ImageSource? ExtractIconFromAssembly(string path, int index)
+        {
+            var extractor = new IconExtractor(Environment.ExpandEnvironmentVariables(path));
+            var icon = extractor.GetIcon(index);
+            return Imaging.CreateBitmapSourceFromHIcon(icon.Handle, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
+        }
     }
 }

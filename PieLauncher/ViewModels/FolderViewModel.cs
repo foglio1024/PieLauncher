@@ -1,50 +1,45 @@
-﻿using Microsoft.Win32;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Nostrum.WPF;
 using Nostrum.WPF.Factories;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.IO;
+using System.Linq;
 using System.Windows.Input;
+using System.Windows.Media;
 
 namespace PieLauncher
 {
     public class FolderViewModel : PieItemBase
     {
 
-        string _name = "";
-        public override string Name
-        {
-            get => _name;
-            set
-            {
-                if (_name == value) return;
-                _name = value;
-                N();
-            }
-        }
 
         public ObservableCollection<IPieItem> Apps { get; }
-        [JsonIgnore]
-        public ICollectionView AppsPreview { get; }
 
         public bool IsRoot { get; set; }
 
-        string _iconPath = "";
-        public string IconPath
+        public override string IconPath
         {
             get => _iconPath;
             set
             {
                 if (_iconPath == value) return;
-                _iconPath = value;
-                N();
+                base.IconPath = value;
                 N(nameof(IsIconValid));
             }
         }
 
-        public bool IsIconValid => File.Exists(_iconPath);
+        public bool IsIconValid => !string.IsNullOrWhiteSpace(_iconPath);
+
+        [JsonIgnore]
+        public override ImageSource? ImageSource
+        {
+            get
+            {
+                if (_imageSourceCache != null) return _imageSourceCache;
+                _imageSourceCache = ImageSourceFromAssemblyOrFile();
+                return _imageSourceCache;
+            }
+        }
 
         [JsonIgnore]
         public ICommand AddShortcutCommand { get; }
@@ -59,23 +54,16 @@ namespace PieLauncher
         public FolderViewModel()
         {
             Apps = new();
+            _name = "New folder";
             AddFolderCommand = new RelayCommand(AddFolder);
             AddSeparatorCommand = new RelayCommand(AddSeparator);
             AddShortcutCommand = new RelayCommand(AddShortcut);
             BrowseIconCommand = new RelayCommand(BrowseIcon);
 
-            AppsPreview = CollectionViewFactory.CreateCollectionView(Apps, a => a is ShortcutViewModel);
 
             MainViewModel.FolderRegistry.Add(this);
         }
 
-        public FolderViewModel(IList<IPieItem> apps) : this()
-        {
-            foreach (var app in apps)
-            {
-                Apps.Add(app);
-            }
-        }
 
         void AddShortcut()
         {
@@ -94,10 +82,7 @@ namespace PieLauncher
 
         void BrowseIcon()
         {
-            var ofd = new OpenFileDialog();
-            ofd.ShowDialog();
-            if (string.IsNullOrWhiteSpace(ofd.FileName)) return;
-            IconPath = ofd.FileName;
+            IconPath = Utils.BrowseIcon();
         }
 
         public override string ToString()
