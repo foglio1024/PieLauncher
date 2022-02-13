@@ -24,7 +24,7 @@ namespace PieLauncher
         string _duration = "0:00";
         double _completion;
         PlayBackStatus _playbackStatus;
-        bool _isEmpty;
+        bool _isEmpty = true;
 
         public PlayBackStatus PlaybackStatus
         {
