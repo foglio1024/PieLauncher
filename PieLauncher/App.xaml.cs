@@ -1,6 +1,7 @@
 ﻿#if !DEBUG
 using Microsoft.Win32;
 #endif
+using Nostrum.Extensions;
 using Nostrum.WinAPI;
 using System;
 using System.Drawing;
@@ -30,8 +31,7 @@ namespace PieLauncher
             MainWindow.Hide();
 
             var assembly = Assembly.GetExecutingAssembly();
-            var resourceName = assembly.GetManifestResourceNames().Single(str => str.EndsWith("donut.png"))!;
-            using var stream = assembly.GetManifestResourceStream(resourceName)!;
+            var stream = assembly.GetResourceStream("icon.ico")!;
             using var reader = new StreamReader(stream);
             reader.ReadToEnd();
             var bmp = new Bitmap(stream);
