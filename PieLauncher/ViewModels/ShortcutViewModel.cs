@@ -41,13 +41,12 @@ namespace PieLauncher
                 if (_imageSourceCache != null) return _imageSourceCache;
                 if (IsAssembly && string.IsNullOrEmpty(IconPath))
                 {
-                    _iconPath = _uri + "|0";
+                    IconPath = _uri + "|0";
                 }
                 _imageSourceCache = ImageSourceFromAssemblyOrFile();
                 return _imageSourceCache;
             }
         }
-
 
         [JsonIgnore]
         public ICommand LaunchCommand { get; }
@@ -61,6 +60,8 @@ namespace PieLauncher
 
         public ShortcutViewModel()
         {
+            Name = "New shortcut";
+
             LaunchCommand = new RelayCommand(Launch);
             BrowseFileCommand = new RelayCommand(BrowseFile);
             BrowseFolderCommand = new RelayCommand(BrowseFolder);

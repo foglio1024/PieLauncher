@@ -54,7 +54,7 @@ namespace PieLauncher
         public FolderViewModel()
         {
             Apps = new();
-            _name = "New folder";
+            Name = "New group";
             AddFolderCommand = new RelayCommand(AddFolder);
             AddSeparatorCommand = new RelayCommand(AddSeparator);
             AddShortcutCommand = new RelayCommand(AddShortcut);
