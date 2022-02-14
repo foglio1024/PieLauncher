@@ -246,16 +246,28 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
                     <Border Height="32" Background="#202325" Grid.ColumnSpan="4"
                                 CornerRadius="16" Margin="-16 0 0 0"/>
                     <Border Height="32" Background="#202325" Grid.ColumnSpan="4"
-                            Grid.Row="1"
-                                CornerRadius="16" Margin="-16 5 0 0"/>
-                    <Path Data="{StaticResource SvgLink}" Style="{StaticResource FieldIconPathStyle}" />
+                            Grid.Row="1" CornerRadius="16" Margin="-16 5 0 0"/>
+                    <Border Height="32" Background="#202325" Grid.ColumnSpan="4"
+                            Grid.Row="2" CornerRadius="16" Margin="-16 5 0 0"/>
+                    <Border Height="32" Background="#202325" Grid.ColumnSpan="4"
+                            Grid.Row="4" CornerRadius="16" Margin="-16 5 0 0"/>
+                    
                     <TextBlock Style="{StaticResource FieldLabelStyle}" Text="Path" />
-                    <TextBox Text="{Binding Uri, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
-                                 Grid.Column="2" HorizontalAlignment="Stretch"/>
+                    <TextBlock Style="{StaticResource FieldLabelStyle}" Text="Icon path" Grid.Row="1"/>
+                    <TextBlock Style="{StaticResource FieldLabelStyle}" Text="Arguments" Grid.Row="2"/>
+                    <TextBlock Style="{StaticResource FieldLabelStyle}" Text="Working dir" Grid.Row="3"/>
+                    
+                    <TextBox Text="{Binding Uri, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="2" HorizontalAlignment="Stretch"/>
+                    <TextBox Text="{Binding IconPath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="2" Grid.Row="1" HorizontalAlignment="Stretch"/>
+                    <TextBox Text="{Binding Args, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="2" Margin="0 0 0 0" Grid.Row="2" HorizontalAlignment="Stretch"/>
+                    <TextBox Text="{Binding WorkingDir, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="2" Grid.Row="3" HorizontalAlignment="Stretch"/>
+
                     <Button Style="{StaticResource BrowseButtonStyle}" Grid.Row="0" x:Name="BrowseButton"
                             Height="20" Margin="0 0 10 0" Background="Transparent">
                         <Grid>
@@ -299,16 +311,13 @@
                             </Popup>
                         </Grid>
                     </Button>
-
-                    <Path Data="{StaticResource SvgImage}" Style="{StaticResource FieldIconPathStyle}" Grid.Row="1"/>
-                    <TextBlock Style="{StaticResource FieldLabelStyle}" Text="Icon path" Grid.Row="1"/>
-                    <TextBox Text="{Binding IconPath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="2" 
-                             Grid.Row="1" HorizontalAlignment="Stretch"/>
-
-
-                    <Button  Style="{StaticResource BrowseButtonStyle}" Grid.Row="2" Command="{Binding BrowseIconCommand}" Height="20"
-                             HorizontalAlignment="Center" Background="Transparent" Margin="0 0 10 0">
+                    <Button  Style="{StaticResource BrowseButtonStyle}" Grid.Row="1" Command="{Binding BrowseIconCommand}" Height="20"
+                             HorizontalAlignment="Center" Background="Transparent" Margin="0 0 10 0" VerticalAlignment="Center">
                         <Path Data="{StaticResource SvgSearchImage}" Margin="4"/>
+                    </Button>
+                    <Button  Style="{StaticResource BrowseButtonStyle}" Grid.Row="3" Command="{Binding BrowseWorkingDirCommand}" Height="20"
+                             HorizontalAlignment="Center" Background="Transparent" Margin="0 0 10 0" VerticalAlignment="Center">
+                        <Path Data="{StaticResource SvgSearch}" Margin="4"/>
                     </Button>
                 </Grid>
             </Expander>
@@ -318,7 +327,6 @@
                 </Trigger>
             </DataTemplate.Triggers>
         </DataTemplate>
-
         <DataTemplate x:Key="SeparatorDataTemplate" DataType="{x:Type local:SeparatorViewModel}">
             <Grid HorizontalAlignment="Left" Margin="11 0 0 0">
                 <Grid.ColumnDefinitions>
@@ -326,9 +334,7 @@
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="40"/>
                 </Grid.ColumnDefinitions>
-                <!--<Separator Width="200" Background="#5999" VerticalAlignment="Center"/>-->
                 <TextBlock Text="Separator" Foreground="#5999"  Grid.Column="1" Margin="15 0" VerticalAlignment="Center"/>
-                <!--<Separator Width="200" Background="#5999" Grid.Column="2" VerticalAlignment="Center"/>-->
                 <Ellipse Grid.Column="0" Fill="#5999" Width="6" Height="6"/>
             </Grid>
         </DataTemplate>
@@ -380,6 +386,7 @@
             </Expander>
 
         </DataTemplate>
+
         <local:PieItemTemplateSelector x:Key="TemplateSelector"
                                        ShortcutDataTemplate="{StaticResource ShortcutDataTemplate}"
                                        SeparatorDataTemplate="{StaticResource SeparatorDataTemplate}"

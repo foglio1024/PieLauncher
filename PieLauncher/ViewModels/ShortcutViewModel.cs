@@ -26,12 +26,36 @@ namespace PieLauncher
             }
         }
 
+        string _args = "";
+        public string Args
+        {
+            get => _args;
+            set
+            {
+                if (_args == value) return;
+                _args = value;
+                N();
+            }
+        }
+
+        string _workingDir = "";
+        public string WorkingDir
+        {
+            get => _workingDir;
+            set
+            {
+                if (_workingDir == value) return;
+                _workingDir = value;
+                N();
+            }
+        }
+
         [JsonIgnore]
         bool IsAssembly => Uri.EndsWith(".exe") || Uri.EndsWith(".dll");
         [JsonIgnore]
         bool IsFolder => Directory.Exists(Uri);
         [JsonIgnore]
-        bool IsVbScript => Uri.EndsWith("vbs");
+        bool IsVbScript => Uri.EndsWith(".vbs");
 
         [JsonIgnore]
         public override ImageSource? ImageSource
@@ -56,7 +80,8 @@ namespace PieLauncher
         public ICommand BrowseIconCommand { get; }
         [JsonIgnore]
         public ICommand BrowseFolderCommand { get; }
-
+        [JsonIgnore]
+        public ICommand BrowseWorkingDirCommand { get; }
 
         public ShortcutViewModel()
         {
@@ -66,19 +91,38 @@ namespace PieLauncher
             BrowseFileCommand = new RelayCommand(BrowseFile);
             BrowseFolderCommand = new RelayCommand(BrowseFolder);
             BrowseIconCommand = new RelayCommand(BrowseIcon);
+            BrowseWorkingDirCommand = new RelayCommand(BrowseWorkingDir);
         }
 
         void Launch()
         {
             try
             {
+                var wd = Directory.Exists(WorkingDir)
+                    ? WorkingDir
+                    : Directory.Exists(Path.GetDirectoryName(Uri))
+                        ? Path.GetDirectoryName(Uri)
+                        : string.Empty;
+
                 if (IsVbScript)
                 {
-                    Process.Start(new ProcessStartInfo("cscript", $"\"{Uri}\"") { WorkingDirectory = Path.GetDirectoryName(Uri), WindowStyle = ProcessWindowStyle.Hidden });
+                    var startInfo = new ProcessStartInfo("cscript", $"\"{Uri}\" " + Args)
+                    {
+                        WorkingDirectory = wd,
+                        WindowStyle = ProcessWindowStyle.Hidden
+                    };
+                    Process.Start(startInfo);
                 }
                 else
                 {
-                    Process.Start(new ProcessStartInfo(Uri) { UseShellExecute = true });
+                    var startInfo = new ProcessStartInfo(Uri, Args) { UseShellExecute = true };
+                    if (IsAssembly && !string.IsNullOrWhiteSpace(wd))
+                    {
+                        startInfo.WorkingDirectory = string.IsNullOrWhiteSpace(WorkingDir)
+                            ? Path.GetDirectoryName(Uri)
+                            : WorkingDir;
+                    }
+                    Process.Start(startInfo);
                 }
             }
             catch (Exception ex)
@@ -135,6 +179,7 @@ namespace PieLauncher
                 }
             }
         }
+
         void BrowseFile()
         {
             var ofd = new OpenFileDialog();
@@ -147,8 +192,16 @@ namespace PieLauncher
         {
             var ofd = new Ookii.Dialogs.Wpf.VistaFolderBrowserDialog();
             if (ofd.ShowDialog() != true) return;
-            if(string.IsNullOrWhiteSpace(ofd.SelectedPath)) return;
+            if (string.IsNullOrWhiteSpace(ofd.SelectedPath)) return;
             SetUri(ofd.SelectedPath);
+        }
+
+        void BrowseWorkingDir()
+        {
+            var ofd = new Ookii.Dialogs.Wpf.VistaFolderBrowserDialog();
+            if (ofd.ShowDialog() != true) return;
+            if (string.IsNullOrWhiteSpace(ofd.SelectedPath)) return;
+            WorkingDir = ofd.SelectedPath;
         }
 
         void SetIconFromAssembly(string path, int index)
