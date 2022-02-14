@@ -1,7 +1,6 @@
 ﻿<Application x:Class="PieLauncher.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:PieLauncher"
              ShutdownMode="OnExplicitShutdown">
     <Application.Resources>
         <ResourceDictionary>
@@ -11,7 +10,7 @@
                 <ResourceDictionary Source="pack://application:,,,/Nostrum.WPF;component/Resources/Converters.xaml"/>
                 <ResourceDictionary Source="pack://application:,,,/Nostrum.WPF;component/Resources/Styles.xaml"/>
             </ResourceDictionary.MergedDictionaries>
-            
+
             <Color x:Key="BaseGradient1" >#2f3740</Color>
             <Color x:Key="BaseGradient2" >#29323c</Color>
             <Color x:Key="AccentGradient1" >#85D8CE</Color>

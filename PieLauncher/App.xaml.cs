@@ -1,18 +1,8 @@
-﻿#if !DEBUG
-using Microsoft.Win32;
-#endif
-using Nostrum.Extensions;
-using Nostrum.WinAPI;
+﻿using Nostrum.WPF;
 using System;
-using System.Diagnostics;
-using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Forms;
-using System.Windows.Input;
 using Application = System.Windows.Application;
 
 namespace PieLauncher
@@ -24,20 +14,11 @@ namespace PieLauncher
 
         protected override void OnStartup(StartupEventArgs e)
         {
-            SetStartWithWindows();
-
-
             MainWindow = new MainWindow();
             MainWindow.Show();
             MainWindow.Hide();
 
-            var assembly = Assembly.GetExecutingAssembly();
-            var stream = assembly.GetResourceStream("icon.ico")!;
-            using var reader = new StreamReader(stream);
-            reader.ReadToEnd();
-            var bmp = new Bitmap(stream);
-            var hIcon = bmp.GetHicon();
-            _tray.Icon = Icon.FromHandle(hIcon);
+            _tray.Icon = MiscUtils.GetEmbeddedIcon("icon.ico");// Icon.FromHandle(hIcon);
             _tray.MouseClick += OnTrayClick;
 
             AppDomain.CurrentDomain.UnhandledException += OnUnhandledException;
@@ -59,21 +40,9 @@ namespace PieLauncher
             App.Current.Shutdown();
         }
 
-
-        void SetStartWithWindows()
-        {
-#if !DEBUG
-            var rk = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
-            var path = Process.GetCurrentProcess().MainModule?.FileName;
-            rk?.SetValue(nameof(PieLauncher), path!);
-            //rk?.DeleteValue(nameof(PieLauncher), false);
-#endif
-        }
-
         void OnTrayClick(object? sender, System.Windows.Forms.MouseEventArgs e)
         {
             App.Current.Shutdown();
         }
-
     }
 }

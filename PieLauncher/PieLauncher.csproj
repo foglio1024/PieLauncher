@@ -18,7 +18,7 @@
 
 
 	<ItemGroup>
-	  <EmbeddedResource Include="icon.ico" />
+	  <Resource Include="icon.ico" />
 	</ItemGroup>
 
 	<ItemGroup>

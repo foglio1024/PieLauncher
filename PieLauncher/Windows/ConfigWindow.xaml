@@ -203,7 +203,7 @@
                                 ContentTemplateSelector="{DynamicResource TemplateSelector}"
                                 VerticalAlignment="Stretch" VerticalContentAlignment="Stretch"/>
                 <Button Style="{StaticResource ButtonMainStyle}"
-                        Padding="5" Margin="0 -7 -7 0" 
+                        Padding="4" Margin="0 -7 -7 0" 
                         Command="{Binding DeleteCommand}" Grid.Column="1"
                         VerticalAlignment="Top"
                         HorizontalAlignment="Right"
@@ -215,7 +215,9 @@
                         BorderThickness="1"
                         nsEx:ButtonExtensions.CornerRadius="20"
                         ToolTip="Delete this item">
-                    <Path Data="{StaticResource SvgCloseRounded}" Fill="#f55" Margin="2" Width="8" Height="8" />
+                    <Path Data="{StaticResource SvgCloseRounded}" 
+                          Fill="#f55" Stroke="#f55"
+                          Margin="2" Width="8" Height="8" />
                 </Button>
                 <!--<Grid.ContextMenu>
                     <ContextMenu UseLayoutRounding="True" Foreground="White">
@@ -338,7 +340,7 @@
                         <RowDefinition/>
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
-                    <Grid Margin="20 2 8 0">
+                    <Grid Margin="20 2 4 0">
                         <Grid.ColumnDefinitions >
                             <ColumnDefinition Width="0"/>
                             <ColumnDefinition Width="Auto"/>
@@ -411,18 +413,21 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-
+        <Border Background="#1ccc" Grid.ColumnSpan="3"
+                   MouseLeftButtonDown="TextBlock_MouseLeftButtonDown"
+                />
         <!--Title bar-->
         <TextBlock Text="Pie launcher settings" 
                    HorizontalAlignment="Stretch"
                    Foreground="#9fff"
                    Grid.ColumnSpan="2"
                    Background="Transparent"
-                   MouseLeftButtonDown="TextBlock_MouseLeftButtonDown"
                    FontWeight="Thin" FontSize="20"  
-                   Padding="18 10 0 10"
+                   Padding="48 10 0 10"
+                   IsHitTestVisible="False"
                    VerticalAlignment="Center"/>
-        <StackPanel HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10 0" Orientation="Horizontal"
+        <StackPanel HorizontalAlignment="Right" VerticalAlignment="Center"
+                    Margin="10 0" Orientation="Horizontal"
                     Background="Transparent" Grid.ColumnSpan="2">
             <Button Style="{StaticResource ButtonMainStyle}" Background="#2fff"
                     Click="OnMinimizeButtonClick"
@@ -440,48 +445,55 @@
                       Fill="White"/>
             </Button>
         </StackPanel>
+        <Image Source="/icon.ico" Width="24" Height="24"
+               HorizontalAlignment="Left" Margin="13 2 16 0"
+               VerticalAlignment="Center"
+               IsHitTestVisible="False"
+               />
 
-        <TextBlock Grid.Row="1" Text="Settings" Style="{StaticResource SectionHeaderStyle}"/>
+        <TextBlock Grid.Row="1" Text="Settings" Style="{StaticResource SectionHeaderStyle}"
+                   Margin="20 10 20 0"/>
         <TextBlock Grid.Row="3" Text="Items" Style="{StaticResource SectionHeaderStyle}"/>
 
         <!--Hotkey and startup-->
-        <Grid Grid.Row="1" Margin="16 0 0 0" 
+        <Grid Grid.Row="1" Margin="16 20 0 0" 
                      Grid.Column="1" 
-                     HorizontalAlignment="Left"
+                     HorizontalAlignment="Stretch"
                      VerticalAlignment="Center" Height="Auto" >
             <Grid.RowDefinitions>
                 <RowDefinition/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
-            <Border Height="32" Background="#22000000" Grid.ColumnSpan="2"
-                                CornerRadius="16" Margin="-16 0 0 0"/>
-            <Border Height="32" Background="#22000000" Grid.ColumnSpan="2"
-                    Grid.Row="1"
-                                CornerRadius="16" Margin="-16 5 0 5"/>
 
-            <Grid>
+            <Grid HorizontalAlignment="Left">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
+                <Border Height="32" Background="#22000000" Grid.ColumnSpan="2"
+                                CornerRadius="16" Margin="-16 0 0 0"/>
+
                 <TextBlock Style="{StaticResource FieldLabelStyle}" Text="Start with windows"
-                       Grid.Column="0"></TextBlock>
+                       Grid.Column="0"/>
                 <CheckBox IsChecked="{Binding StartWithWindows, Mode=TwoWay}"
                       Height="30" 
                       Grid.Column="1"
                       VerticalContentAlignment="Center"
                       Foreground="#9fff" 
-                          Margin="0 0 10 0"
-                          nsEx:CheckBoxExtensions.Size="14"
-                                           HorizontalAlignment="Right"
+                      Margin="10 0 15 0"
+                      nsEx:CheckBoxExtensions.Size="14"
+                      HorizontalAlignment="Right"
                       VerticalAlignment="Center" />
 
             </Grid>
-            <Grid Grid.Row="1">
+            <Grid Grid.Row="1" HorizontalAlignment="Left">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
+
+                <Border Height="32" Background="#22000000" Grid.ColumnSpan="2"
+                                CornerRadius="16" Margin="-16 5 0 5"/>
 
                 <TextBlock Style="{StaticResource FieldLabelStyle}" Text="Hotkey"
                        Grid.Column="0" ></TextBlock>
