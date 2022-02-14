@@ -54,7 +54,9 @@ namespace PieLauncher
 
         #region Fields
 
-        byte[][]? iconData = null;   // Binary data of each icon.
+#pragma warning disable CS8625 // too lazy to fix this now
+        byte[][] iconData = null;   // Binary data of each icon.
+#pragma warning restore CS8625 
 
         #endregion
 
@@ -76,7 +78,12 @@ namespace PieLauncher
         /// Initializes a new instance of the IconExtractor class from the specified file name.
         /// </summary>
         /// <param name="fileName">The file to extract icons from.</param>
-        public IconExtractor(string fileName) => Initialize(fileName);
+#pragma warning disable CS8618 // too lazy to fix this now
+        public IconExtractor(string fileName)
+#pragma warning restore CS8618 
+        {
+            Initialize(fileName);
+        }
 
         /// <summary>
         /// Extracts an icon from the file.
@@ -130,7 +137,6 @@ namespace PieLauncher
         void Initialize(string fileName)
         {
             if (fileName == null)
-
                 throw new ArgumentNullException(nameof(fileName));
 
             IntPtr hModule = IntPtr.Zero;
@@ -140,7 +146,6 @@ namespace PieLauncher
                 hModule = Kernel32.LoadLibraryEx(fileName, IntPtr.Zero, LOAD_LIBRARY_AS_DATAFILE);
 
                 if (hModule == IntPtr.Zero)
-
                     throw new Win32Exception();
 
                 FileName = GetFileName(hModule);
