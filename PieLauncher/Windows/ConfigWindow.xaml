@@ -523,7 +523,7 @@
                       Margin="0 0 10 0">
             <ItemsControl x:Name="RootFolder" 
                         Grid.Column="1"
-                        Margin="0 0 6 0"
+                        Margin="0 2 6 0"
                         ItemsSource="{Binding Root.Apps}" 
                         ItemTemplate="{StaticResource PieItemDataTemplate}"
                         dd:DragDrop.IsDragSource="True"
@@ -535,7 +535,7 @@
 
         <!--Add button-->
         <ContentControl Grid.Row="4" Grid.Column="1"
-                            HorizontalAlignment="Right" Margin="0 0 32 0" 
+                            HorizontalAlignment="Left" Margin="0 4 0 0" 
                             Content="{Binding Root}" 
                             ContentTemplate="{StaticResource FolderActionsDataTemplate}"/>
 
@@ -543,19 +543,7 @@
 
         <!--Config management buttons-->
         <UniformGrid Grid.Row="6" Rows="1" Grid.Column="1"
-                     HorizontalAlignment="Left" Margin="0 0 10 10">
-            <Button Style="{StaticResource ButtonsStyle}" 
-                    Command="{Binding SaveConfigCommand}"
-                    Width="Auto" Padding="10 6" Background="SeaGreen">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition/>
-                    </Grid.ColumnDefinitions>
-                    <Path Data="{StaticResource SvgSave}" Style="{StaticResource OptionPathStyle}"/>
-                    <TextBlock Text="Save" Style="{StaticResource OptionLabelStyle}"></TextBlock>
-                </Grid>
-            </Button>
+                     HorizontalAlignment="Right" Margin="0 0 10 10">
             <Button Style="{StaticResource ButtonsStyle}" 
                     Command="{Binding ImportConfigCommand}" 
                     Width="Auto" Padding="10 6">
@@ -568,7 +556,19 @@
                     <TextBlock Text="Import settings" Style="{StaticResource OptionLabelStyle}"></TextBlock>
                 </Grid>
             </Button>
-            <Button Style="{StaticResource ButtonsStyle}" Command="{Binding ExportConfigCommand}"
+            <Button Style="{StaticResource ButtonsStyle}" 
+                    Command="{Binding SaveConfigCommand}"
+                    Width="Auto" Padding="10 6" Background="SeaGreen">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Path Data="{StaticResource SvgSave}" Style="{StaticResource OptionPathStyle}"/>
+                    <TextBlock Text="Save and close" Style="{StaticResource OptionLabelStyle}"></TextBlock>
+                </Grid>
+            </Button>
+            <!--<Button Style="{StaticResource ButtonsStyle}" Command="{Binding ExportConfigCommand}"
                     Width="Auto" Padding="10 6">
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -576,9 +576,9 @@
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
                     <Path Data="{StaticResource SvgExport}" Style="{StaticResource OptionPathStyle}"/>
-                    <TextBlock Text="Export settings" Style="{StaticResource OptionLabelStyle}"></TextBlock>
+                    <TextBlock Text="Export settings" Style="{StaticResource OptionLabelStyle}"/>
                 </Grid>
-            </Button>
+            </Button>-->
         </UniformGrid>
 
 
