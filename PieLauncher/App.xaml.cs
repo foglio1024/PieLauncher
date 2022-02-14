@@ -18,19 +18,30 @@ namespace PieLauncher
             MainWindow.Show();
             MainWindow.Hide();
 
-            _tray.Icon = MiscUtils.GetEmbeddedIcon("icon.ico");// Icon.FromHandle(hIcon);
+            _tray.Icon = MiscUtils.GetEmbeddedIcon("icon.ico");
             _tray.MouseClick += OnTrayClick;
+            _tray.MouseDoubleClick += OnTrayDoubleClick;
 
             AppDomain.CurrentDomain.UnhandledException += OnUnhandledException;
 
             base.OnStartup(e);
         }
+
         protected override void OnExit(ExitEventArgs e)
         {
             KeyboardHook.Instance.Dispose();
             _tray?.Dispose();
 
             base.OnExit(e);
+        }
+        void OnTrayDoubleClick(object? sender, MouseEventArgs e)
+        {
+            App.Current.Shutdown();
+        }
+
+        void OnTrayClick(object? sender, EventArgs e)
+        {
+            ((MainViewModel)((MainWindow)MainWindow).DataContext).OpenConfigWindowCommand.Execute(null);
         }
 
         void OnUnhandledException(object sender, UnhandledExceptionEventArgs e)
@@ -40,9 +51,5 @@ namespace PieLauncher
             App.Current.Shutdown();
         }
 
-        void OnTrayClick(object? sender, System.Windows.Forms.MouseEventArgs e)
-        {
-            App.Current.Shutdown();
-        }
     }
 }

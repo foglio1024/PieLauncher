@@ -187,6 +187,8 @@ namespace PieLauncher
                 StartWithWindows = StartWithWindows,
                 HotKey = HotKey
             }.Save();
+
+            _configWindow?.Close();
         }
 
         void ImportConfig()
