@@ -12,7 +12,7 @@ namespace PieLauncher
 
         public FolderViewModel? Root { get; set; }
         public bool StartWithWindows { get; set; }
-        public HotKey HotKey { get; set; }
+        public HotKey HotKey { get; set; } = new HotKey(System.Windows.Forms.Keys.OemBackslash, System.Windows.Input.ModifierKeys.Windows);
 
         public static Settings Load()
         {
