@@ -71,13 +71,13 @@
                 <Ellipse Style="{StaticResource DefaultButtonEllipseStyle}" 
                          Opacity=".8" Stroke="{StaticResource BorderBrush}"/>
 
-                <Grid VerticalAlignment="Center">
+                <Grid VerticalAlignment="Center" >
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
                     <Grid x:Name="IconContainer"
-                          Width="32" Height="32">
+                          Width="32" Height="32" Margin="0 -10 0 0">
                         <Path x:Name="DefaultIcon" 
                               Visibility="{Binding IsIconValid, Converter={converters:BoolToVisibility Invert=True}}"
                               Data="{StaticResource SvgMoreHorizontal}" />
