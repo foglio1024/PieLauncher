@@ -46,7 +46,8 @@ namespace PieLauncher
 
         public override string ToString()
         {
-            return $"{(Ctrl ? "Ctrl + " : "")}{(Shift ? "Shift + " : "")}{(Alt ? "Alt + " : "")}{(Win ? "Win + " : "")}{Key}";
+            return $"{(Ctrl ? "Ctrl + " : "")}{(Shift ? "Shift + " : "")}{(Alt ? "Alt + " : "")}{(Win ? "Win + " : "")}{Key}"
+                .Replace("OemBackslash", "<");
         }
 
         public static bool operator ==(HotKey left, HotKey right)

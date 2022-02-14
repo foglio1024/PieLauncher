@@ -84,8 +84,11 @@ namespace PieLauncher.Controls
             var alt = _pressedKeys.Contains(Key.LeftAlt);
             var ctrl = _pressedKeys.Contains(Key.LeftCtrl);
             var win = _pressedKeys.Contains(Key.LWin);
-            var key = _pressedKeys.FirstOrDefault(x => x != Key.LeftAlt && x != Key.LeftShift && x != Key.LeftCtrl && x != Key.LWin);
-            var mod = (ctrl ? ModifierKeys.Control : ModifierKeys.None) | (win ? ModifierKeys.Windows: ModifierKeys.None) | (shift ? ModifierKeys.Shift : ModifierKeys.None) | (alt ? ModifierKeys.Alt : ModifierKeys.None);
+            var key = _pressedKeys.FirstOrDefault(x => x is not Key.LeftAlt and not Key.LeftShift and not Key.LeftCtrl and not Key.LWin);
+            var mod = (ctrl ? ModifierKeys.Control : ModifierKeys.None) 
+                    | (win ? ModifierKeys.Windows: ModifierKeys.None) 
+                    | (shift ? ModifierKeys.Shift : ModifierKeys.None) 
+                    | (alt ? ModifierKeys.Alt : ModifierKeys.None);
 
             Enum.TryParse<Keys>(key.ToString(), out var wfKey);
             if (wfKey == Keys.None) return;
