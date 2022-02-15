@@ -46,8 +46,8 @@ namespace PieLauncher
 
         void OnUnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
-            File.WriteAllText(Path.Combine(Path.GetDirectoryName(Environment.ProcessPath)!, "error.txt"), e.ToString());
-            System.Windows.MessageBox.Show(e.ToString(), "Pie launcher", MessageBoxButton.OK);
+            File.WriteAllText(Path.Combine(Path.GetDirectoryName(Environment.ProcessPath)!, "error.txt"), e.ExceptionObject.ToString());
+            System.Windows.MessageBox.Show(e.ExceptionObject.ToString(), "Pie launcher", MessageBoxButton.OK);
             App.Current.Shutdown();
         }
 

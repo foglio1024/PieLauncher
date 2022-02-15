@@ -9,11 +9,12 @@
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<PublishSingleFile Condition="'$(Configuration)' == 'Release'">true</PublishSingleFile>
 		<SelfContained>true</SelfContained>
-		<PublishReadyToRun>true</PublishReadyToRun>
+		<!--<PublishReadyToRun>true</PublishReadyToRun>-->
 		<RuntimeIdentifier>win-x64</RuntimeIdentifier>
-		<IncludeAllContentForSelfExtract>true</IncludeAllContentForSelfExtract>
+		<!--<IncludeAllContentForSelfExtract>true</IncludeAllContentForSelfExtract>-->
 		<DebugType>Embedded</DebugType>
 		<ApplicationIcon>icon.ico</ApplicationIcon>
+		<Version>1.0.0</Version>
 	</PropertyGroup>
 
 
