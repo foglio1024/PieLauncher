@@ -55,7 +55,7 @@ namespace PieLauncher
         #region Fields
 
 #pragma warning disable CS8625 // too lazy to fix this now
-        byte[][] iconData = null;   // Binary data of each icon.
+        byte[][] _iconData = null;   // Binary data of each icon.
 #pragma warning restore CS8625 
 
         #endregion
@@ -70,7 +70,7 @@ namespace PieLauncher
         /// <summary>
         /// Gets the count of the icons in the associated file.
         /// </summary>
-        public int Count => iconData.Length;
+        public int Count => _iconData.Length;
 
         #endregion
 
@@ -98,8 +98,8 @@ namespace PieLauncher
 
             // Create an Icon based on a .ico file in memory.
 
-            using var ms = new MemoryStream(iconData[index]);
-            return new Icon(ms);
+            using var ms = new MemoryStream(_iconData[index]);
+            return new Icon(ms, -1,-1);
         }
 
         /// <summary>
@@ -130,7 +130,7 @@ namespace PieLauncher
             if (outputStream == null)
                 throw new ArgumentNullException(nameof(outputStream));
 
-            byte[] data = iconData[index];
+            byte[] data = _iconData[index];
             outputStream.Write(data, 0, data.Length);
         }
 
@@ -211,7 +211,7 @@ namespace PieLauncher
 
                 Kernel32.EnumResourceNames(hModule, RT_GROUP_ICON, callback, IntPtr.Zero);
 
-                iconData = tmpData.ToArray();
+                _iconData = tmpData.ToArray();
             }
             finally
             {
