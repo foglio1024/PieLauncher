@@ -35,9 +35,10 @@
                 <Path >
                     <Path.Style>
                         <Style TargetType="Path" BasedOn="{StaticResource {x:Type Path}}">
-                            <Setter Property="Data" Value="{StaticResource SvgPlay}"></Setter>
+                            <Setter Property="Data" Value="{StaticResource SvgPlay}"/>
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding MediaInfo.PlaybackStatus}" Value="{x:Static ctrl:GlobalSystemMediaTransportControlsSessionPlaybackStatus.Playing}">
+                                <DataTrigger Binding="{Binding MediaInfo.PlaybackStatus}" 
+                                             Value="{x:Static ctrl:GlobalSystemMediaTransportControlsSessionPlaybackStatus.Playing}">
                                     <Setter Property="Data" Value="{StaticResource SvgPause}"></Setter>
                                 </DataTrigger>
                             </Style.Triggers>

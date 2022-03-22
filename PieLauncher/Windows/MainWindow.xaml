@@ -19,9 +19,9 @@
         WindowStartupLocation="CenterScreen"
         Title="MainWindow" Height="700" Width="700"
         ToolTipService.InitialShowDelay="0" 
+        KeyDown="Window_KeyDown"
         >
     <Window.Resources>
-
         <ItemsPanelTemplate x:Key="RadialPanelTemplate">
             <pielauncher:RadialPanel TotalAngle="360" AngleOffset="0" SwipeDirection="Clockwise"/>
         </ItemsPanelTemplate>
@@ -34,16 +34,6 @@
             <Setter Property="Effect" >
                 <Setter.Value>
                     <DropShadowEffect Opacity=".5" BlurRadius="30"/>
-                </Setter.Value>
-            </Setter>
-        </Style>
-        <Style x:Key="MainRingStyle" TargetType="Ellipse">
-            <Setter Property="Margin" Value="60"/>
-            <Setter Property="StrokeThickness" Value="100"/>
-            <Setter Property="Stroke" Value="{StaticResource DefaultBackgroundBrush}"/>
-            <Setter Property="Effect" >
-                <Setter.Value>
-                    <DropShadowEffect ShadowDepth="0" BlurRadius="100" Opacity=".7"/>
                 </Setter.Value>
             </Setter>
         </Style>
@@ -66,11 +56,10 @@
         <DataTemplate x:Key="SeparatorDataTemplate" DataType="{x:Type pielauncher:SeparatorViewModel}">
             <Ellipse Width="16" Height="16" Fill="#1fff"/>
         </DataTemplate>
+
         <DataTemplate x:Key="FolderDataTemplate" DataType="{x:Type pielauncher:FolderViewModel}">
             <Grid>
-                <Ellipse Style="{StaticResource DefaultButtonEllipseStyle}" 
-                         Opacity=".8" Stroke="{StaticResource BorderBrush}"/>
-
+                <Ellipse Style="{StaticResource DefaultButtonEllipseStyle}" />
                 <Grid VerticalAlignment="Center" >
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
@@ -154,6 +143,11 @@
                                                  EasingFunction="{StaticResource QuadraticEase}"
                                                  Storyboard.TargetName="FolderName"
                                                  Storyboard.TargetProperty="FontSize"/>
+                                <DoubleAnimation Duration="0:0:0.20"
+                                                 To="100" 
+                                                 EasingFunction="{StaticResource QuadraticEase}"
+                                                 Storyboard.TargetName="FolderName"
+                                                 Storyboard.TargetProperty="MaxWidth"/>
                             </Storyboard>
                         </BeginStoryboard>
                     </Trigger.EnterActions>
@@ -175,6 +169,12 @@
                                                  EasingFunction="{StaticResource QuadraticEase}"
                                                  Storyboard.TargetName="FolderName"
                                                  Storyboard.TargetProperty="FontSize"/>
+                                <DoubleAnimation Duration="0:0:0.20"
+                                                 To="70" 
+                                                 EasingFunction="{StaticResource QuadraticEase}"
+                                                 Storyboard.TargetName="FolderName"
+                                                 Storyboard.TargetProperty="MaxWidth"/>
+
                             </Storyboard>
                         </BeginStoryboard>
                     </Trigger.ExitActions>
@@ -190,30 +190,48 @@
 
     </Window.Resources>
     <Grid>
-        <Ellipse Style="{StaticResource MainRingStyle}"/>
-        <Ellipse Margin="60"  StrokeThickness="1" Stroke="#19ffffff" />
-        <Ellipse Margin="160"  StrokeThickness="1" Stroke="#3fff" />
+        <controls:Donut x:Name="Donut"
+                        InnerRadius="360" 
+                        OuterRadius="580"
+                        Fill="{StaticResource DefaultBackgroundBrush}"
+                        >
+            <FrameworkElement.CacheMode>
+                <BitmapCache RenderAtScale=".8"/>
+            </FrameworkElement.CacheMode>
+            <controls:Donut.Stroke>
+                <SolidColorBrush Color="{StaticResource BaseGradient3}"/>
+            </controls:Donut.Stroke>
+        </controls:Donut>
+
+        <Ellipse x:Name="Glow" Width="300" Height="300" StrokeThickness="5" Opacity=".5" 
+                 Stroke="{Binding CurrentTime, Converter={pielauncher:DateTimeToGradient}}" Visibility="Visible">
+            <FrameworkElement.CacheMode>
+                <BitmapCache RenderAtScale=".2"/>
+            </FrameworkElement.CacheMode>
+            <Ellipse.Effect>
+                <BlurEffect Radius="30"/>
+            </Ellipse.Effect>
+        </Ellipse>
+        <Ellipse x:Name="InnerCircle" Width="300" Height="300" Stroke="#2fff" StrokeThickness="0" 
+                 Fill="{Binding CurrentTime, Converter={pielauncher:DateTimeToGradient}}">
+            <FrameworkElement.CacheMode>
+                <BitmapCache RenderAtScale=".75"/>
+            </FrameworkElement.CacheMode>
+            <Ellipse.Effect>
+                <DropShadowEffect Opacity=".5" BlurRadius="30"/>
+            </Ellipse.Effect>
+        </Ellipse>
+
         <ItemsControl x:Name="MainContainer"
                       ItemsSource="{Binding Root.Apps}" 
                       ItemTemplateSelector="{StaticResource PieItemTemplateSelector}"
                       ItemsPanel="{StaticResource RadialPanelTemplate}"
-                      Margin="64" 
+                      Margin="68" 
                       RenderTransformOrigin=".5 .5">
             <ItemsControl.RenderTransform>
                 <RotateTransform/>
             </ItemsControl.RenderTransform>
         </ItemsControl>
-
-        <Ellipse Width="300" Height="300" StrokeThickness="5" Opacity=".5" Stroke="{StaticResource BorderBrush}">
-            <Ellipse.Effect>
-                <BlurEffect Radius="30"/>
-            </Ellipse.Effect>
-        </Ellipse>
-        <Ellipse Width="300" Height="300" Stroke="#2fff" StrokeThickness="1" Fill="{StaticResource BorderBrush}">
-            <Ellipse.Effect>
-                <DropShadowEffect Opacity=".5" BlurRadius="30"/>
-            </Ellipse.Effect>
-        </Ellipse>
         <Grid x:Name="InnerContainer" VerticalAlignment="Stretch" HorizontalAlignment="Center" RenderTransformOrigin=".5 .5">
             <Grid.RowDefinitions>
                 <RowDefinition/>
@@ -230,6 +248,7 @@
                     <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
                     <Setter Property="Command" Value="{Binding OpenConfigWindowCommand}"/>
                     <Setter Property="nostrumExt:ButtonExtensions.CornerRadius" Value="15"/>
+                    <Setter Property="nostrumExt:ButtonExtensions.RippleEnabled" Value="False"/>
                 </Style>
                 <Style x:Key="ClockTextBlockStyle" TargetType="TextBlock">
                     <Style.Triggers>

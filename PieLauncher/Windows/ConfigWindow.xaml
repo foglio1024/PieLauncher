@@ -6,15 +6,16 @@
         xmlns:nsEx="clr-namespace:Nostrum.WPF.Extensions;assembly=Nostrum.WPF"
         xmlns:local="clr-namespace:PieLauncher"
         xmlns:controls="clr-namespace:PieLauncher.Controls"
-        xmlns:conv="clr-namespace:Nostrum.WPF.Converters;assembly=Nostrum.WPF"
         xmlns:dd="urn:gong-wpf-dragdrop"
-        Topmost="True"
+        mc:Ignorable="d" 
         ResizeMode="CanMinimize"
-        d:DataContext="{d:DesignInstance Type=local:MainViewModel}"
-        mc:Ignorable="d" Background="#202325" 
+        Background="#202325" 
         Foreground="White"
+        WindowStartupLocation="CenterScreen"
         FontFamily="{StaticResource K2DRegular}"
-        Title="Pie launcher settings" Height="800" Width="1000">
+        d:DataContext="{d:DesignInstance Type=local:MainViewModel}"
+        Title="Pie launcher settings" 
+        Height="800" Width="1000">
     <WindowChrome.WindowChrome>
         <WindowChrome ResizeBorderThickness="2 2 4 4"
                       GlassFrameThickness="0 0 1 1"
@@ -142,7 +143,7 @@
             <Setter Property="HorizontalAlignment" Value="Right"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="Margin" Value="0 0 6 0"/>
-            <Setter Property="Grid.Column" Value="1"/>
+            <Setter Property="Grid.Column" Value="0"/>
         </Style>
         <Style x:Key="BrowseButtonStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource ButtonContentOpacityStyle}">
             <Setter Property="HorizontalAlignment" Value="Stretch"/>
@@ -257,12 +258,12 @@
                             Grid.Row="2" CornerRadius="16" Margin="-16 5 0 0"/>
                     <Border Height="32" Background="#202325" Grid.ColumnSpan="4"
                             Grid.Row="4" CornerRadius="16" Margin="-16 5 0 0"/>
-                    
-                    <TextBlock Style="{StaticResource FieldLabelStyle}" Text="Path" />
-                    <TextBlock Style="{StaticResource FieldLabelStyle}" Text="Icon path" Grid.Row="1"/>
-                    <TextBlock Style="{StaticResource FieldLabelStyle}" Text="Arguments" Grid.Row="2"/>
-                    <TextBlock Style="{StaticResource FieldLabelStyle}" Text="Working dir" Grid.Row="3"/>
-                    
+
+                    <TextBlock Style="{StaticResource FieldLabelStyle}" Grid.Column="1" Text="Path" />
+                    <TextBlock Style="{StaticResource FieldLabelStyle}" Grid.Column="1" Text="Icon path" Grid.Row="1"/>
+                    <TextBlock Style="{StaticResource FieldLabelStyle}" Grid.Column="1" Text="Arguments" Grid.Row="2"/>
+                    <TextBlock Style="{StaticResource FieldLabelStyle}" Grid.Column="1" Text="Working dir" Grid.Row="3"/>
+
                     <TextBox Text="{Binding Uri, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="2" HorizontalAlignment="Stretch"/>
                     <TextBox Text="{Binding IconPath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="2" Grid.Row="1" HorizontalAlignment="Stretch"/>
                     <TextBox Text="{Binding Args, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="2" Margin="0 0 0 0" Grid.Row="2" HorizontalAlignment="Stretch"/>
@@ -356,7 +357,7 @@
                         <Border Height="32" Background="#202325" Grid.ColumnSpan="4"
                                 CornerRadius="16" Margin="-16 0 0 0"/>
 
-                        <TextBlock Style="{StaticResource FieldLabelStyle}" Text="Icon path" Grid.Row="1"/>
+                        <TextBlock Style="{StaticResource FieldLabelStyle}" Grid.Column="1" Text="Icon path" Grid.Row="1"/>
                         <TextBox Text="{Binding IconPath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
                                  Grid.Column="2" 
                                  HorizontalAlignment="Stretch"/>
@@ -397,6 +398,23 @@
             <Setter Property="Margin" Value="20 0"/>
             <Setter Property="Foreground" Value="#5fff"/>
         </Style>
+        <Style x:Key="TitleBarButtonStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource ButtonMainStyle}">
+            <Setter Property="Background" Value="#2fff"/>
+            <Setter Property="nsEx:ButtonExtensions.CornerRadius" Value="10"/>
+            <Setter Property="nsEx:ButtonExtensions.RippleEnabled" Value="False"/>
+            <Setter Property="Height" Value="18"/>
+            <Setter Property="Width" Value="18"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+
+        <Style x:Key="TitleBarButtonPathStyle" TargetType="{x:Type Path}">
+            <Setter Property="Height" Value="8"/>
+            <Setter Property="Width" Value="8"/>
+            <Setter Property="Fill" Value="White"/>
+            <Setter Property="Stretch" Value="Uniform"/>
+
+        </Style>
     </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
@@ -421,7 +439,7 @@
         </Grid.RowDefinitions>
 
         <Border Background="#1ccc" Grid.ColumnSpan="3"
-                   MouseLeftButtonDown="TextBlock_MouseLeftButtonDown"
+                MouseLeftButtonDown="TextBlock_MouseLeftButtonDown"
                 />
         <!--Title bar-->
         <TextBlock Text="Pie launcher settings" 
@@ -436,20 +454,16 @@
         <StackPanel HorizontalAlignment="Right" VerticalAlignment="Center"
                     Margin="10 0" Orientation="Horizontal"
                     Background="Transparent" Grid.ColumnSpan="2">
-            <Button Style="{StaticResource ButtonMainStyle}" Background="#2fff"
+            <Button Style="{StaticResource TitleBarButtonStyle}" 
                     Click="OnMinimizeButtonClick"
-                    nsEx:ButtonExtensions.CornerRadius="10" Height="18" Width="18"
-                    Margin="0 0 4 0"
-                    HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
-                <Path Data="{StaticResource SvgMinimize}" Height="8" Width="8"
-                      Fill="White"/>
+                    Margin="0 0 4 0" >
+                <Path Style="{StaticResource TitleBarButtonPathStyle}" 
+                      Data="{StaticResource SvgMinimize}" />
             </Button>
-            <Button Style="{StaticResource ButtonMainStyle}" Background="#2fff"
-                    Click="OnCloseButtonClick"
-                    nsEx:ButtonExtensions.CornerRadius="10" Height="18" Width="18"
-                    HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
-                <Path Data="{StaticResource SvgCloseRounded}" Height="8" Width="8"
-                      Fill="White"/>
+            <Button Style="{StaticResource TitleBarButtonStyle}" 
+                    Click="OnCloseButtonClick" >
+                <Path Style="{StaticResource TitleBarButtonPathStyle}"
+                      Data="{StaticResource SvgCloseRounded}" />
             </Button>
         </StackPanel>
         <Image Source="/icon.ico" Width="24" Height="24"
@@ -463,56 +477,79 @@
         <TextBlock Grid.Row="3" Text="Items" Style="{StaticResource SectionHeaderStyle}"/>
 
         <!--Hotkey and startup-->
-        <Grid Grid.Row="1" Margin="16 20 0 0" 
+        <StackPanel Grid.Row="1" Margin="16 10 0 0" 
                      Grid.Column="1" 
                      HorizontalAlignment="Stretch"
                      VerticalAlignment="Center" Height="Auto" >
-            <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition/>
-            </Grid.RowDefinitions>
+            <StackPanel.Resources>
+                <Style x:Key="SettingBorderStyle" TargetType="Border">
+                    <Setter Property="Height" Value="32"/>
+                    <Setter Property="Background" Value="#2000"/>
+                    <Setter Property="Grid.ColumnSpan" Value="2"/>
+                    <Setter Property="CornerRadius" Value="16"/>
+                    <Setter Property="Margin" Value="-16 0 0 0"/>
+                </Style>
+                <ControlTemplate x:Key="SettingTemplate" TargetType="ContentControl">
+                    <Grid Grid.Row="1" HorizontalAlignment="Left">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Border Style="{StaticResource SettingBorderStyle}"/>
+                        <TextBlock Style="{StaticResource FieldLabelStyle}" 
+                                   Text="{TemplateBinding local:ContentControlExtensions.Label}" />
+                        <ContentPresenter Content="{TemplateBinding Content}"
+                                          Grid.Column="1"
+                                          Height="30" Margin="5 0 15 0"
+                                          VerticalAlignment="Center" />
+                    </Grid>
 
-            <Grid HorizontalAlignment="Left">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <Border Height="32" Background="#22000000" Grid.ColumnSpan="2"
-                                CornerRadius="16" Margin="-16 0 0 0"/>
+                </ControlTemplate>
+                <Style TargetType="ContentControl">
+                    <Setter Property="Template"  Value="{StaticResource SettingTemplate}"/>
+                    <Setter Property="Margin" Value="0 5 0 0"/>
+                </Style>
 
-                <TextBlock Style="{StaticResource FieldLabelStyle}" Text="Start with windows"
-                       Grid.Column="0"/>
+            </StackPanel.Resources>
+            <ContentControl local:ContentControlExtensions.Label="Start with windows"
+                            Margin="0">
                 <CheckBox IsChecked="{Binding StartWithWindows, Mode=TwoWay}"
-                      Height="30" 
-                      Grid.Column="1"
-                      VerticalContentAlignment="Center"
                       Foreground="#9fff" 
-                      Margin="10 0 15 0"
                       nsEx:CheckBoxExtensions.Size="14"
-                      HorizontalAlignment="Right"
                       VerticalAlignment="Center" />
+            </ContentControl>
+            <ContentControl local:ContentControlExtensions.Label="Hotkey">
+                <controls:HotkeySettingControl Value="{Binding HotKey, Mode=TwoWay}" 
+                                               Grid.Column="1" />
+            </ContentControl>
+            <ContentControl local:ContentControlExtensions.Label="Trigger mode">
+                <ComboBox SelectedValue="{Binding TriggerMode, Mode=TwoWay}"
+                          Style="{StaticResource ComboBoxMainStyle}"
+                          Foreground="White"
+                          VerticalContentAlignment="Center"
+                          ItemsSource="{nsEx:EnumBindingSource {x:Type local:TriggerMode}}"
+                          nsEx:ComboBoxExtensions.DropDownBorderStyle="{StaticResource ComboBoxDropDownBorderStyle}"/>
+            </ContentControl>
 
-            </Grid>
-            <Grid Grid.Row="1" HorizontalAlignment="Left">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
+            <ContentControl local:ContentControlExtensions.Label="Close after launch" >
+                <ContentControl.Style>
+                    <Style BasedOn="{StaticResource {x:Type ContentControl}}" TargetType="{x:Type ContentControl}">
+                        <Setter Property="Visibility" Value="Collapsed"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding TriggerMode}" Value="{x:Static local:TriggerMode.Toggle}">
+                                <Setter Property="Visibility" Value="Visible"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </ContentControl.Style>
+                <CheckBox IsChecked="{Binding CloseAfterClick, Mode=TwoWay}"
+                      Foreground="#9fff" 
+                      nsEx:CheckBoxExtensions.Size="14"
+                      VerticalAlignment="Center" />
+            </ContentControl>
 
-                <Border Height="32" Background="#22000000" Grid.ColumnSpan="2"
-                                CornerRadius="16" Margin="-16 5 0 5"/>
 
-                <TextBlock Style="{StaticResource FieldLabelStyle}" Text="Hotkey"
-                       Grid.Column="0" ></TextBlock>
-                <controls:HotkeySettingControl Value="{Binding HotKey, Mode=TwoWay}"
-                      Grid.Column="1"
-                      Height="30" Margin="0 0 10 0"
-                                           VerticalAlignment="Center"
-                                           VerticalContentAlignment="Center"
-                                           HorizontalAlignment="Left"
-                      />
-            </Grid>
-        </Grid>
+        </StackPanel>
 
         <Separator Grid.Row="2" Grid.ColumnSpan="2"
                    Margin="20 10 20 10" Background="#2fff"/>
@@ -522,22 +559,21 @@
                       Grid.Row="3"
                       Margin="0 0 10 0">
             <ItemsControl x:Name="RootFolder" 
-                        Grid.Column="1"
-                        Margin="0 2 6 0"
-                        ItemsSource="{Binding Root.Apps}" 
-                        ItemTemplate="{StaticResource PieItemDataTemplate}"
-                        dd:DragDrop.IsDragSource="True"
-                        dd:DragDrop.IsDropTarget="True"
-                        dd:DragDrop.DropTargetAdornerBrush="Orange"
+                          Grid.Column="1"
+                          Margin="0 2 6 0"
+                          ItemsSource="{Binding Root.Apps}" 
+                          ItemTemplate="{StaticResource PieItemDataTemplate}"
+                          dd:DragDrop.IsDragSource="True"
+                          dd:DragDrop.IsDropTarget="True"
+                          dd:DragDrop.DropTargetAdornerBrush="Orange"
                       />
-
         </ScrollViewer>
 
         <!--Add button-->
         <ContentControl Grid.Row="4" Grid.Column="1"
-                            HorizontalAlignment="Left" Margin="0 4 0 0" 
-                            Content="{Binding Root}" 
-                            ContentTemplate="{StaticResource FolderActionsDataTemplate}"/>
+                        HorizontalAlignment="Left" Margin="0 4 0 0" 
+                        Content="{Binding Root}" 
+                        ContentTemplate="{StaticResource FolderActionsDataTemplate}"/>
 
         <Separator Grid.Row="5" Grid.ColumnSpan="2" Margin="20 8 20 10" Background="#2fff"/>
 
@@ -553,7 +589,7 @@
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
                     <Path Data="{StaticResource SvgImport}" Style="{StaticResource OptionPathStyle}"/>
-                    <TextBlock Text="Import settings" Style="{StaticResource OptionLabelStyle}"></TextBlock>
+                    <TextBlock Text="Import items" Style="{StaticResource OptionLabelStyle}"></TextBlock>
                 </Grid>
             </Button>
             <Button Style="{StaticResource ButtonsStyle}" 
