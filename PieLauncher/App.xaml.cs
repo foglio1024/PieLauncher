@@ -15,8 +15,8 @@ namespace PieLauncher
         protected override void OnStartup(StartupEventArgs e)
         {
             MainWindow = new MainWindow();
-            MainWindow.Show();
-            MainWindow.Hide();
+            //MainWindow.Show();
+            //MainWindow.Hide();
 
             _tray.Icon = MiscUtils.GetEmbeddedIcon("icon.ico");
             _tray.MouseClick += OnTrayClick;
@@ -41,7 +41,9 @@ namespace PieLauncher
 
         void OnTrayClick(object? sender, EventArgs e)
         {
-            ((MainViewModel)((MainWindow)MainWindow).DataContext).OpenConfigWindowCommand.Execute(null);
+            var dc = ((MainViewModel)((MainWindow)MainWindow).DataContext);
+            if (dc.ForceVisible) return;
+            dc.IsVisible = !dc.IsVisible; //.OpenConfigWindowCommand.Execute(null);
         }
 
         void OnUnhandledException(object sender, UnhandledExceptionEventArgs e)

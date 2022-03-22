@@ -19,7 +19,7 @@ namespace PieLauncher
         readonly DoubleAnimation _rollOut;
         readonly DoubleAnimation _expandButton;
         readonly DoubleAnimation _shrinkButton;
-        readonly RotateTransform _rotateTransform;
+        readonly RotateTransform _mainContainerTransform;
 
         readonly MainViewModel _dc;
 
@@ -40,9 +40,11 @@ namespace PieLauncher
 
             InitializeComponent();
 
-            _rotateTransform = ((RotateTransform)MainContainer.RenderTransform);
+            _mainContainerTransform = ((RotateTransform)MainContainer.RenderTransform);
             Opacity = 0;
             IsHitTestVisible = false;
+
+            _ = _dc.InitialShow();
         }
 
         void OnLoaded(object sender, RoutedEventArgs e)
@@ -54,11 +56,13 @@ namespace PieLauncher
         {
             if (e.PropertyName == nameof(MainViewModel.IsVisible))
             {
+                //Donut.HasShadow = false;
+                //Glow.Visibility = Visibility.Collapsed;
                 if (_dc.IsVisible)
                 {
                     Show();
                     BeginAnimation(OpacityProperty, _fadeIn);
-                    _rotateTransform.BeginAnimation(RotateTransform.AngleProperty,_rollIn);
+                    _mainContainerTransform.BeginAnimation(RotateTransform.AngleProperty, _rollIn);
                 }
                 else
                 {
@@ -68,10 +72,10 @@ namespace PieLauncher
                            .Select(f => f.Parent)
                            .OfType<Popup>()
                            .ToList()
-                           .ForEach(popup => popup.SetCurrentValue(Popup.IsOpenProperty, false)); 
+                           .ForEach(popup => popup.SetCurrentValue(Popup.IsOpenProperty, false));
                     IsHitTestVisible = false;
                     BeginAnimation(OpacityProperty, _fadeOut);
-                    _rotateTransform.BeginAnimation(RotateTransform.AngleProperty,_rollOut);
+                    _mainContainerTransform.BeginAnimation(RotateTransform.AngleProperty, _rollOut);
 
                 }
             }
@@ -85,6 +89,9 @@ namespace PieLauncher
         void OnFadeInCompleted(object? sender, EventArgs e)
         {
             IsHitTestVisible = true;
+            //Donut.HasShadow = true;
+            //Glow.Visibility = Visibility.Visible;
+
         }
 
         void OnFadeOutCompleted(object? sender, EventArgs e)
@@ -106,6 +113,12 @@ namespace PieLauncher
             var xform = Utils.GetOrCreateScaleTransform(btn);
             xform.BeginAnimation(ScaleTransform.ScaleXProperty, _shrinkButton);
             xform.BeginAnimation(ScaleTransform.ScaleYProperty, _shrinkButton);
+        }
+
+        void Window_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            _dc.CurrentTime = _dc.CurrentTime.AddHours(e.Key is System.Windows.Input.Key.A ? -1 : e.Key is System.Windows.Input.Key.D ? 1 : 0);
+            _dc.CurrentTime = _dc.CurrentTime.AddMinutes(e.Key is System.Windows.Input.Key.W ? 1 : e.Key is System.Windows.Input.Key.S ? -1 : 0);
         }
     }
 }

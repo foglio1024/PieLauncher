@@ -2,6 +2,7 @@
 using Nostrum.WPF;
 using System;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -127,6 +128,9 @@ namespace PieLauncher
         {
             try
             {
+                if (IsIconFromAssembly && !File.Exists(AssemblyIconPath)) return null;
+                if (!IsIconFromAssembly && !File.Exists(_iconPath)) return null;
+
                 return IsIconFromAssembly
                     ? Utils.ExtractIconFromAssembly(AssemblyIconPath, AssemblyIconIndex)
                     : new BitmapImage(new Uri(_iconPath, UriKind.RelativeOrAbsolute));

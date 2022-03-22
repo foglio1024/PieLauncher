@@ -1,4 +1,6 @@
 ﻿using Nostrum.WPF.Extensions;
+using Nostrum.WPF.Factories;
+using System;
 using System.Windows;
 
 namespace PieLauncher
