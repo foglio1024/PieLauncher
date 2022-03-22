@@ -50,6 +50,7 @@ namespace PieLauncher.R
 		public static Geometry SvgSave => Get<Geometry>("SvgSave");
 		public static Geometry SvgSearch => Get<Geometry>("SvgSearch");
 		public static Geometry SvgSearchImage => Get<Geometry>("SvgSearchImage");
+		public static Geometry SvgSecurityRounded => Get<Geometry>("SvgSecurityRounded");
 		public static Geometry SvgSettingsRounded => Get<Geometry>("SvgSettingsRounded");
 		public static GradientStopCollection DefaultGradientStops => Get<GradientStopCollection>("DefaultGradientStops");
 		public static LinearGradientBrush DayGradient => Get<LinearGradientBrush>("DayGradient");

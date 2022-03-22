@@ -25,6 +25,9 @@ namespace PieLauncher
                 _uri = value;
                 InvalidateImageCache();
                 N();
+                N(nameof(IsAssembly));
+                N(nameof(IsFolder));
+                N(nameof(IsVbScript));
             }
         }
 
@@ -52,12 +55,24 @@ namespace PieLauncher
             }
         }
 
+        bool _runAsAdmin;
+        public bool RunAsAdmin
+        {
+            get => _runAsAdmin;
+            set
+            {
+                if (_runAsAdmin == value) return;
+                _runAsAdmin = value;
+                N();
+            }
+        }
+
         [JsonIgnore]
-        bool IsAssembly => Uri.EndsWith(".exe") || Uri.EndsWith(".dll");
+        public bool IsAssembly => Uri.EndsWith(".exe") || Uri.EndsWith(".dll");
         [JsonIgnore]
-        bool IsFolder => Directory.Exists(Uri);
+        public bool IsFolder => Directory.Exists(Uri);
         [JsonIgnore]
-        bool IsVbScript => Uri.EndsWith(".vbs");
+        public bool IsVbScript => Uri.EndsWith(".vbs");
 
         [JsonIgnore]
         public override ImageSource? ImageSource
@@ -113,6 +128,7 @@ namespace PieLauncher
                         WorkingDirectory = wd,
                         WindowStyle = ProcessWindowStyle.Hidden
                     };
+                    if (RunAsAdmin) startInfo.Verb = "runas";
                     Process.Start(startInfo);
                 }
                 else
@@ -123,11 +139,16 @@ namespace PieLauncher
                         startInfo.WorkingDirectory = string.IsNullOrWhiteSpace(WorkingDir)
                             ? Path.GetDirectoryName(Uri)
                             : WorkingDir;
+                        if (RunAsAdmin) startInfo.Verb = "runas";
                     }
                     Process.Start(startInfo);
                 }
 
                 Launched?.Invoke(this);
+            }
+            catch (System.ComponentModel.Win32Exception w32ex)
+            {
+                if (w32ex.NativeErrorCode == 0x000004C7) return;
             }
             catch (Exception ex)
             {

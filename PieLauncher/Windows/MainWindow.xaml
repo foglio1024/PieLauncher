@@ -43,11 +43,31 @@
                             MouseEnter="Button_MouseEnter" MouseLeave="Button_MouseLeave" RenderTransformOrigin=".5 .5" ToolTip="{Binding Name}"
                             Command="{Binding LaunchCommand}">
                 <Grid>
-                    <Ellipse Style="{StaticResource DefaultButtonEllipseStyle}" x:Name="BorderEllipse"/>
+                    <Ellipse Style="{StaticResource DefaultButtonEllipseStyle}" x:Name="BorderEllipse" />
                     <Image Source="{Binding ImageSource}" 
                            Width="54" 
                            Height="54"
                            Stretch="Uniform" StretchDirection="Both" RenderOptions.BitmapScalingMode="HighQuality" />
+                    <Ellipse  Width="80" Height="80" VerticalAlignment="Bottom" Style="{StaticResource DefaultButtonEllipseStyle}"
+                             Margin="0 0 0 -59"
+                             Fill="{StaticResource DayGradient}"
+                             Visibility="{Binding RunAsAdmin, Converter={converters:BoolToVisibility}}">
+                        <Ellipse.Effect>
+                            <DropShadowEffect Direction="90"
+                                              BlurRadius="10"
+                                              ShadowDepth="0"
+                                              Opacity=".7"/>
+                        </Ellipse.Effect>
+                        <Ellipse.Clip>
+                            <EllipseGeometry RadiusX="40" 
+                                             RadiusY="40" 
+                                             Center="40 -20"/>
+                        </Ellipse.Clip>
+
+                    </Ellipse>
+                    <Path Data="{StaticResource SvgSecurityRounded}" Width="12" Height="12" Stretch="Uniform"
+                          VerticalAlignment="Bottom" Margin="0 0 0 4" Fill="White"
+                          Visibility="{Binding RunAsAdmin, Converter={converters:BoolToVisibility}}"/>
                     <!--<TextBlock Text="{Binding Name}" Foreground="White" HorizontalAlignment="Center" TextWrapping="Wrap" TextAlignment="Center" Width="Auto" VerticalAlignment="Center"
                                    FontSize="16" FontWeight="DemiBold"/>-->
                 </Grid>
