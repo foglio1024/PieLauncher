@@ -1,5 +1,6 @@
 ﻿using Nostrum.WPF;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Threading;
@@ -23,7 +24,7 @@ namespace PieLauncher
         string _position = "0:00";
         string _duration = "0:00";
         double _completion;
-        PlayBackStatus _playbackStatus;
+        PlayBackStatus _playbackStatus = PlayBackStatus.Playing;
         bool _isEmpty = true;
 
         public PlayBackStatus PlaybackStatus
@@ -115,14 +116,14 @@ namespace PieLauncher
             _sessionManager = SessionManager.RequestAsync().GetResults();
             _sessionManager.CurrentSessionChanged += OnCurrentSessionChanged;
 
-            _currentSession = _sessionManager.GetCurrentSession();
-
+            _currentSession = _sessionManager.GetSessions().AsEnumerable<Session>().FirstOrDefault(x => 
+            x.SourceAppUserModelId == "Spotify.exe" );
             if (_currentSession == null)
             {
                 IsEmpty = true;
                 return;
             }
-            IsEmpty = _currentSession.SourceAppUserModelId == "Chrome"; // todo: better handling of other media sources
+            IsEmpty = _currentSession.SourceAppUserModelId != "Spotify.exe"; // todo: better handling of other media sources
             if (IsEmpty) return;
 
             _currentSession.MediaPropertiesChanged += OnMediaPropertiesChanged;
@@ -186,7 +187,7 @@ namespace PieLauncher
                 _currentSession.TimelinePropertiesChanged -= OnTimelinePropertiesChanged;
             }
 
-            _currentSession = _sessionManager.GetCurrentSession();
+            _currentSession = _sessionManager.GetSessions().AsEnumerable<Session>().FirstOrDefault(x => x.SourceAppUserModelId == "Spotify.exe");
 
             if (_currentSession == null)
             {
@@ -194,7 +195,7 @@ namespace PieLauncher
                 return;
             }
 
-            IsEmpty = _currentSession.SourceAppUserModelId == "Chrome"; // todo: better handling of other media sources
+            IsEmpty = _currentSession.SourceAppUserModelId != "Spotify.exe"; // todo: better handling of other media sources
             if (IsEmpty) return;
             _currentSession.MediaPropertiesChanged += OnMediaPropertiesChanged;
             _currentSession.PlaybackInfoChanged += OnPlaybackInfoChanged;
