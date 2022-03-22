@@ -52,5 +52,7 @@
 		<PackageReference Include="Nostrum.WPF" Version="1.2.14" />
 		<PackageReference Include="Ookii.Dialogs.Wpf" Version="5.0.1" />
 	</ItemGroup>
-
+	<Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+		<Exec Command="E:\Repos\ReSource\ReSource.CLI\bin\Release\ReSource.CLI.exe &quot;$(ProjectPath)&quot; &quot;$(TargetPath)&quot; &quot;$(ProjectDir)\\R.cs&quot; PieLauncher.R" />
+	</Target>
 </Project>
