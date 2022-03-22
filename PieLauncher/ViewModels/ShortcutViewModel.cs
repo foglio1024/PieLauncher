@@ -13,6 +13,8 @@ namespace PieLauncher
     //https://stackoverflow.com/questions/11607133/global-mouse-event-handler
     public class ShortcutViewModel : PieItemBase
     {
+        public static event Action<ShortcutViewModel>? Launched;
+
         string _uri = "";
         public string Uri
         {
@@ -124,6 +126,8 @@ namespace PieLauncher
                     }
                     Process.Start(startInfo);
                 }
+
+                Launched?.Invoke(this);
             }
             catch (Exception ex)
             {
