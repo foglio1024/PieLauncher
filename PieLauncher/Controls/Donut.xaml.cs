@@ -36,7 +36,7 @@ namespace PieLauncher.Controls
         }
 
         public static readonly DependencyProperty FillProperty =
-            DependencyProperty.Register("Fill", typeof(Brush), typeof(Donut), new PropertyMetadata(Brushes.SlateGray));
+            DependencyProperty.Register("Fill", typeof(Brush), typeof(Donut), new FrameworkPropertyMetadata(Brushes.SlateGray, FrameworkPropertyMetadataOptions.AffectsRender | FrameworkPropertyMetadataOptions.SubPropertiesDoNotAffectRender));
 
         public Brush Stroke
         {
@@ -45,7 +45,7 @@ namespace PieLauncher.Controls
         }
 
         public static readonly DependencyProperty StrokeProperty =
-            DependencyProperty.Register("Stroke", typeof(Brush), typeof(Donut), new PropertyMetadata(Brushes.LightSlateGray));
+            DependencyProperty.Register("Stroke", typeof(Brush), typeof(Donut), new FrameworkPropertyMetadata(Brushes.LightSlateGray, FrameworkPropertyMetadataOptions.AffectsRender | FrameworkPropertyMetadataOptions.SubPropertiesDoNotAffectRender | FrameworkPropertyMetadataOptions.AffectsMeasure));
 
         public bool HasShadow
         {

@@ -1,0 +1,13 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Color x:Key="BaseGradient1" >#fafafa</Color>
+    <Color x:Key="BaseGradient2" >#d5dde3</Color>
+    <Color x:Key="BaseGradient3" >#ffffff</Color>
+
+    <Color x:Key="BaseTextColor">#29323c</Color>
+    <Color x:Key="DimTextColor">#4a5766</Color>
+    <Color x:Key="DisabledTextColor">#d5dde3</Color>
+    <Color x:Key="OverlayColor">#2fff</Color>
+
+
+</ResourceDictionary>

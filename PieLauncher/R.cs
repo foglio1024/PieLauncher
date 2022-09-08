@@ -11,14 +11,23 @@ using System.Windows.Media.Effects;
 
 namespace PieLauncher.R
 {
+	// Resources/DarkTheme.xaml
+	public class DarkTheme : RH
+	{
+		public static Color BaseGradient1 => Get<Color>("BaseGradient1");
+		public static Color BaseGradient2 => Get<Color>("BaseGradient2");
+		public static Color BaseGradient3 => Get<Color>("BaseGradient3");
+		public static Color BaseTextColor => Get<Color>("BaseTextColor");
+		public static Color DimTextColor => Get<Color>("DimTextColor");
+		public static Color DisabledTextColor => Get<Color>("DisabledTextColor");
+		public static Color OverlayColor => Get<Color>("OverlayColor");
+	}
+
 	// Resources/Resources.xaml
 	public class Resources : RH
 	{
 		public static Color AccentGradient1 => Get<Color>("AccentGradient1");
 		public static Color AccentGradient2 => Get<Color>("AccentGradient2");
-		public static Color BaseGradient1 => Get<Color>("BaseGradient1");
-		public static Color BaseGradient2 => Get<Color>("BaseGradient2");
-		public static Color BaseGradient3 => Get<Color>("BaseGradient3");
 		public static Color DuskGradient1 => Get<Color>("DuskGradient1");
 		public static Color DuskGradient2 => Get<Color>("DuskGradient2");
 		public static Color NightGradient1 => Get<Color>("NightGradient1");
@@ -53,12 +62,19 @@ namespace PieLauncher.R
 		public static Geometry SvgSecurityRounded => Get<Geometry>("SvgSecurityRounded");
 		public static Geometry SvgSettingsRounded => Get<Geometry>("SvgSettingsRounded");
 		public static GradientStopCollection DefaultGradientStops => Get<GradientStopCollection>("DefaultGradientStops");
+		public static GradientStopCollection LightGradientStops => Get<GradientStopCollection>("LightGradientStops");
 		public static LinearGradientBrush DayGradient => Get<LinearGradientBrush>("DayGradient");
 		public static LinearGradientBrush DuskGradient => Get<LinearGradientBrush>("DuskGradient");
 		public static LinearGradientBrush NightGradient => Get<LinearGradientBrush>("NightGradient");
 		public static LinearGradientBrush SunriseGradient => Get<LinearGradientBrush>("SunriseGradient");
-		public static RadialGradientBrush DefaultBackgroundBrush => Get<RadialGradientBrush>("DefaultBackgroundBrush");
+		public static RadialGradientBrush BackgroundBrush => Get<RadialGradientBrush>("BackgroundBrush");
+		public static RadialGradientBrush LightBackgroundBrush => Get<RadialGradientBrush>("LightBackgroundBrush");
 		public static RadialGradientBrush RingBackgroundBrush => Get<RadialGradientBrush>("RingBackgroundBrush");
+		public static SolidColorBrush DefaultBorderBrush => Get<SolidColorBrush>("DefaultBorderBrush");
+		public static SolidColorBrush DefaultTextBrush => Get<SolidColorBrush>("DefaultTextBrush");
+		public static SolidColorBrush DimTextBrush => Get<SolidColorBrush>("DimTextBrush");
+		public static SolidColorBrush DisabledTextBrush => Get<SolidColorBrush>("DisabledTextBrush");
+		public static SolidColorBrush OverlayBrush => Get<SolidColorBrush>("OverlayBrush");
 	}
 
 	// pack://application:,,,/Nostrum.WPF;component/Resources/Converters.xaml

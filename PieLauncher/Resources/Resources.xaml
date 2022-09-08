@@ -1,8 +1,5 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <Color x:Key="BaseGradient1" >#2f3740</Color>
-    <Color x:Key="BaseGradient2" >#29323c</Color>
-    <Color x:Key="BaseGradient3" >#4a5766</Color>
     <Color x:Key="AccentGradient1" >#85D8CE</Color>
     <Color x:Key="AccentGradient2" >#085078</Color>
 
@@ -29,11 +26,22 @@
         <GradientStop Color="{StaticResource NightGradient1}" Offset="0"/>
         <GradientStop Color="{StaticResource NightGradient2}" Offset="1"/>
     </LinearGradientBrush>
-    <GradientStopCollection x:Key="DefaultGradientStops">
-        <GradientStop Color="{StaticResource BaseGradient1}" Offset="0.5"/>
-        <GradientStop Color="{StaticResource BaseGradient2}" Offset="1.0"/>
+    <GradientStopCollection x:Key="LightGradientStops">
+        <GradientStop Color="{DynamicResource BaseGradient3}" Offset="0.5"/>
+        <GradientStop Color="{DynamicResource BaseGradient1}" Offset="1.0"/>
     </GradientStopCollection>
-    <RadialGradientBrush x:Key="DefaultBackgroundBrush"  Center="0.5 0.5" RadiusX="1" RadiusY="1" GradientOrigin="-1 -1" GradientStops="{StaticResource DefaultGradientStops}"/>
+    <GradientStopCollection x:Key="DefaultGradientStops">
+        <GradientStop Color="{DynamicResource BaseGradient1}" Offset="0.5"/>
+        <GradientStop Color="{DynamicResource BaseGradient2}" Offset="1.0"/>
+    </GradientStopCollection>
+
+    <SolidColorBrush x:Key="DefaultTextBrush" Color="{DynamicResource BaseTextColor}"/>
+    <SolidColorBrush x:Key="DimTextBrush" Color="{DynamicResource DimTextColor}"/>
+    <SolidColorBrush x:Key="DisabledTextBrush" Color="{DynamicResource DisabledTextColor}"/>
+    <SolidColorBrush x:Key="DefaultBorderBrush" Color="{DynamicResource BaseGradient3}"/>
+    <SolidColorBrush x:Key="OverlayBrush" Color="{DynamicResource Overlay}"/>
+    <RadialGradientBrush x:Key="BackgroundBrush"  Center="0.5 0.5" RadiusX="1" RadiusY="1" GradientOrigin="-1 -1" GradientStops="{StaticResource DefaultGradientStops}"/>
+    <RadialGradientBrush x:Key="LightBackgroundBrush"  Center="0.5 0.5" RadiusX="1" RadiusY="1" GradientOrigin="-1 -1" GradientStops="{StaticResource LightGradientStops}"/>
     <RadialGradientBrush x:Key="RingBackgroundBrush" GradientStops="{StaticResource DefaultGradientStops}"/>
 
     <PathGeometry x:Key="SvgPlay">M8 6.82v10.36c0 .79.87 1.27 1.54.84l8.14-5.18c.62-.39.62-1.29 0-1.69L9.54 5.98C8.87 5.55 8 6.03 8 6.82z</PathGeometry>

@@ -18,7 +18,8 @@ namespace PieLauncher
         public FolderViewModel? Root { get; set; }
         public bool StartWithWindows { get; set; }
         public HotKey HotKey { get; set; } = new HotKey(System.Windows.Forms.Keys.OemBackslash, System.Windows.Input.ModifierKeys.Windows);
-        public TriggerMode TriggerMode { get; set; } = 0;
+        public TriggerMode TriggerMode { get; set; } = TriggerMode.Hold;
+        public Theme Theme { get; set; } = Theme.Dark;
         public bool CloseAfterClick { get; set; }
         public static Settings Load()
         {

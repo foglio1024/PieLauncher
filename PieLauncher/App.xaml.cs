@@ -1,12 +1,18 @@
 ﻿using Nostrum.WPF;
 using System;
 using System.IO;
+using System.Linq;
 using System.Windows;
 using System.Windows.Forms;
 using Application = System.Windows.Application;
 
 namespace PieLauncher
 {
+    public enum Theme
+    {
+        Dark,
+        Light
+    }
     // todo: mutex
     public partial class App : Application
     {
@@ -15,8 +21,6 @@ namespace PieLauncher
         protected override void OnStartup(StartupEventArgs e)
         {
             MainWindow = new MainWindow();
-            //MainWindow.Show();
-            //MainWindow.Hide();
 
             _tray.Icon = MiscUtils.GetEmbeddedIcon("icon.ico");
             _tray.MouseClick += OnTrayClick;
@@ -25,6 +29,10 @@ namespace PieLauncher
             AppDomain.CurrentDomain.UnhandledException += OnUnhandledException;
 
             base.OnStartup(e);
+        }
+
+        public App()
+        {
         }
 
         protected override void OnExit(ExitEventArgs e)
@@ -53,5 +61,16 @@ namespace PieLauncher
             App.Current.Shutdown();
         }
 
+        public void ApplyTheme(Theme t)
+        {
+            var themeUri = $"Resources/{t}Theme.xaml";
+            if (Current.Resources.MergedDictionaries.Any(d => d.Source.OriginalString == themeUri)) return;
+            var currentThemeDict = Current.Resources.MergedDictionaries.FirstOrDefault(x => x.Source.OriginalString.EndsWith("Theme.xaml"));
+            if (currentThemeDict == null) return;
+            Current.Resources.MergedDictionaries.Remove(currentThemeDict);
+            Current.Resources.MergedDictionaries.Add(new ResourceDictionary { Source = new Uri(themeUri, UriKind.Relative) });
+
+        }
     }
+
 }

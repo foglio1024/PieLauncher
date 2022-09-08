@@ -1,6 +1,9 @@
 ﻿<Application x:Class="PieLauncher.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:converters="clr-namespace:Nostrum.WPF.Converters;assembly=Nostrum.WPF"
+             xmlns:nostrumExt="clr-namespace:Nostrum.WPF.Extensions;assembly=Nostrum.WPF"
+             xmlns:pielauncher="clr-namespace:PieLauncher"
              ShutdownMode="OnExplicitShutdown">
     <Application.Resources>
         <ResourceDictionary>
@@ -9,6 +12,7 @@
                 <ResourceDictionary Source="pack://application:,,,/Nostrum.WPF;component/Resources/MiscResources.xaml"/>
                 <ResourceDictionary Source="pack://application:,,,/Nostrum.WPF;component/Resources/Converters.xaml"/>
                 <ResourceDictionary Source="pack://application:,,,/Nostrum.WPF;component/Resources/Styles.xaml"/>
+                <ResourceDictionary Source="Resources/DarkTheme.xaml"/>
                 <ResourceDictionary Source="Resources/Resources.xaml"/>
             </ResourceDictionary.MergedDictionaries>
 
@@ -17,6 +21,18 @@
             <SolidColorBrush x:Key="Expander.Disabled.Arrow.Stroke" Color="#3fff" />
             <SolidColorBrush x:Key="Expander.Pressed.Arrow.Stroke" Color="#afff" />
 
+            <Style TargetType="{x:Type Path}">
+                <Setter Property="Stretch" Value="Uniform"/>
+                <Setter Property="Fill" Value="#9fff"/>
+            </Style>
+            
+            <Style TargetType="ComboBox" BasedOn="{StaticResource {x:Type ComboBox}}">
+                <Setter Property="Foreground" Value="{StaticResource DefaultTextBrush}"/>
+            </Style>
+            
+            <Style x:Key="ExpanderDownArrowStyle" TargetType="Path">
+                <Setter Property="Fill" Value="{StaticResource DefaultTextBrush}"/>
+            </Style>
             <Style x:Key="ExpanderDownHeaderStyle" TargetType="{x:Type ToggleButton}">
                 <Setter Property="Template">
                     <Setter.Value>
@@ -28,10 +44,11 @@
                                         <ColumnDefinition Width="*" />
                                     </Grid.ColumnDefinitions>
                                     <Path x:Name="arrow" 
+                                          Style="{StaticResource ExpanderDownArrowStyle}"
                                           Margin="10 0"
+                                          Stretch="Uniform"
                                           Data="{StaticResource SvgArrowRight}" 
                                           HorizontalAlignment="Center"
-                                          Fill="{StaticResource Expander.Static.Arrow.Stroke}"
                                           StrokeThickness="0" 
                                           VerticalAlignment="Center" 
                                           RenderTransformOrigin="0.5 0.5">
@@ -75,10 +92,10 @@
                                     </Trigger.ExitActions>
                                 </Trigger>
                                 <Trigger Property="IsMouseOver" Value="true">
-                                    <Setter Property="Fill" TargetName="arrow" Value="{StaticResource Expander.MouseOver.Arrow.Stroke}" />
+                                    <Setter Property="Fill" TargetName="arrow" Value="{StaticResource DimTextBrush}" />
                                 </Trigger>
                                 <Trigger Property="IsPressed" Value="true">
-                                    <Setter Property="Fill" TargetName="arrow" Value="{StaticResource Expander.Pressed.Arrow.Stroke}" />
+                                    <Setter Property="Fill" TargetName="arrow" Value="{StaticResource DisabledTextBrush}" />
                                 </Trigger>
                                 <Trigger Property="IsEnabled" Value="false">
                                     <Setter Property="Fill" TargetName="arrow" Value="{StaticResource Expander.Disabled.Arrow.Stroke}" />
@@ -259,6 +276,38 @@
                     </Setter.Value>
                 </Setter>
             </Style>
+
+            <ItemsPanelTemplate x:Key="RadialPanelTemplate">
+                <pielauncher:RadialPanel TotalAngle="360" AngleOffset="0" SwipeDirection="Clockwise"/>
+            </ItemsPanelTemplate>
+
+            <Style x:Key="DefaultButtonEllipseStyle" TargetType="Ellipse">
+                <Setter Property="Width" Value="80"/>
+                <Setter Property="Height" Value="80"/>
+                <Setter Property="Stroke" >
+                    <Setter.Value>
+                        <SolidColorBrush Color="{DynamicResource BaseGradient3}"></SolidColorBrush>
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="Fill" Value="{StaticResource BackgroundBrush}"/>
+                <Setter Property="Effect" >
+                    <Setter.Value>
+                        <DropShadowEffect Opacity=".5" BlurRadius="30" />
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <Style x:Key="SettingsButtonStyle" TargetType="Button" BasedOn="{StaticResource NostrumMainButtonStyle}">
+                <Setter Property="VerticalAlignment" Value="Center"/>
+                <Setter Property="Height" Value="30"/>
+                <Setter Property="Margin" Value="0 110 0 0"/>
+                <Setter Property="Width" Value="30"/>
+                <Setter Property="Padding" Value="8"/>
+                <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+                <Setter Property="Command" Value="{Binding OpenConfigWindowCommand}"/>
+                <Setter Property="nostrumExt:ButtonExtensions.CornerRadius" Value="15"/>
+                <Setter Property="nostrumExt:ButtonExtensions.RippleEnabled" Value="False"/>
+            </Style>
+
 
         </ResourceDictionary>
     </Application.Resources>

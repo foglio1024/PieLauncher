@@ -4,6 +4,7 @@ using Nostrum.WPF;
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -14,6 +15,8 @@ namespace PieLauncher
     public class ShortcutViewModel : PieItemBase
     {
         public static event Action<ShortcutViewModel>? Launched;
+        public static event Action<ShortcutViewModel>? Hovered;
+        public static event Action<ShortcutViewModel>? Unhovered;
 
         string _uri = "";
         public string Uri
@@ -55,15 +58,40 @@ namespace PieLauncher
             }
         }
 
-        bool _runAsAdmin;
-        public bool RunAsAdmin
+        bool _canRunAsAdmin;
+        public bool CanRunAsAdmin
         {
-            get => _runAsAdmin;
+            get => _canRunAsAdmin || _tempRunAsAdmin;
             set
             {
-                if (_runAsAdmin == value) return;
-                _runAsAdmin = value;
+                if (_canRunAsAdmin == value) return;
+                _canRunAsAdmin = value;
                 N();
+            }
+        }
+
+        bool _isHovered;
+        public bool IsHovered
+        {
+            get => _isHovered;
+            set
+            {
+                if (_isHovered == value) return;
+                _isHovered = value;
+                if (value) Hovered?.Invoke(this);
+                else Unhovered?.Invoke(this);
+            }
+        }
+
+        bool _tempRunAsAdmin;
+        public bool TempRunAsAdmin
+        {
+            get => _tempRunAsAdmin;
+            set
+            {
+                if (_tempRunAsAdmin == value) return;
+                _tempRunAsAdmin = value;
+                N(nameof(CanRunAsAdmin));
             }
         }
 
@@ -104,14 +132,14 @@ namespace PieLauncher
         {
             Name = "New shortcut";
 
-            LaunchCommand = new RelayCommand(Launch);
+            LaunchCommand = new RelayCommand<bool>(Launch);
             BrowseFileCommand = new RelayCommand(BrowseFile);
             BrowseFolderCommand = new RelayCommand(BrowseFolder);
             BrowseIconCommand = new RelayCommand(BrowseIcon);
             BrowseWorkingDirCommand = new RelayCommand(BrowseWorkingDir);
         }
 
-        void Launch()
+        void Launch(bool forceAdmin)
         {
             try
             {
@@ -128,8 +156,9 @@ namespace PieLauncher
                         WorkingDirectory = wd,
                         WindowStyle = ProcessWindowStyle.Hidden
                     };
-                    if (RunAsAdmin) startInfo.Verb = "runas";
-                    Process.Start(startInfo);
+                    if (forceAdmin) startInfo.Verb = "runas";
+
+                    Task.Run(() => Process.Start(startInfo));
                 }
                 else
                 {
@@ -139,9 +168,9 @@ namespace PieLauncher
                         startInfo.WorkingDirectory = string.IsNullOrWhiteSpace(WorkingDir)
                             ? Path.GetDirectoryName(Uri)
                             : WorkingDir;
-                        if (RunAsAdmin) startInfo.Verb = "runas";
+                        if (forceAdmin) startInfo.Verb = "runas";
                     }
-                    Process.Start(startInfo);
+                    Task.Run(() => Process.Start(startInfo));
                 }
 
                 Launched?.Invoke(this);

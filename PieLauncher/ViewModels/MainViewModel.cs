@@ -51,6 +51,8 @@ namespace PieLauncher
         bool _keyDown = false;
         ConfigWindow? _configWindow;
 
+        ShortcutViewModel? _hoveredShortcut;
+
         FolderViewModel _root;
         public FolderViewModel Root
         {
@@ -88,6 +90,19 @@ namespace PieLauncher
             }
         }
 
+        Theme _theme;
+        public Theme Theme
+        {
+            get => _theme;
+            set
+            {
+                if (_theme == value) return;
+                _theme = value;
+                ((App)System.Windows.Application.Current).ApplyTheme(value);
+                N();
+            }
+        }
+
         bool _closeAfterClick;
         public bool CloseAfterClick
         {
@@ -99,8 +114,6 @@ namespace PieLauncher
                 N();
             }
         }
-
-
 
         bool _topmost = true;
         public bool Topmost
@@ -190,6 +203,7 @@ namespace PieLauncher
                 StartWithWindows = settings.StartWithWindows;
                 HotKey = settings.HotKey;
                 TriggerMode = settings.TriggerMode;
+                //Theme = settings.Theme;
                 CloseAfterClick = settings.CloseAfterClick;
             }
             catch (Exception)
@@ -207,12 +221,26 @@ namespace PieLauncher
             ExportConfigCommand = new RelayCommand(ExportConfig);
 
             ShortcutViewModel.Launched += OnShortcutLaunched;
+            ShortcutViewModel.Hovered += OnShortcutHovered;
+            ShortcutViewModel.Unhovered += OnShortcutUnhovered;
 
             _clockUpdateTimer = new DispatcherTimer(DispatcherPriority.Background) { Interval = TimeSpan.FromSeconds(0.5) };
             _clockUpdateTimer.Tick += OnClockUpdateTick;
             _clockUpdateTimer.Start();
 
         }
+        void OnShortcutHovered(ShortcutViewModel obj)
+        {
+            //obj.TempRunAsAdmin = Keyboard.IsKeyDown(Key.LeftShift);
+            _hoveredShortcut = obj;
+        }
+
+        void OnShortcutUnhovered(ShortcutViewModel obj)
+        {
+            //obj.TempRunAsAdmin = false;
+            _hoveredShortcut = null;
+        }
+
 
         internal async Task InitialShow()
         {
@@ -269,6 +297,7 @@ namespace PieLauncher
                 StartWithWindows = StartWithWindows,
                 HotKey = HotKey,
                 TriggerMode = TriggerMode,
+                //Theme = Theme,
                 CloseAfterClick = CloseAfterClick,
             }.Save();
 
@@ -308,8 +337,8 @@ namespace PieLauncher
             {
                 _configWindow = null;
                 ForceVisible = false;
-                    //IsVisible = false;
-                    Topmost = true;
+                //IsVisible = false;
+                Topmost = true;
             };
             _configWindow.Show();
         }
@@ -322,6 +351,18 @@ namespace PieLauncher
 
             var key = (Keys)(Marshal.ReadInt32(lParam));
             var msg = (User32.WindowsMessages)wParam;
+
+            //if (IsVisible && key == Keys.LShiftKey && _hoveredShortcut != null)
+            //{
+            //    if (msg == User32.WindowsMessages.WM_KEYUP)
+            //    {
+            //        _hoveredShortcut.TempRunAsAdmin = false;
+            //    }
+            //    else if (msg == User32.WindowsMessages.WM_KEYDOWN)
+            //    {
+            //        _hoveredShortcut.TempRunAsAdmin = true;
+            //    }
+            //}
 
             if (key == HotKey.Key /*Keys.OemBackslash*/)
             {

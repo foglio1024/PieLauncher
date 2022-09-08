@@ -1,9 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Nostrum.WPF;
-using Nostrum.WPF.Factories;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Linq;
 using System.Windows.Input;
 using System.Windows.Media;
 
@@ -11,7 +8,6 @@ namespace PieLauncher
 {
     public class FolderViewModel : PieItemBase
     {
-
 
         public ObservableCollection<IPieItem> Apps { get; }
 

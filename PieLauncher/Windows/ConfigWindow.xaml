@@ -9,24 +9,36 @@
         xmlns:dd="urn:gong-wpf-dragdrop"
         mc:Ignorable="d" 
         ResizeMode="CanMinimize"
-        Background="#202325" 
-        Foreground="White"
         WindowStartupLocation="CenterScreen"
         FontFamily="{StaticResource K2DRegular}"
         d:DataContext="{d:DesignInstance Type=local:MainViewModel}"
         Title="Pie launcher settings" 
         Height="800" Width="1000">
+    <Window.Style>
+        <Style TargetType="Window">
+            <Setter Property="Background" Value="{StaticResource BackgroundBrush}"/>
+            <Setter Property="Foreground" Value="{StaticResource DefaultTextBrush}"/>
+        </Style>
+    </Window.Style>
     <WindowChrome.WindowChrome>
         <WindowChrome ResizeBorderThickness="2 2 4 4"
                       GlassFrameThickness="0 0 1 1"
                        CaptionHeight="0"/>
     </WindowChrome.WindowChrome>
     <Window.Resources>
+        <Style TargetType="Border" x:Key="FieldBorderStyle">
+            <Setter Property="Background" Value="{StaticResource DefaultBorderBrush}"/>
+            <Setter Property="Grid.ColumnSpan" Value="4"/>
+            <Setter Property="Margin" Value="-16 5 0 0"/>
+            <Setter Property="CornerRadius" Value="16"/>
+            <Setter Property="Height" Value="32"/>
+        </Style>
+
         <Style x:Key="OptionLabelStyle" TargetType="TextBlock">
             <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="Grid.Column" Value="1"/>
         </Style>
-        <Style x:Key="OptionButtonStyle" TargetType="Button" BasedOn="{StaticResource ButtonMainStyle}">
+        <Style x:Key="OptionButtonStyle" TargetType="Button" BasedOn="{StaticResource NostrumMainButtonStyle}">
             <Setter Property="Padding" Value="10 8"/>
             <Setter Property="Margin" Value="1"/>
             <Setter Property="nsEx:ButtonExtensions.CornerRadius" Value="5"/>
@@ -36,7 +48,7 @@
             <Setter Property="Height" Value="14"/>
             <Setter Property="Margin" Value="0 0 8 0"/>
         </Style>
-        <Style x:Key="ButtonsStyle" BasedOn="{StaticResource ButtonMainStyle}" TargetType="Button">
+        <Style x:Key="ButtonsStyle" BasedOn="{StaticResource NostrumMainButtonStyle}" TargetType="Button">
             <Setter Property="Width" Value="100"/>
             <Setter Property="Padding" Value="10 5"/>
             <Setter Property="Margin" Value="5"/>
@@ -47,6 +59,7 @@
         </Style>
         <DataTemplate x:Key="FolderActionsDataTemplate" DataType="{x:Type local:FolderViewModel}">
             <Button Style="{StaticResource ButtonsStyle}" 
+                    Foreground="{StaticResource DefaultTextBrush}"
                     Width="Auto" Padding="10 6" Cursor="Arrow"
                     HorizontalAlignment="Center">
                 <Grid>
@@ -57,13 +70,14 @@
                     </Grid.ColumnDefinitions>
                     <TextBlock Text="Add new item" Margin="0 0 8 0" VerticalAlignment="Center" Grid.Column="1" IsHitTestVisible="False"/>
                     <Path Data="{StaticResource SvgAddRounded}" Grid.Column="0" IsHitTestVisible="False"
-                                      Fill="#9fff" Width="12" Height="12" VerticalAlignment="Center"/>
+                                      Fill="{StaticResource DefaultTextBrush}" Width="12" Height="12" VerticalAlignment="Center"/>
                     <Path Data="{StaticResource SvgArrowDown}" Grid.Column="2" IsHitTestVisible="False"
-                                      Fill="#9fff" Width="8" Height="8" VerticalAlignment="Center" Opacity=".8"/>
+                                      Fill="{StaticResource DefaultTextBrush}" Width="8" Height="8" VerticalAlignment="Center" Opacity=".8"/>
                     <Popup x:Name="AddOptionsPopup" Placement="Center" AllowsTransparency="True" PopupAnimation="Fade"
                            VerticalOffset="35" HorizontalOffset="0">
                         <Grid Margin="50">
-                            <Border Background="#202325" CornerRadius="5" BorderBrush="#444" BorderThickness="1">
+                            <Border Background="{StaticResource BackgroundBrush}" CornerRadius="5" 
+                                    BorderBrush="{DynamicResource DefaultBorderBrush}" BorderThickness="1">
                                 <Border.Effect>
                                     <DropShadowEffect ShadowDepth="0" BlurRadius="20" Opacity=".5"/>
                                 </Border.Effect>
@@ -118,13 +132,12 @@
             </DataTemplate.Triggers>
         </DataTemplate>
 
-
         <Style TargetType="{x:Type TextBox}">
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="MinWidth" Value="10"/>
             <Setter Property="HorizontalAlignment" Value="Left"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="Foreground" Value="#9fff"/>
+            <Setter Property="Foreground" Value="{StaticResource DefaultTextBrush}"/>
             <Setter Property="Margin" Value="0 2"/>
             <Setter Property="BorderThickness" Value="0 0 0 1"/>
             <Setter Property="BorderBrush" Value="#1fff"/>
@@ -139,13 +152,13 @@
             <Setter Property="Height" Value="12"/>
         </Style>
         <Style x:Key="FieldLabelStyle" TargetType="{x:Type TextBlock}">
-            <Setter Property="Foreground" Value="#5fff"/>
+            <Setter Property="Foreground" Value="{StaticResource DimTextBrush}"/>
             <Setter Property="HorizontalAlignment" Value="Right"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="Margin" Value="0 0 6 0"/>
             <Setter Property="Grid.Column" Value="0"/>
         </Style>
-        <Style x:Key="BrowseButtonStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource ButtonContentOpacityStyle}">
+        <Style x:Key="BrowseButtonStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource NostrumContentOpacityButtonStyle}">
             <Setter Property="HorizontalAlignment" Value="Stretch"/>
             <Setter Property="HorizontalContentAlignment" Value="Center"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
@@ -168,6 +181,7 @@
                       >
                     <Shape.Fill>
                         <RadialGradientBrush>
+                            <!--TODO-->
                             <GradientStop Color="#2fff" Offset="0"></GradientStop>
                             <GradientStop Color="#1fff" Offset="1"></GradientStop>
                         </RadialGradientBrush>
@@ -182,19 +196,15 @@
                                    HorizontalAlignment="Left"
                                    Grid.Column="0"/>
                 <TextBox Grid.Column="1" Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                       Foreground="#9fff"
                                        Margin="8 0 0 0"
                                        VerticalAlignment="Center"
-                                       FontSize="18"></TextBox>
+                                       FontSize="18"/>
             </Grid>
 
         </DataTemplate>
 
         <DataTemplate x:Key="PieItemDataTemplate" DataType="{x:Type local:PieItemBase}">
             <Grid Background="Transparent" Margin="5">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
                 <Border Background="#19777990" Grid.ColumnSpan="2"
                         BorderBrush="#444" BorderThickness="1"
                         CornerRadius="5"/>
@@ -203,9 +213,9 @@
                                 Margin="6"
                                 ContentTemplateSelector="{DynamicResource TemplateSelector}"
                                 VerticalAlignment="Stretch" VerticalContentAlignment="Stretch"/>
-                <Button Style="{StaticResource ButtonMainStyle}"
+                <Button Style="{StaticResource NostrumMainButtonStyle}"
                         Padding="4" Margin="0 -7 -7 0" 
-                        Command="{Binding DeleteCommand}" Grid.Column="1"
+                        Command="{Binding DeleteCommand}" 
                         VerticalAlignment="Top"
                         HorizontalAlignment="Right"
                         nsEx:ButtonExtensions.RippleEnabled="False"
@@ -238,6 +248,8 @@
         <DataTemplate x:Key="ShortcutDataTemplate" DataType="{x:Type local:ShortcutViewModel}">
             <Expander Header="{Binding}" HeaderTemplate="{StaticResource ItemExpanderHeaderTemplate}">
                 <Grid Margin="20 2 2 0">
+                    <Grid.Resources>
+                    </Grid.Resources>
                     <Grid.ColumnDefinitions >
                         <ColumnDefinition Width="0"/>
                         <ColumnDefinition Width="Auto"/>
@@ -251,28 +263,27 @@
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="0" x:Name="RunAsAdminRow"/>
                     </Grid.RowDefinitions>
-                    <Border Height="32" Background="#202325" Grid.ColumnSpan="4"
-                                         CornerRadius="16" Margin="-16 0 0 0"/>
-                    <Border Height="32" Background="#202325" Grid.ColumnSpan="4"
-                            Grid.Row="1" CornerRadius="16" Margin="-16 5 0 0"/>
-                    <Border Height="32" Background="#202325" Grid.ColumnSpan="4"
-                            Grid.Row="2" CornerRadius="16" Margin="-16 5 0 0"/>
-                    <Border Height="32" Background="#202325" Grid.ColumnSpan="4"
-                            Grid.Row="3" CornerRadius="16" Margin="-16 5 0 0"/>
-                    <Border Height="32" Background="#202325" Grid.ColumnSpan="4"
-                            Grid.Row="4" CornerRadius="16" Margin="-16 5 0 0"/>
+                    <Border Style="{StaticResource FieldBorderStyle}" Margin="-16 0 0 0"/>
+                    <Border Style="{StaticResource FieldBorderStyle}"
+                            Grid.Row="1" />
+                    <Border Style="{StaticResource FieldBorderStyle}" 
+                            Grid.Row="2" />
+                    <Border Style="{StaticResource FieldBorderStyle}"
+                            Grid.Row="3" />
+                    <Border Style="{StaticResource FieldBorderStyle}"
+                            Grid.Row="4" />
 
                     <TextBlock Style="{StaticResource FieldLabelStyle}" Grid.Column="1" Text="Path" />
                     <TextBlock Style="{StaticResource FieldLabelStyle}" Grid.Column="1" Text="Icon path" Grid.Row="1"/>
                     <TextBlock Style="{StaticResource FieldLabelStyle}" Grid.Column="1" Text="Arguments" Grid.Row="2"/>
                     <TextBlock Style="{StaticResource FieldLabelStyle}" Grid.Column="1" Text="Working dir" Grid.Row="3"/>
-                    <TextBlock Style="{StaticResource FieldLabelStyle}" Grid.Column="1" Text="Run as admin" Grid.Row="4"/>
+                    <TextBlock Style="{StaticResource FieldLabelStyle}" Grid.Column="1" Text="Can run as admin" Grid.Row="4"/>
 
                     <TextBox Text="{Binding Uri, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="2" HorizontalAlignment="Stretch"/>
                     <TextBox Text="{Binding IconPath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="2" Grid.Row="1" HorizontalAlignment="Stretch"/>
                     <TextBox Text="{Binding Args, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="2" Margin="0 0 0 0" Grid.Row="2" HorizontalAlignment="Stretch"/>
                     <TextBox Text="{Binding WorkingDir, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="2" Grid.Row="3" HorizontalAlignment="Stretch"/>
-                    <CheckBox IsChecked="{Binding RunAsAdmin, Mode=TwoWay}" Grid.Column="2" Grid.Row="4" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                    <CheckBox IsChecked="{Binding CanRunAsAdmin, Mode=TwoWay}" Grid.Column="2" Grid.Row="4" HorizontalAlignment="Left" VerticalAlignment="Center" />
 
                     <Button Style="{StaticResource BrowseButtonStyle}" Grid.Row="0" x:Name="BrowseButton"
                             Height="20" Margin="0 0 10 0" Background="Transparent">
@@ -346,7 +357,7 @@
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="40"/>
                 </Grid.ColumnDefinitions>
-                <TextBlock Text="Separator" Foreground="#5999"  Grid.Column="1" Margin="15 0" VerticalAlignment="Center"/>
+                <TextBlock Text="Separator" Foreground="{StaticResource DimTextBrush}"  Grid.Column="1" Margin="15 0" VerticalAlignment="Center"/>
                 <Ellipse Grid.Column="0" Fill="#5999" Width="6" Height="6"/>
             </Grid>
         </DataTemplate>
@@ -365,10 +376,9 @@
                             <ColumnDefinition/>
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
-                        <Border Height="32" Background="#202325" Grid.ColumnSpan="4"
-                                CornerRadius="16" Margin="-16 0 0 0"/>
+                        <Border Margin="-16 0 0 0" Style="{StaticResource FieldBorderStyle}"/>
 
-                        <TextBlock Style="{StaticResource FieldLabelStyle}" Grid.Column="1" Text="Icon path" Grid.Row="1"/>
+                        <TextBlock Style="{StaticResource FieldLabelStyle}" Grid.Column="1" Text="Icon path" />
                         <TextBox Text="{Binding IconPath, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
                                  Grid.Column="2" 
                                  HorizontalAlignment="Stretch"/>
@@ -407,10 +417,10 @@
             <Setter Property="FontSize" Value="32"/>
             <Setter Property="FontWeight" Value="Thin"/>
             <Setter Property="Margin" Value="20 0"/>
-            <Setter Property="Foreground" Value="#5fff"/>
+            <Setter Property="Foreground" Value="{StaticResource DimTextBrush}"/>
         </Style>
-        <Style x:Key="TitleBarButtonStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource ButtonMainStyle}">
-            <Setter Property="Background" Value="#2fff"/>
+        <Style x:Key="TitleBarButtonStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource NostrumMainButtonStyle}">
+            <Setter Property="Background" Value="{StaticResource OverlayBrush}"/>
             <Setter Property="nsEx:ButtonExtensions.CornerRadius" Value="10"/>
             <Setter Property="nsEx:ButtonExtensions.RippleEnabled" Value="False"/>
             <Setter Property="Height" Value="18"/>
@@ -422,7 +432,7 @@
         <Style x:Key="TitleBarButtonPathStyle" TargetType="{x:Type Path}">
             <Setter Property="Height" Value="8"/>
             <Setter Property="Width" Value="8"/>
-            <Setter Property="Fill" Value="White"/>
+            <Setter Property="Fill" Value="{StaticResource DefaultTextBrush}"/>
             <Setter Property="Stretch" Value="Uniform"/>
 
         </Style>
@@ -449,13 +459,12 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <Border Background="#1ccc" Grid.ColumnSpan="3"
+        <Border Background="{StaticResource OverlayBrush}" Grid.ColumnSpan="3"
                 MouseLeftButtonDown="TextBlock_MouseLeftButtonDown"
                 />
         <!--Title bar-->
         <TextBlock Text="Pie launcher settings" 
                    HorizontalAlignment="Stretch"
-                   Foreground="#9fff"
                    Grid.ColumnSpan="2"
                    Background="Transparent"
                    FontWeight="Thin" FontSize="20"  
@@ -525,7 +534,7 @@
             <ContentControl local:ContentControlExtensions.Label="Start with windows"
                             Margin="0">
                 <CheckBox IsChecked="{Binding StartWithWindows, Mode=TwoWay}"
-                      Foreground="#9fff" 
+                      Foreground="{StaticResource DefaultTextBrush}" 
                       nsEx:CheckBoxExtensions.Size="14"
                       VerticalAlignment="Center" />
             </ContentControl>
@@ -536,7 +545,7 @@
             <ContentControl local:ContentControlExtensions.Label="Trigger mode">
                 <ComboBox SelectedValue="{Binding TriggerMode, Mode=TwoWay}"
                           Style="{StaticResource ComboBoxMainStyle}"
-                          Foreground="White"
+                          Foreground="{StaticResource DefaultTextBrush}"
                           VerticalContentAlignment="Center"
                           ItemsSource="{nsEx:EnumBindingSource {x:Type local:TriggerMode}}"
                           nsEx:ComboBoxExtensions.DropDownBorderStyle="{StaticResource ComboBoxDropDownBorderStyle}"/>
@@ -554,12 +563,20 @@
                     </Style>
                 </ContentControl.Style>
                 <CheckBox IsChecked="{Binding CloseAfterClick, Mode=TwoWay}"
-                      Foreground="#9fff" 
+                      Foreground="{StaticResource DefaultTextBrush}" 
                       nsEx:CheckBoxExtensions.Size="14"
                       VerticalAlignment="Center" />
             </ContentControl>
 
-
+            <ContentControl local:ContentControlExtensions.Label="Theme">
+                <ComboBox SelectedValue="{Binding Theme, Mode=TwoWay}"
+                          Style="{StaticResource ComboBoxMainStyle}"
+                          Foreground="{StaticResource DefaultTextBrush}"
+                          VerticalContentAlignment="Center"
+                          ItemsSource="{nsEx:EnumBindingSource {x:Type local:Theme}}"
+                          nsEx:ComboBoxExtensions.DropDownBorderStyle="{StaticResource ComboBoxDropDownBorderStyle}"
+                          />
+            </ContentControl>
         </StackPanel>
 
         <Separator Grid.Row="2" Grid.ColumnSpan="2"

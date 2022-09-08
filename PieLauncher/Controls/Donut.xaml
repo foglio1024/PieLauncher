@@ -10,7 +10,7 @@
         <Style x:Key="MainRingStyle" TargetType="Ellipse">
             <Setter Property="Width" Value="{Binding OuterRadius, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=c:Donut}}"/>
             <Setter Property="Height" Value="{Binding OuterRadius, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=c:Donut}}"/>
-            <Setter Property="Stroke" Value="{Binding Fill, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=c:Donut}}"/>
+            <!--<Setter Property="Stroke" Value="{Binding Fill, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=c:Donut}}"/>-->
         </Style>
         <Style x:Key="StrokeStyle" TargetType="Ellipse">
             <Setter Property="StrokeThickness" Value="1"/>
@@ -26,7 +26,7 @@
         </Style>
     </UserControl.Resources>
     <Grid>
-        <Ellipse x:Name="MainRing" Style="{StaticResource MainRingStyle}" />
+        <Ellipse x:Name="MainRing" Style="{DynamicResource MainRingStyle}" Stroke="{Binding Fill, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=c:Donut}}"/>
         <Ellipse x:Name="ExternalStroke" Style="{StaticResource ExternalStrokeStyle}"  Stroke="#444" />
         <Ellipse x:Name="InternalStroke" Style="{StaticResource InternalStrokeStyle}"  Stroke="#444" />
 
