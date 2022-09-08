@@ -63,6 +63,7 @@ namespace PieLauncher
 
         public void ApplyTheme(Theme t)
         {
+            return;
             var themeUri = $"Resources/{t}Theme.xaml";
             if (Current.Resources.MergedDictionaries.Any(d => d.Source.OriginalString == themeUri)) return;
             var currentThemeDict = Current.Resources.MergedDictionaries.FirstOrDefault(x => x.Source.OriginalString.EndsWith("Theme.xaml"));

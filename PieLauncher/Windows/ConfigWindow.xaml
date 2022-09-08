@@ -568,7 +568,7 @@
                       VerticalAlignment="Center" />
             </ContentControl>
 
-            <ContentControl local:ContentControlExtensions.Label="Theme">
+            <!--<ContentControl local:ContentControlExtensions.Label="Theme">
                 <ComboBox SelectedValue="{Binding Theme, Mode=TwoWay}"
                           Style="{StaticResource ComboBoxMainStyle}"
                           Foreground="{StaticResource DefaultTextBrush}"
@@ -576,7 +576,7 @@
                           ItemsSource="{nsEx:EnumBindingSource {x:Type local:Theme}}"
                           nsEx:ComboBoxExtensions.DropDownBorderStyle="{StaticResource ComboBoxDropDownBorderStyle}"
                           />
-            </ContentControl>
+            </ContentControl>-->
         </StackPanel>
 
         <Separator Grid.Row="2" Grid.ColumnSpan="2"
