@@ -35,7 +35,7 @@
                             Visibility="{Binding CanRunAsAdmin, Converter={converters:BoolToVisibility}}"
                          Style="{StaticResource NostrumMainButtonStyle}">
                     <Grid>
-                        <Ellipse x:Name="Ell" Width="80" Height="80" VerticalAlignment="Bottom" Style="{StaticResource DefaultButtonEllipseStyle}"
+                        <Ellipse x:Name="Ell" VerticalAlignment="Bottom" Style="{StaticResource DefaultButtonEllipseStyle}"
                              Margin="0 0 0 -59" 
                              Fill="{StaticResource LightBackgroundBrush}"
                               >
