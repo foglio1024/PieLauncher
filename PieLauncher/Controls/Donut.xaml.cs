@@ -1,89 +1,84 @@
 ﻿using System;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Effects;
 
-namespace PieLauncher.Controls
+namespace PieLauncher.Controls;
+
+public partial class Donut
 {
-    public partial class Donut : UserControl
+    private readonly DropShadowEffect _ringShadow = new() { ShadowDepth = 0, BlurRadius = 100, Opacity = .7 };
+
+    public double InnerRadius
     {
-        readonly DropShadowEffect _ringShadow = new() { ShadowDepth = 0, BlurRadius = 100, Opacity = .7 };
+        get => (double)GetValue(InnerRadiusProperty);
+        set => SetValue(InnerRadiusProperty, value);
+    }
 
-        public double InnerRadius
-        {
-            get { return (double)GetValue(InnerRadiusProperty); }
-            set { SetValue(InnerRadiusProperty, value); }
-        }
+    public static readonly DependencyProperty InnerRadiusProperty =
+        DependencyProperty.Register(nameof(InnerRadius), typeof(double), typeof(Donut), new PropertyMetadata(60d, HandleRadiiChanged));
 
-        public static readonly DependencyProperty InnerRadiusProperty =
-            DependencyProperty.Register("InnerRadius", typeof(double), typeof(Donut), new PropertyMetadata(60d, HandleRadiiChanged));
+    public double OuterRadius
+    {
+        get => (double)GetValue(OuterRadiusProperty);
+        set => SetValue(OuterRadiusProperty, value);
+    }
 
-        public double OuterRadius
-        {
-            get { return (double)GetValue(OuterRadiusProperty); }
-            set { SetValue(OuterRadiusProperty, value); }
-        }
+    public static readonly DependencyProperty OuterRadiusProperty =
+        DependencyProperty.Register(nameof(OuterRadius), typeof(double), typeof(Donut), new PropertyMetadata(100d, HandleRadiiChanged));
 
-        public static readonly DependencyProperty OuterRadiusProperty =
-            DependencyProperty.Register("OuterRadius", typeof(double), typeof(Donut), new PropertyMetadata(100d, HandleRadiiChanged));
+    public Brush Fill
+    {
+        get => (Brush)GetValue(FillProperty);
+        set => SetValue(FillProperty, value);
+    }
 
+    public static readonly DependencyProperty FillProperty =
+        DependencyProperty.Register(nameof(Fill), typeof(Brush), typeof(Donut), new FrameworkPropertyMetadata(Brushes.SlateGray, FrameworkPropertyMetadataOptions.AffectsRender | FrameworkPropertyMetadataOptions.SubPropertiesDoNotAffectRender));
 
-        public Brush Fill
-        {
-            get { return (Brush)GetValue(FillProperty); }
-            set { SetValue(FillProperty, value); }
-        }
+    public Brush Stroke
+    {
+        get => (Brush)GetValue(StrokeProperty);
+        set => SetValue(StrokeProperty, value);
+    }
 
-        public static readonly DependencyProperty FillProperty =
-            DependencyProperty.Register("Fill", typeof(Brush), typeof(Donut), new FrameworkPropertyMetadata(Brushes.SlateGray, FrameworkPropertyMetadataOptions.AffectsRender | FrameworkPropertyMetadataOptions.SubPropertiesDoNotAffectRender));
+    public static readonly DependencyProperty StrokeProperty =
+        DependencyProperty.Register(nameof(Stroke), typeof(Brush), typeof(Donut), new FrameworkPropertyMetadata(Brushes.LightSlateGray, FrameworkPropertyMetadataOptions.AffectsRender | FrameworkPropertyMetadataOptions.SubPropertiesDoNotAffectRender | FrameworkPropertyMetadataOptions.AffectsMeasure));
 
-        public Brush Stroke
-        {
-            get { return (Brush)GetValue(StrokeProperty); }
-            set { SetValue(StrokeProperty, value); }
-        }
+    public bool HasShadow
+    {
+        get => (bool)GetValue(HasShadowProperty);
+        set => SetValue(HasShadowProperty, value);
+    }
 
-        public static readonly DependencyProperty StrokeProperty =
-            DependencyProperty.Register("Stroke", typeof(Brush), typeof(Donut), new FrameworkPropertyMetadata(Brushes.LightSlateGray, FrameworkPropertyMetadataOptions.AffectsRender | FrameworkPropertyMetadataOptions.SubPropertiesDoNotAffectRender | FrameworkPropertyMetadataOptions.AffectsMeasure));
+    public static readonly DependencyProperty HasShadowProperty =
+        DependencyProperty.Register(nameof(HasShadow), typeof(bool), typeof(Donut), new PropertyMetadata(true, HandleHasShadowChanged));
 
-        public bool HasShadow
-        {
-            get { return (bool)GetValue(HasShadowProperty); }
-            set { SetValue(HasShadowProperty, value); }
-        }
+    private static void HandleHasShadowChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    {
+        ((Donut)d).OnHasShadowChanged();
+    }
 
-        public static readonly DependencyProperty HasShadowProperty =
-            DependencyProperty.Register("HasShadow", typeof(bool), typeof(Donut), new PropertyMetadata(true, HandleHasShadowChanged));
+    private void OnHasShadowChanged()
+    {
+        MainRing.Effect = HasShadow
+            ? _ringShadow
+            : null;
+    }
 
-        static void HandleHasShadowChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            ((Donut)d).OnHasShadowChanged();
-        }
+    public Donut()
+    {
+        InitializeComponent();
+        OnHasShadowChanged();
+    }
 
-        void OnHasShadowChanged()
-        {
-            MainRing.Effect = HasShadow 
-                ? _ringShadow
-                : null;
-        }
+    private void OnRadiiChanged()
+    {
+        MainRing.StrokeThickness = Math.Abs(OuterRadius - InnerRadius) / 2;
+    }
 
-        public Donut()
-        {
-            InitializeComponent();
-            OnHasShadowChanged();
-        }
-
-        void OnRadiiChanged()
-        {
-            MainRing.StrokeThickness = Math.Abs(OuterRadius - InnerRadius)/2;
-        }
-
-
-        static void HandleRadiiChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            ((Donut)d).OnRadiiChanged();
-        }
-
+    private static void HandleRadiiChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    {
+        ((Donut)d).OnRadiiChanged();
     }
 }

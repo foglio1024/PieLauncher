@@ -1,7 +1,8 @@
-﻿[*.cs]
 
-# CS0659: Il tipo esegue l'override di Object.Equals(object o) ma non esegue l'override di Object.GetHashCode()
-dotnet_diagnostic.CS0659.severity = none
+[*]
 
-[*.{cs,vb}]
-dotnet_style_require_accessibility_modifiers=omit_if_default:error
+# Microsoft .NET properties
+dotnet_style_qualification_for_event = false:none
+dotnet_style_qualification_for_field = false:none
+dotnet_style_qualification_for_method = false:none
+dotnet_style_qualification_for_property = false:none

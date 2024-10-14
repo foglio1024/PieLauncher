@@ -1,30 +1,27 @@
-﻿using Nostrum.WPF.Extensions;
-using Nostrum.WPF.Factories;
-using System;
-using System.Windows;
+﻿using System.Windows;
+using Nostrum.WPF.Extensions;
 
-namespace PieLauncher
+namespace PieLauncher.Windows;
+
+public partial class ConfigWindow
 {
-    public partial class ConfigWindow : Window
+    public ConfigWindow()
     {
-        public ConfigWindow()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
+    }
 
-        void TextBlock_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-            this.TryDragMove();
-        }
+    private void TextBlock_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+    {
+        this.TryDragMove();
+    }
 
-        void OnMinimizeButtonClick(object sender, RoutedEventArgs e)
-        {
-            WindowState = WindowState.Minimized;
-        }
+    private void OnMinimizeButtonClick(object sender, RoutedEventArgs e)
+    {
+        WindowState = WindowState.Minimized;
+    }
 
-        void OnCloseButtonClick(object sender, RoutedEventArgs e)
-        {
-            Close();
-        }
+    private void OnCloseButtonClick(object sender, RoutedEventArgs e)
+    {
+        Close();
     }
 }

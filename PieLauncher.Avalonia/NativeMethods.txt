@@ -1,0 +1,8 @@
+FindWindow
+GetWindowRect
+GetDpiForWindow
+SetWindowLong
+GetWindowLong
+SetWindowRgn
+GetWindow
+EnumWindows

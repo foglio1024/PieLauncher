@@ -1,34 +1,46 @@
 ﻿<UserControl x:Class="PieLauncher.Controls.Donut"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:c="clr-namespace:PieLauncher.Controls"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="450">
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             d:DesignHeight="450"
+             d:DesignWidth="450"
+             mc:Ignorable="d">
     <UserControl.Resources>
-        <Style x:Key="MainRingStyle" TargetType="Ellipse">
-            <Setter Property="Width" Value="{Binding OuterRadius, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=c:Donut}}"/>
-            <Setter Property="Height" Value="{Binding OuterRadius, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=c:Donut}}"/>
+        <Style x:Key="MainRingStyle"
+               TargetType="Ellipse">
+            <Setter Property="Width" Value="{Binding OuterRadius, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=c:Donut}}" />
+            <Setter Property="Height" Value="{Binding OuterRadius, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=c:Donut}}" />
             <!--<Setter Property="Stroke" Value="{Binding Fill, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=c:Donut}}"/>-->
         </Style>
-        <Style x:Key="StrokeStyle" TargetType="Ellipse">
-            <Setter Property="StrokeThickness" Value="1"/>
-            <Setter Property="Stroke" Value="{Binding Stroke, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=c:Donut}}"/>
+        <Style x:Key="StrokeStyle"
+               TargetType="Ellipse">
+            <Setter Property="StrokeThickness" Value="1" />
+            <Setter Property="Stroke" Value="{Binding Stroke, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=c:Donut}}" />
         </Style>
-        <Style x:Key="ExternalStrokeStyle" TargetType="Ellipse" BasedOn="{StaticResource StrokeStyle}">
-            <Setter Property="Width" Value="{Binding OuterRadius, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=c:Donut}}"/>
-            <Setter Property="Height" Value="{Binding OuterRadius, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=c:Donut}}"/>
+        <Style x:Key="ExternalStrokeStyle"
+               BasedOn="{StaticResource StrokeStyle}"
+               TargetType="Ellipse">
+            <Setter Property="Width" Value="{Binding OuterRadius, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=c:Donut}}" />
+            <Setter Property="Height" Value="{Binding OuterRadius, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=c:Donut}}" />
         </Style>
-        <Style x:Key="InternalStrokeStyle" TargetType="Ellipse" BasedOn="{StaticResource StrokeStyle}">
-            <Setter Property="Width" Value="{Binding InnerRadius, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=c:Donut}}"/>
-            <Setter Property="Height" Value="{Binding InnerRadius, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=c:Donut}}"/>
+        <Style x:Key="InternalStrokeStyle"
+               BasedOn="{StaticResource StrokeStyle}"
+               TargetType="Ellipse">
+            <Setter Property="Width" Value="{Binding InnerRadius, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=c:Donut}}" />
+            <Setter Property="Height" Value="{Binding InnerRadius, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=c:Donut}}" />
         </Style>
     </UserControl.Resources>
     <Grid>
-        <Ellipse x:Name="MainRing" Style="{DynamicResource MainRingStyle}" Stroke="{Binding Fill, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=c:Donut}}"/>
-        <Ellipse x:Name="ExternalStroke" Style="{StaticResource ExternalStrokeStyle}"  Stroke="#444" />
-        <Ellipse x:Name="InternalStroke" Style="{StaticResource InternalStrokeStyle}"  Stroke="#444" />
-
+        <Ellipse x:Name="MainRing"
+                 Stroke="{Binding Fill, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=c:Donut}}"
+                 Style="{DynamicResource MainRingStyle}" />
+        <Ellipse x:Name="ExternalStroke"
+                 Stroke="#444"
+                 Style="{StaticResource ExternalStrokeStyle}" />
+        <Ellipse x:Name="InternalStroke"
+                 Stroke="#444"
+                 Style="{StaticResource InternalStrokeStyle}" />
     </Grid>
 </UserControl>

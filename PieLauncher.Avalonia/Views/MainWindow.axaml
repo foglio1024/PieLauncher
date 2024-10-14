@@ -1,0 +1,14 @@
+<Window x:Class="PieLauncher.Avalonia.Views.MainWindow"
+        xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:pla="using:PieLauncher.Avalonia"
+        xmlns:v="using:PieLauncher.Avalonia.Views"
+        xmlns:vm="using:PieLauncher.Core.ViewModels"
+        d:DataContext="{x:Static pla:DesignTimeViewModels.Main}"
+        x:DataType="vm:MainViewModel"
+        Classes="main"
+        mc:Ignorable="d">
+    <v:MainView />
+</Window>

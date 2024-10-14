@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "PieLauncher": {
+      "commandName": "Project",
+      "remoteDebugEnabled": false
+    }
+  }
+}

@@ -1,0 +1,37 @@
+﻿<UserControl x:Class="PieLauncher.Avalonia.Controls.Donut"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:controls="clr-namespace:PieLauncher.Avalonia.Controls"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             d:DesignHeight="450"
+             d:DesignWidth="450"
+             mc:Ignorable="d">
+    <UserControl.Styles>
+        <Style Selector="Ellipse">
+            <Setter Property="StrokeThickness" Value="1" />
+            <!--<Setter Property="Stroke" Value="{Binding Stroke, RelativeSource={RelativeSource AncestorType=controls:Donut}}" />-->
+            <Setter Property="Stroke" Value="#444" />
+            <Style Selector="^.main">
+                <Setter Property="Stroke" Value="{Binding $parent[controls:Donut].Fill}" />
+            </Style>
+            <Style Selector="^.outer">
+                <Setter Property="Width" Value="{Binding $parent[controls:Donut].OuterRadius}" />
+                <Setter Property="Height" Value="{Binding $parent[controls:Donut].OuterRadius}" />
+            </Style>
+            <Style Selector="^.inner">
+                <Setter Property="Width" Value="{Binding $parent[controls:Donut].InnerRadius}" />
+                <Setter Property="Height" Value="{Binding $parent[controls:Donut].InnerRadius}" />
+            </Style>
+        </Style>
+    </UserControl.Styles>
+
+    <Grid>
+        <Ellipse x:Name="MainRing"
+                 Classes="main outer" />
+        <Ellipse x:Name="ExternalStroke"
+                 Classes="outer" />
+        <Ellipse x:Name="InternalStroke"
+                 Classes="inner" />
+    </Grid>
+</UserControl>

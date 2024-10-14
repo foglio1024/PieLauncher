@@ -1,0 +1,194 @@
+<UserControl x:Class="PieLauncher.Avalonia.Views.MainView"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:controls="clr-namespace:PieLauncher.Avalonia.Controls"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:pla="clr-namespace:PieLauncher.Avalonia"
+             xmlns:viewModels="clr-namespace:PieLauncher.Core.ViewModels;assembly=PieLauncher.Core"
+             Width="700"
+             Height="700"
+             d:DataContext="{x:Static pla:DesignTimeViewModels.Main}"
+             x:DataType="viewModels:MainViewModel"
+             mc:Ignorable="d">
+    <UserControl.DataTemplates>
+        <DataTemplate DataType="viewModels:ShortcutViewModel">
+            <Panel Classes="shortcut"
+                   Cursor="Hand"
+                   IsPointerOver="{Binding IsHovered, Mode=OneWayToSource}">
+                <!--<Ellipse Classes="button" />-->
+                <Button Padding="0"
+                        Classes="invisible"
+                        Command="{Binding LaunchCommand}"
+                        CommandParameter="{StaticResource False}"
+                        CornerRadius="200">
+                    <Image Width="54"
+                           Height="54"
+                           RenderOptions.BitmapInterpolationMode="HighQuality"
+                           Source="{Binding ImageSource, Converter={controls:BitmapConverter}}"
+                           Stretch="Uniform"
+                           StretchDirection="Both" />
+                </Button>
+
+                <Button Name="AdminButton"
+                        Margin="-10"
+                        Padding="0"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Bottom"
+                        Classes="invisible"
+                        ClipToBounds="False"
+                        Command="{Binding LaunchCommand}"
+                        CommandParameter="{StaticResource True}"
+                        IsVisible="{Binding CanRunAsAdmin}">
+                    <Panel HorizontalAlignment="Stretch"
+                           VerticalAlignment="Stretch">
+
+                        <!--<Ellipse Fill="Transparent"
+                                 StrokeThickness="1">
+                            <Ellipse.Stroke>
+                                <LinearGradientBrush>
+                                    <GradientStop Color="{StaticResource AccentGradient1}" />
+                                    <GradientStop Offset="1" Color="{StaticResource AccentGradient2}" />
+                                </LinearGradientBrush>
+                            </Ellipse.Stroke>
+                        </Ellipse>-->
+
+                        <Border Padding="9 4 8 4"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Bottom"
+                                CornerRadius="100">
+                            <Border.Background>
+                                <LinearGradientBrush>
+                                    <GradientStop Color="{StaticResource AccentGradient1}" />
+                                    <GradientStop Offset="1" Color="{StaticResource AccentGradient2}" />
+                                </LinearGradientBrush>
+                            </Border.Background>
+                            <Path Width="12"
+                                  Height="12"
+                                  VerticalAlignment="Center"
+                                  Data="{StaticResource SvgSecurityRounded}"
+                                  Fill="White"
+                                  Stretch="Uniform" />
+                        </Border>
+
+                    </Panel>
+                </Button>
+            </Panel>
+        </DataTemplate>
+        <DataTemplate DataType="viewModels:SeparatorViewModel">
+            <Ellipse Width="16"
+                     Height="16"
+                     Fill="#1fff" />
+        </DataTemplate>
+        <DataTemplate DataType="viewModels:FolderViewModel">
+            <Panel controls:FlyoutOnHoverBehavior.Enabled="True"
+                   Background="Transparent">
+                <FlyoutBase.AttachedFlyout>
+                    <Flyout FlyoutPresenterClasses="base"
+                            Placement="Center"
+                            ShowMode="Standard">
+                        <Grid Margin="0"
+                              Background="{x:Null}"
+                              Classes="folder_content"
+                              Classes.visible="{Binding $parent[FlyoutPresenter].IsPointerOver}"
+                              ClipToBounds="False">
+                            <Ellipse Width="300"
+                                     Height="300"
+                                     Margin="30"
+                                     Fill="Transparent"
+                                     IsHitTestVisible="True"
+                                     StrokeThickness="100">
+                                <Ellipse.Stroke>
+                                    <RadialGradientBrush>
+                                        <GradientStop Offset="0.5" Color="{DynamicResource BaseGradient1}" />
+                                        <GradientStop Offset="1.0" Color="{DynamicResource BaseGradient2}" />
+                                    </RadialGradientBrush>
+                                </Ellipse.Stroke>
+                                <Ellipse.Effect>
+                                    <DropShadowEffect BlurRadius="50"
+                                                      OffsetX="0"
+                                                      OffsetY="0"
+                                                      Opacity="1" />
+                                </Ellipse.Effect>
+                            </Ellipse>
+
+                            <ItemsControl Margin="62"
+                                          Classes="radial animatable"
+                                          Classes.visible="{Binding $parent[FlyoutPresenter].IsPointerOver}"
+                                          ClipToBounds="False"
+                                          ItemsPanel="{StaticResource RadialPanelTemplate}"
+                                          ItemsSource="{Binding Apps}" />
+                        </Grid>
+                    </Flyout>
+                </FlyoutBase.AttachedFlyout>
+
+                <!--<Ellipse Classes="button" />-->
+                <Grid VerticalAlignment="Center"
+                      RowDefinitions="auto,auto">
+
+                    <Grid x:Name="IconContainer"
+                          Width="32"
+                          Height="32"
+                          Margin="0 -10 0 0">
+                        <Path x:Name="DefaultIcon"
+                              Margin="4"
+                              HorizontalAlignment="Center"
+                              VerticalAlignment="Center"
+                              Data="{StaticResource SvgMoreHorizontal}"
+                              IsVisible="{Binding !IsIconValid}"
+                              Stretch="Uniform">
+                            <Path.Fill>
+                                <SolidColorBrush Color="{StaticResource DimTextColor}" />
+                            </Path.Fill>
+                        </Path>
+
+                        <Image x:Name="CustomIcon"
+                               Source="{Binding ImageSource, Converter={controls:BitmapConverter}}" />
+                    </Grid>
+
+                    <TextBlock Grid.Row="1"
+                               Classes="folder_name"
+                               Text="{Binding Name}" />
+
+                </Grid>
+
+            </Panel>
+        </DataTemplate>
+    </UserControl.DataTemplates>
+
+    <Panel Classes="main_content"
+           Classes.visible="{Binding IsVisible}">
+
+        <controls:Donut Classes="main_donut"
+                        IsHitTestVisible="False" />
+
+        <ItemsControl x:Name="MainContainer"
+                      Margin="68"
+                      Classes="radial animatable"
+                      Classes.visible="{Binding IsVisible}"
+                      ItemsSource="{Binding Root.Apps}" />
+
+        <Ellipse Classes="inner_circle"
+                 Fill="{Binding CurrentTime, Converter={StaticResource DayToBrush}}" />
+        <Ellipse Classes="glow"
+                 Stroke="{Binding CurrentTime, Converter={StaticResource DayToBrush}}" />
+
+        <Grid HorizontalAlignment="Center"
+              VerticalAlignment="Stretch"
+              RowDefinitions="*,Auto,*">
+            <Button Classes="settings" VerticalAlignment="Bottom" Margin="0 0 0 60"
+					Command="{Binding OpenConfigWindowCommand}"/>
+            <StackPanel Grid.Row="1" Margin="0 -20 0 0">
+
+                <TextBlock Classes="clock"
+                           Text="{Binding Time, Mode=OneWay}" />
+
+                <TextBlock Classes="clock"
+                           FontSize="24"
+                           Foreground="#7fff"
+                           Text="{Binding Date, Mode=OneWay}" />
+            </StackPanel>
+
+        </Grid>
+    </Panel>
+</UserControl>

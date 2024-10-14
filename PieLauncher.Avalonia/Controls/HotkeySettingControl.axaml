@@ -1,0 +1,21 @@
+<UserControl x:Class="PieLauncher.Avalonia.Controls.HotkeySettingControl"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             d:DesignHeight="450"
+             d:DesignWidth="800"
+             mc:Ignorable="d">
+	
+    <TextBox x:Name="TheTextBox"
+			 MinHeight="0"
+             Padding="6 0"
+             VerticalContentAlignment="Center"
+             GotFocus="OnGotKeyboardFocus"
+             KeyDown="OnKeyDown"
+             KeyUp="OnKeyUp"
+			 BorderThickness="0"
+			 Background="Transparent"
+             LostFocus="OnLostKeyboardFocus" />
+
+</UserControl>

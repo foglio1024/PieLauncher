@@ -5,6 +5,10 @@ VisualStudioVersion = 17.0.32112.339
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PieLauncher", "PieLauncher\PieLauncher.csproj", "{8F499A8F-44F7-4251-9202-EC20C0BA1AC7}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PieLauncher.Core", "PieLauncher.Core\PieLauncher.Core.csproj", "{9AFA7166-E80A-43C2-9AD9-30A5D476921F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PieLauncher.Avalonia", "PieLauncher.Avalonia\PieLauncher.Avalonia.csproj", "{0A501C13-D2F7-4D34-8627-AE875E05A891}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{8F499A8F-44F7-4251-9202-EC20C0BA1AC7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8F499A8F-44F7-4251-9202-EC20C0BA1AC7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8F499A8F-44F7-4251-9202-EC20C0BA1AC7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9AFA7166-E80A-43C2-9AD9-30A5D476921F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9AFA7166-E80A-43C2-9AD9-30A5D476921F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9AFA7166-E80A-43C2-9AD9-30A5D476921F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9AFA7166-E80A-43C2-9AD9-30A5D476921F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0A501C13-D2F7-4D34-8627-AE875E05A891}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0A501C13-D2F7-4D34-8627-AE875E05A891}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0A501C13-D2F7-4D34-8627-AE875E05A891}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0A501C13-D2F7-4D34-8627-AE875E05A891}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
