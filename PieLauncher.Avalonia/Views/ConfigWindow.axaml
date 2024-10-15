@@ -1,23 +1,23 @@
-<Window x:Class="PieLauncher.Avalonia.Views.ConfigWindow"
-        xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:avalonia="using:PieLauncher.Avalonia"
-        xmlns:controls="using:PieLauncher.Avalonia.Controls"
-        xmlns:core="using:PieLauncher.Core"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:icons="using:Material.Icons.Avalonia"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:viewModels="using:PieLauncher.Core.ViewModels"
-        xmlns:views="clr-namespace:PieLauncher.Avalonia.Views"
-        Title="PieLauncher"
-        d:DataContext="{x:Static avalonia:DesignTimeViewModels.Main}"
-        d:DesignHeight="450"
-        d:DesignWidth="800"
-        x:DataType="viewModels:MainViewModel"
-        Background="Transparent"
-        ExtendClientAreaToDecorationsHint="True"
-        TransparencyLevelHint="AcrylicBlur"
-        mc:Ignorable="d">
+<Window
+    x:Class="PieLauncher.Avalonia.Views.ConfigWindow"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:avalonia="using:PieLauncher.Avalonia"
+    xmlns:controls="using:PieLauncher.Avalonia.Controls"
+    xmlns:core="using:PieLauncher.Core"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:icons="using:Material.Icons.Avalonia"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:viewModels="using:PieLauncher.Core.ViewModels"
+    xmlns:views="clr-namespace:PieLauncher.Avalonia.Views"
+    Title="PieLauncher"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    x:DataType="viewModels:MainViewModel"
+    Background="Transparent"
+    ExtendClientAreaToDecorationsHint="True"
+    TransparencyLevelHint="AcrylicBlur"
+    mc:Ignorable="d">
     <Window.Styles>
         <Style Selector="Path.flipped">
             <Setter Property="RenderTransform" Value="rotate(180deg)" />
@@ -40,8 +40,7 @@
             <Setter Property="(Interaction.Behaviors)">
                 <BehaviorCollectionTemplate>
                     <BehaviorCollection>
-                        <ContextDragBehavior HorizontalDragThreshold="10"
-                                             VerticalDragThreshold="10" />
+                        <ContextDragBehavior HorizontalDragThreshold="10" VerticalDragThreshold="10" />
                     </BehaviorCollection>
                 </BehaviorCollectionTemplate>
             </Setter>
@@ -49,8 +48,7 @@
     </Window.Styles>
     <Window.Resources>
         <!--  ReSharper disable once Xaml.RedundantResource  -->
-        <ControlTheme x:Key="{x:Type TreeViewItem}"
-                      TargetType="TreeViewItem">
+        <ControlTheme x:Key="{x:Type TreeViewItem}" TargetType="TreeViewItem">
             <Setter Property="Padding" Value="4" />
             <Setter Property="MinHeight" Value="0" />
             <Setter Property="IsExpanded" Value="True" />
@@ -60,46 +58,52 @@
             <Setter Property="Template">
                 <ControlTemplate>
                     <StackPanel>
-                        <Border Name="PART_LayoutRoot"
-                                MinHeight="{TemplateBinding MinHeight}"
-                                Background="{TemplateBinding Background}"
-                                BorderBrush="{TemplateBinding BorderBrush}"
-                                BorderThickness="{TemplateBinding BorderThickness}"
-                                CornerRadius="{TemplateBinding CornerRadius}"
-                                Focusable="True"
-                                TemplatedControl.IsTemplateFocusTarget="True">
-                            <Grid Name="PART_Header"
-                                  Margin="{TemplateBinding Level,
-                                                           Mode=OneWay,
-                                                           Converter={StaticResource TreeViewItemLeftMarginConverter}}"
-                                  ColumnDefinitions="Auto, *">
+                        <Border
+                            Name="PART_LayoutRoot"
+                            MinHeight="{TemplateBinding MinHeight}"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="{TemplateBinding CornerRadius}"
+                            Focusable="True"
+                            TemplatedControl.IsTemplateFocusTarget="True">
+                            <Grid
+                                Name="PART_Header"
+                                Margin="{TemplateBinding Level,
+                                                         Mode=OneWay,
+                                                         Converter={StaticResource TreeViewItemLeftMarginConverter}}"
+                                ColumnDefinitions="Auto, *">
                                 <Panel Name="PART_ExpandCollapseChevronContainer">
-                                    <ToggleButton Name="PART_ExpandCollapseChevron"
-                                                  Margin="8 0 8 0"
-                                                  Focusable="False"
-                                                  Foreground="#555"
-                                                  IsChecked="{TemplateBinding IsExpanded,
-                                                                              Mode=TwoWay}"
-                                                  Theme="{StaticResource FluentTreeViewExpandCollapseChevron}" />
+                                    <ToggleButton
+                                        Name="PART_ExpandCollapseChevron"
+                                        Margin="8 0 8 0"
+                                        Focusable="False"
+                                        Foreground="#555"
+                                        IsChecked="{TemplateBinding IsExpanded,
+                                                                    Mode=TwoWay}"
+                                        Theme="{StaticResource FluentTreeViewExpandCollapseChevron}" />
                                 </Panel>
-                                <Border x:Name="ContentBorder"
-                                        Grid.Column="1"
-                                        Padding="{TemplateBinding Padding}"
-                                        Background="{TemplateBinding Background}"
-                                        CornerRadius="{TemplateBinding CornerRadius}">
-                                    <ContentPresenter Name="PART_HeaderPresenter"
-                                                      HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
-                                                      VerticalAlignment="{TemplateBinding VerticalAlignment}"
-                                                      Background="Transparent"
-                                                      Content="{TemplateBinding Header}"
-                                                      ContentTemplate="{TemplateBinding HeaderTemplate}"
-                                                      Focusable="False" />
+                                <Border
+                                    x:Name="ContentBorder"
+                                    Grid.Column="1"
+                                    Padding="{TemplateBinding Padding}"
+                                    Background="{TemplateBinding Background}"
+                                    CornerRadius="{TemplateBinding CornerRadius}">
+                                    <ContentPresenter
+                                        Name="PART_HeaderPresenter"
+                                        HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
+                                        VerticalAlignment="{TemplateBinding VerticalAlignment}"
+                                        Background="Transparent"
+                                        Content="{TemplateBinding Header}"
+                                        ContentTemplate="{TemplateBinding HeaderTemplate}"
+                                        Focusable="False" />
                                 </Border>
                             </Grid>
                         </Border>
-                        <ItemsPresenter Name="PART_ItemsPresenter"
-                                        IsVisible="{TemplateBinding IsExpanded}"
-                                        ItemsPanel="{TemplateBinding ItemsPanel}" />
+                        <ItemsPresenter
+                            Name="PART_ItemsPresenter"
+                            IsVisible="{TemplateBinding IsExpanded}"
+                            ItemsPanel="{TemplateBinding ItemsPanel}" />
                     </StackPanel>
                 </ControlTemplate>
             </Setter>
@@ -175,33 +179,33 @@
             </Style>
         </ControlTheme>
 
-        <DataTemplate x:Key="BaseItemTemplate"
-                      DataType="viewModels:PieItemBase">
+        <DataTemplate x:Key="BaseItemTemplate" DataType="viewModels:PieItemBase">
             <ContentControl Content="{Binding}" />
         </DataTemplate>
     </Window.Resources>
     <Window.DataTemplates>
         <DataTemplate DataType="viewModels:ShortcutViewModel">
-            <Grid ColumnDefinitions="Auto,*,Auto"
-                  RowDefinitions="Auto,Auto">
-                <Image Width="24"
-                       Height="24"
-                       Margin="0 0 8 0"
-                       Source="{Binding ImageSource, Converter={controls:BitmapConverter}}"
-                       Stretch="Uniform" />
-                <TextBlock Grid.Column="1"
-                           Margin="8 0 0 0"
-                           VerticalAlignment="Center"
-                           Text="{Binding Name, Mode=TwoWay}" />
+            <Grid ColumnDefinitions="Auto,*,Auto" RowDefinitions="Auto,Auto">
+                <Image
+                    Width="24"
+                    Height="24"
+                    Margin="0 0 8 0"
+                    Source="{Binding ImageSource, Converter={controls:BitmapConverter}}"
+                    Stretch="Uniform" />
+                <TextBlock
+                    Grid.Column="1"
+                    Margin="8 0 0 0"
+                    VerticalAlignment="Center"
+                    Text="{Binding Name, Mode=TwoWay}" />
             </Grid>
         </DataTemplate>
         <DataTemplate DataType="viewModels:SeparatorViewModel">
-            <Border Background="Transparent"
-                    Tag="x">
-                <StackPanel Height="24"
-                            HorizontalAlignment="Center"
-                            Orientation="Horizontal"
-                            Spacing="2">
+            <Border Background="Transparent" Tag="x">
+                <StackPanel
+                    Height="24"
+                    HorizontalAlignment="Center"
+                    Orientation="Horizontal"
+                    Spacing="2">
                     <StackPanel.Styles>
                         <Style Selector="Ellipse.dot">
                             <Setter Property="Width" Value="5" />
@@ -215,32 +219,30 @@
                 </StackPanel>
             </Border>
         </DataTemplate>
-        <TreeDataTemplate DataType="viewModels:FolderViewModel"
-                          ItemsSource="{Binding Apps}">
-            <Grid Margin="0"
-                  Background="Transparent"
-                  ColumnDefinitions="32,*,auto"
-                  RowDefinitions="Auto,*">
+        <TreeDataTemplate DataType="viewModels:FolderViewModel" ItemsSource="{Binding Apps}">
+            <Grid
+                Margin="0"
+                Background="Transparent"
+                ColumnDefinitions="32,*,auto"
+                RowDefinitions="Auto,*">
 
-                <Grid Grid.ColumnSpan="2"
-                      ColumnDefinitions="Auto,*,auto">
-                    <Image Width="24"
-                           Height="24"
-                           Margin="0 0 8 0"
-                           Source="{Binding ImageSource, Converter={controls:BitmapConverter}}"
-                           Stretch="Uniform" />
-                    <TextBlock Grid.Column="1"
-                               VerticalAlignment="Center"
-                               Text="{Binding Name}" />
+                <Grid Grid.ColumnSpan="2" ColumnDefinitions="Auto,*,auto">
+                    <Image
+                        Width="24"
+                        Height="24"
+                        Margin="0 0 8 0"
+                        Source="{Binding ImageSource, Converter={controls:BitmapConverter}}"
+                        Stretch="Uniform" />
+                    <TextBlock
+                        Grid.Column="1"
+                        VerticalAlignment="Center"
+                        Text="{Binding Name}" />
                 </Grid>
                 <Grid.ContextFlyout>
                     <MenuFlyout>
-                        <MenuItem Command="{Binding AddShortcutCommand}"
-                                  Header="Add shortcut" />
-                        <MenuItem Command="{Binding AddFolderCommand}"
-                                  Header="Add folder" />
-                        <MenuItem Command="{Binding AddSeparatorCommand}"
-                                  Header="Add separator" />
+                        <MenuItem Command="{Binding AddShortcutCommand}" Header="Add shortcut" />
+                        <MenuItem Command="{Binding AddFolderCommand}" Header="Add folder" />
+                        <MenuItem Command="{Binding AddSeparatorCommand}" Header="Add separator" />
                     </MenuFlyout>
 
                 </Grid.ContextFlyout>
@@ -250,104 +252,123 @@
     <Panel>
         <ExperimentalAcrylicBorder>
             <ExperimentalAcrylicBorder.Material>
-                <ExperimentalAcrylicMaterial BackgroundSource="Digger"
-                                             MaterialOpacity=".95"
-                                             TintColor="#050f1f"
-                                             TintOpacity="1" />
+                <ExperimentalAcrylicMaterial
+                    BackgroundSource="Digger"
+                    MaterialOpacity=".95"
+                    TintColor="#050f1f"
+                    TintOpacity="1" />
             </ExperimentalAcrylicBorder.Material>
         </ExperimentalAcrylicBorder>
 
         <Grid RowDefinitions="42,*,auto,auto">
-            <StackPanel Margin="10 0"
-                        IsHitTestVisible="False"
-                        Orientation="Horizontal">
-                <Image Width="22"
-                       Source="/Assets/icon.ico"
-                       Stretch="Uniform" />
-                <TextBlock Margin="8 0"
-                           VerticalAlignment="Center"
-                           Text="{Binding $parent[Window].Title}" />
+            <StackPanel
+                Margin="10 0"
+                IsHitTestVisible="False"
+                Orientation="Horizontal">
+                <Image
+                    Width="22"
+                    Source="/Assets/icon.ico"
+                    Stretch="Uniform" />
+                <TextBlock
+                    Margin="8 0"
+                    VerticalAlignment="Center"
+                    Text="{Binding $parent[Window].Title}" />
             </StackPanel>
 
-            <Grid Grid.Row="1"
-                  ColumnDefinitions="*,2*">
-                <Border Margin="10 0 10 10"
-                        Padding="10"
-                        Background="#2000"
-                        BorderBrush="#1fff"
-                        BorderThickness="1"
-                        CornerRadius="8">
+            <Grid Grid.Row="1" ColumnDefinitions="*,2*">
+                <Border
+                    Margin="10 0 10 10"
+                    Padding="10"
+                    Background="#2000"
+                    BorderBrush="#1fff"
+                    BorderThickness="1"
+                    CornerRadius="8">
 
-                    <TreeView Margin="10 0"
-                              Padding="0 0 10 0"
-                              Classes="NodesDragAndDrop"
-                              DataContext="{Binding Root}"
-                              ItemsSource="{Binding Apps}"
-                              PointerPressed="InputElement_OnPointerPressed"
-                              SelectedItem="{Binding #ItemDetails.Content, Mode=TwoWay}"
-                              SelectionMode="Single" />
+                    <TreeView
+                        Margin="10 0"
+                        Padding="0 0 10 0"
+                        Classes="NodesDragAndDrop"
+                        DataContext="{Binding Root}"
+                        ItemsSource="{Binding Apps}"
+                        PointerPressed="InputElement_OnPointerPressed"
+                        SelectedItem="{Binding #ItemDetails.Content, Mode=TwoWay}"
+                        SelectionMode="Single">
+                        <TreeView.ContextFlyout>
+                            <MenuFlyout>
+                                <MenuItem Command="{Binding AddShortcutCommand}" Header="Add shortcut" />
+                                <MenuItem Command="{Binding AddFolderCommand}" Header="Add folder" />
+                                <MenuItem Command="{Binding AddSeparatorCommand}" Header="Add separator" />
+                            </MenuFlyout>
+                        </TreeView.ContextFlyout>
+                    </TreeView>
 
                 </Border>
-                <Border Grid.Column="1"
-                        Margin="0 0 10 10"
-                        Background="#2000"
-                        BorderBrush="#1fff"
-                        BorderThickness="1"
-                        CornerRadius="8">
-                    <ContentControl x:Name="ItemDetails"
-                                    Content="{Binding SelectedItem, FallbackValue=Select an item}">
+                <Border
+                    Grid.Column="1"
+                    Margin="0 0 10 10"
+                    Background="#2000"
+                    BorderBrush="#1fff"
+                    BorderThickness="1"
+                    CornerRadius="8">
+                    <ContentControl x:Name="ItemDetails" Content="{Binding SelectedItem, FallbackValue=Select an item}">
                         <ContentControl.DataTemplates>
                             <DataTemplate DataType="viewModels:FolderViewModel">
-                                <Border HorizontalAlignment="Center"
-                                        VerticalAlignment="Center"
-                                        Background="#0000"
-                                        BorderBrush="#1fff"
-                                        BorderThickness="0"
-                                        BoxShadow="0 10 10 5 #0000"
-                                        CornerRadius="10">
-                                    <Grid Margin="4"
-                                          RowDefinitions="*,auto">
-                                        <Image Width="48"
-                                               Height="48"
-                                               Margin="56 48"
-                                               Source="{Binding ImageSource, Converter={controls:BitmapConverter}}"
-                                               Stretch="Uniform" />
-                                        <TextBox Grid.Row="1"
-                                                 Margin="10 0 10 10"
-                                                 VerticalContentAlignment="Center"
-                                                 BorderThickness="0"
-                                                 CornerRadius="100"
-                                                 Text="{Binding Name, Mode=TwoWay}"
-                                                 TextAlignment="Center" />
+                                <Border
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Background="#0000"
+                                    BorderBrush="#1fff"
+                                    BorderThickness="0"
+                                    BoxShadow="0 10 10 5 #0000"
+                                    CornerRadius="10">
+                                    <Grid Margin="4" RowDefinitions="*,auto">
+                                        <Image
+                                            Width="48"
+                                            Height="48"
+                                            Margin="56 48"
+                                            Source="{Binding ImageSource, Converter={controls:BitmapConverter}}"
+                                            Stretch="Uniform" />
+                                        <TextBox
+                                            Grid.Row="1"
+                                            Margin="10 0 10 10"
+                                            VerticalContentAlignment="Center"
+                                            BorderThickness="0"
+                                            CornerRadius="100"
+                                            Text="{Binding Name, Mode=TwoWay}"
+                                            TextAlignment="Center" />
                                     </Grid>
                                 </Border>
                             </DataTemplate>
                             <DataTemplate DataType="viewModels:ShortcutViewModel">
-                                <Border Margin="4"
-                                        Padding="12"
-                                        Background="#0fff"
-                                        CornerRadius="24">
-                                    <Grid ColumnDefinitions="Auto,*,Auto"
-                                          RowDefinitions="Auto,Auto">
-                                        <Image Width="32"
-                                               Height="32"
-                                               Margin="0 0 8 0"
-                                               Source="{Binding ImageSource, Converter={controls:BitmapConverter}}"
-                                               Stretch="Uniform" />
-                                        <TextBox Grid.Column="1"
-                                                 VerticalContentAlignment="Center"
-                                                 BorderThickness="0"
-                                                 CornerRadius="100"
-                                                 FontWeight="DemiBold"
-                                                 Text="{Binding Name, Mode=TwoWay}" />
-                                        <Separator Grid.ColumnSpan="2"
-                                                   Margin="0 0 0 -8"
-                                                   VerticalAlignment="Bottom"
-                                                   Background="#1fff" />
-                                        <StackPanel Grid.Row="1"
-                                                    Grid.Column="1"
-                                                    Grid.ColumnSpan="2"
-                                                    Margin="0 16 0 0">
+                                <Border
+                                    Margin="4"
+                                    Padding="12"
+                                    Background="#0fff"
+                                    CornerRadius="24">
+                                    <Grid ColumnDefinitions="Auto,*,Auto" RowDefinitions="Auto,Auto">
+                                        <Image
+                                            Width="32"
+                                            Height="32"
+                                            Margin="0 0 8 0"
+                                            Source="{Binding ImageSource, Converter={controls:BitmapConverter}}"
+                                            Stretch="Uniform" />
+                                        <TextBox
+                                            Grid.Column="1"
+                                            VerticalContentAlignment="Center"
+                                            BorderThickness="0"
+                                            CornerRadius="100"
+                                            FontWeight="DemiBold"
+                                            Text="{Binding Name, Mode=TwoWay}" />
+                                        <Separator
+                                            Grid.ColumnSpan="2"
+                                            Margin="0 0 0 -8"
+                                            VerticalAlignment="Bottom"
+                                            Background="#1fff" />
+                                        <StackPanel
+                                            Grid.Row="1"
+                                            Grid.Column="1"
+                                            Grid.ColumnSpan="2"
+                                            Margin="0 16 0 0">
                                             <StackPanel.Styles>
                                                 <Style Selector="Border">
                                                     <Setter Property="Padding" Value="4" />
@@ -382,70 +403,73 @@
                                             </StackPanel.Styles>
                                             <Border>
                                                 <Grid ColumnDefinitions="130,*,auto,auto">
-                                                    <TextBlock VerticalAlignment="Center"
-                                                               Text="Path" />
-                                                    <TextBox Grid.Column="1"
-                                                             HorizontalAlignment="Stretch"
-                                                             Text="{Binding Uri, Mode=TwoWay}" />
-                                                    <Button Grid.Column="2"
-                                                            Classes="browse"
-                                                            Command="{Binding BrowseFolderCommand}" />
-                                                    <Button Grid.Column="3"
-                                                            Classes="browse"
-                                                            Command="{Binding BrowseFileCommand}">
-                                                        <icons:MaterialIcon Margin="0"
-                                                                            Kind="File" />
+                                                    <TextBlock VerticalAlignment="Center" Text="Path" />
+                                                    <TextBox
+                                                        Grid.Column="1"
+                                                        HorizontalAlignment="Stretch"
+                                                        Text="{Binding Uri, Mode=TwoWay}" />
+                                                    <Button
+                                                        Grid.Column="2"
+                                                        Classes="browse"
+                                                        Command="{Binding BrowseFolderCommand}" />
+                                                    <Button
+                                                        Grid.Column="3"
+                                                        Classes="browse"
+                                                        Command="{Binding BrowseFileCommand}">
+                                                        <icons:MaterialIcon Margin="0" Kind="File" />
                                                     </Button>
                                                 </Grid>
                                             </Border>
 
                                             <Border>
                                                 <Grid ColumnDefinitions="130,*,auto">
-                                                    <TextBlock VerticalAlignment="Center"
-                                                               Text="Icon path" />
-                                                    <TextBox Grid.Column="1"
-                                                             HorizontalAlignment="Stretch"
-                                                             Text="{Binding IconPath, Mode=TwoWay}" />
-                                                    <Button Grid.Column="2"
-                                                            Classes="browse"
-                                                            Command="{Binding BrowseIconCommand}" />
+                                                    <TextBlock VerticalAlignment="Center" Text="Icon path" />
+                                                    <TextBox
+                                                        Grid.Column="1"
+                                                        HorizontalAlignment="Stretch"
+                                                        Text="{Binding IconPath, Mode=TwoWay}" />
+                                                    <Button
+                                                        Grid.Column="2"
+                                                        Classes="browse"
+                                                        Command="{Binding BrowseIconCommand}" />
                                                 </Grid>
                                             </Border>
                                             <Border>
                                                 <Grid ColumnDefinitions="130,*,auto">
-                                                    <TextBlock VerticalAlignment="Center"
-                                                               Text="Working dir" />
-                                                    <TextBox Grid.Column="1"
-                                                             HorizontalAlignment="Stretch"
-                                                             Text="{Binding WorkingDir, Mode=TwoWay}" />
+                                                    <TextBlock VerticalAlignment="Center" Text="Working dir" />
+                                                    <TextBox
+                                                        Grid.Column="1"
+                                                        HorizontalAlignment="Stretch"
+                                                        Text="{Binding WorkingDir, Mode=TwoWay}" />
 
-                                                    <Button Grid.Column="2"
-                                                            Classes="browse"
-                                                            Command="{Binding BrowseWorkingDirCommand}" />
+                                                    <Button
+                                                        Grid.Column="2"
+                                                        Classes="browse"
+                                                        Command="{Binding BrowseWorkingDirCommand}" />
 
-                                                </Grid>
-                                            </Border>
-
-                                            <Border>
-                                                <Grid ColumnDefinitions="130,*,auto">
-                                                    <TextBlock VerticalAlignment="Center"
-                                                               Text="Args" />
-                                                    <TextBox Grid.Column="1"
-                                                             HorizontalAlignment="Stretch"
-                                                             Text="{Binding Args, Mode=TwoWay}" />
                                                 </Grid>
                                             </Border>
 
                                             <Border>
                                                 <Grid ColumnDefinitions="130,*,auto">
-                                                    <TextBlock VerticalAlignment="Center"
-                                                               Text="Can run as admin" />
+                                                    <TextBlock VerticalAlignment="Center" Text="Args" />
+                                                    <TextBox
+                                                        Grid.Column="1"
+                                                        HorizontalAlignment="Stretch"
+                                                        Text="{Binding Args, Mode=TwoWay}" />
+                                                </Grid>
+                                            </Border>
 
-                                                    <CheckBox Grid.Column="1"
-                                                              Margin="0 5"
-                                                              HorizontalAlignment="Left"
-                                                              VerticalAlignment="Center"
-                                                              IsChecked="{Binding CanRunAsAdmin, Mode=TwoWay}" />
+                                            <Border>
+                                                <Grid ColumnDefinitions="130,*,auto">
+                                                    <TextBlock VerticalAlignment="Center" Text="Can run as admin" />
+
+                                                    <CheckBox
+                                                        Grid.Column="1"
+                                                        Margin="0 5"
+                                                        HorizontalAlignment="Left"
+                                                        VerticalAlignment="Center"
+                                                        IsChecked="{Binding CanRunAsAdmin, Mode=TwoWay}" />
                                                 </Grid>
                                             </Border>
                                         </StackPanel>
@@ -458,71 +482,76 @@
                 </Border>
             </Grid>
 
-            <Border Grid.Row="2"
-                    Margin="10 0 10 10"
-                    Padding="10"
-                    Background="#2000"
-                    BorderBrush="#1fff"
-                    BorderThickness="1"
-                    CornerRadius="8">
+            <Border
+                Grid.Row="2"
+                Margin="10 0 10 10"
+                Padding="10"
+                Background="#2000"
+                BorderBrush="#1fff"
+                BorderThickness="1"
+                CornerRadius="8">
                 <UniformGrid>
-                    <CheckBox MinHeight="0"
-                              Margin="0 0 0 5"
-                              VerticalAlignment="Center"
-                              Content="Start with Windows"
-                              IsChecked="{Binding StartWithWindows, Mode=TwoWay}" />
+                    <CheckBox
+                        MinHeight="0"
+                        Margin="0 0 0 5"
+                        VerticalAlignment="Center"
+                        Content="Start with Windows"
+                        IsChecked="{Binding StartWithWindows, Mode=TwoWay}" />
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition SharedSizeGroup="A" />
                             <ColumnDefinition Width="2*" />
                         </Grid.ColumnDefinitions>
-                        <TextBlock VerticalAlignment="Center"
-                                   Text="Hotkey behavior " />
-                        <ComboBox Grid.Column="1"
-                                  Height="{Binding #HotkeySetting.Bounds.Height}"
-                                  MinHeight="0"
-                                  Padding="5 0"
-                                  VerticalAlignment="Center"
-                                  Background="Transparent"
-                                  BorderThickness="0"
-                                  ItemsSource="{controls:EnumValues {x:Type core:TriggerMode}}"
-                                  SelectedValue="{Binding TriggerMode, Mode=TwoWay}" />
+                        <TextBlock VerticalAlignment="Center" Text="Hotkey behavior " />
+                        <ComboBox
+                            Grid.Column="1"
+                            Height="{Binding #HotkeySetting.Bounds.Height}"
+                            MinHeight="0"
+                            Padding="5 0"
+                            VerticalAlignment="Center"
+                            Background="Transparent"
+                            BorderThickness="0"
+                            ItemsSource="{controls:EnumValues {x:Type core:TriggerMode}}"
+                            SelectedValue="{Binding TriggerMode, Mode=TwoWay}" />
                     </Grid>
-                    <CheckBox MinHeight="0"
-                              VerticalAlignment="Center"
-                              Content="Close after launching"
-                              IsChecked="{Binding CloseAfterClick, Mode=TwoWay}" />
+                    <CheckBox
+                        MinHeight="0"
+                        VerticalAlignment="Center"
+                        Content="Close after launching"
+                        IsChecked="{Binding CloseAfterClick, Mode=TwoWay}" />
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition SharedSizeGroup="A" />
                             <ColumnDefinition Width="2*" />
                         </Grid.ColumnDefinitions>
-                        <TextBlock VerticalAlignment="Center"
-                                   Text="Display hotkey " />
-                        <controls:HotkeySettingControl Name="HotkeySetting"
-                                                       Grid.Column="1"
-                                                       MinHeight="0"
-                                                       HorizontalAlignment="Left"
-                                                       VerticalAlignment="Center"
-                                                       Value="{Binding HotKey, Mode=TwoWay}" />
+                        <TextBlock VerticalAlignment="Center" Text="Display hotkey " />
+                        <controls:HotkeySettingControl
+                            Name="HotkeySetting"
+                            Grid.Column="1"
+                            MinHeight="0"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Center"
+                            Value="{Binding HotKey, Mode=TwoWay}" />
                     </Grid>
                 </UniformGrid>
             </Border>
 
-            <Border Grid.Row="3"
-                    MinHeight="20"
-                    Padding="10"
-                    Background="#2000"
-                    BorderBrush="#1fff"
-                    BorderThickness="0 1 0 0"
-                    CornerRadius="0 0 8 8">
-                <Button MinWidth="200"
-                        HorizontalAlignment="Center"
-                        HorizontalContentAlignment="Center"
-                        Background="{StaticResource SystemAccentColor}"
-                        Command="{Binding SaveConfigCommand}"
-                        Content="Save and close"
-                        CornerRadius="100" />
+            <Border
+                Grid.Row="3"
+                MinHeight="20"
+                Padding="10"
+                Background="#2000"
+                BorderBrush="#1fff"
+                BorderThickness="0 1 0 0"
+                CornerRadius="0 0 8 8">
+                <Button
+                    MinWidth="200"
+                    HorizontalAlignment="Center"
+                    HorizontalContentAlignment="Center"
+                    Background="{StaticResource SystemAccentColor}"
+                    Command="{Binding SaveConfigCommand}"
+                    Content="Save and close"
+                    CornerRadius="100" />
             </Border>
         </Grid>
     </Panel>
