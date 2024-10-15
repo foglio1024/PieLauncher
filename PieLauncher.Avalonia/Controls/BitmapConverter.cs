@@ -2,10 +2,12 @@
 using Avalonia.Data.Converters;
 using Avalonia.Markup.Xaml;
 using Avalonia.Platform;
+
 using System;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Windows.Media.Imaging;
+
 using ABitmap = Avalonia.Media.Imaging.Bitmap;
 using PixelFormat = Avalonia.Platform.PixelFormat;
 
