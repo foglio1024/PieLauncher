@@ -2,6 +2,7 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.VisualTree;
 using Avalonia.Xaml.Interactions.DragAndDrop;
+
 using PieLauncher.Core.ViewModels;
 
 namespace PieLauncher.Avalonia.Views;
@@ -107,6 +108,15 @@ public partial class ConfigWindow : Window
     private void InputElement_OnPointerPressed(object? sender, PointerPressedEventArgs e)
     {
 
+    }
+
+    private void OnTreeViewKeyDown(object? sender, KeyEventArgs e)
+    {
+        if (e.Key is not Key.Delete) return;
+        if (e.Source is Control { DataContext: PieItemBase item and { Parent: FolderViewModel folder } })
+        {
+            folder.Apps.Remove(item);
+        }
     }
     // -------------------- Do all this stuff in attached behaviors -----------------------
     //

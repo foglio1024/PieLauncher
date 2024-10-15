@@ -290,6 +290,7 @@
                         Classes="NodesDragAndDrop"
                         DataContext="{Binding Root}"
                         ItemsSource="{Binding Apps}"
+                        KeyDown="OnTreeViewKeyDown"
                         PointerPressed="InputElement_OnPointerPressed"
                         SelectedItem="{Binding #ItemDetails.Content, Mode=TwoWay}"
                         SelectionMode="Single">
