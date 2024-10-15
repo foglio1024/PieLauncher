@@ -1,9 +1,12 @@
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Platform.Storage;
+
 using Nostrum.WinAPI;
+
 using PieLauncher.Core;
 using PieLauncher.Core.Services;
 using PieLauncher.Core.ViewModels;
+
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -11,6 +14,7 @@ using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
 
 namespace PieLauncher.Avalonia.Services;
@@ -52,6 +56,12 @@ public class StorageService : IStorageService
     public async Task SaveSettingsAsync(ISettings settings)
     {
         var file = JsonSerializer.Serialize(settings);
+
+        if (!Directory.Exists(Path.GetDirectoryName(IStorageService.ConfigFilePath)))
+        {
+            Directory.CreateDirectory(Path.GetDirectoryName(IStorageService.ConfigFilePath));
+        }
+
         await File.WriteAllTextAsync(IStorageService.ConfigFilePath, file);
     }
 
