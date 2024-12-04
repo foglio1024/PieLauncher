@@ -15,8 +15,6 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
-
 namespace PieLauncher.Avalonia.Services;
 
 public class StorageService : IStorageService
@@ -27,7 +25,7 @@ public class StorageService : IStorageService
     [
         new FilePickerFileType("Icons or assemblies")
         {
-            Patterns = [".jpg", ".png", ".gif", ".webp", ".bmp", ".ico", ".exe", ".dll"]
+            Patterns = ["*.jpg", "*.png", "*.gif", "*.webp", "*.bmp", "*.ico", "*.exe", "*.dll"]
         }
     ];
 
