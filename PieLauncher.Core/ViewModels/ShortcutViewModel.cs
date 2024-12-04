@@ -19,6 +19,7 @@ public partial class ShortcutViewModel : PieItemBase
     [NotifyPropertyChangedFor(nameof(IsAssembly))]
     [NotifyPropertyChangedFor(nameof(IsFolder))]
     [NotifyPropertyChangedFor(nameof(IsVbScript))]
+    [NotifyPropertyChangedFor(nameof(IsBatScript))]
     private string _uri = "";
 
     [ObservableProperty]
@@ -57,6 +58,9 @@ public partial class ShortcutViewModel : PieItemBase
     public bool IsVbScript => Uri.EndsWith(".vbs");
 
     [JsonIgnore]
+    public bool IsBatScript => Uri.EndsWith(".bat");
+
+    [JsonIgnore]
     public override ImageSource? ImageSource
     {
         get
@@ -80,55 +84,65 @@ public partial class ShortcutViewModel : PieItemBase
     [property: JsonIgnore]
     private void Launch(bool forceAdmin = false)
     {
-        try
+        var verb = forceAdmin
+            ? "runas"
+            : "";
+
+        var containingFolder = Path.GetDirectoryName((string?)Uri);
+        var wd = Directory.Exists(WorkingDir)
+            ? WorkingDir
+            : Directory.Exists(containingFolder)
+                ? containingFolder
+                : string.Empty;
+
+        ProcessStartInfo startInfo = new()
         {
-            var verb = forceAdmin
-                ? "runas"
-                : "";
+            Verb = verb
+        };
 
-            var containingFolder = Path.GetDirectoryName((string?)Uri);
-            var wd = Directory.Exists(WorkingDir)
-                ? WorkingDir
-                : Directory.Exists(containingFolder)
-                    ? containingFolder
-                    : string.Empty;
+        if (IsVbScript)
+        {
+            startInfo.FileName = "cscript";
+            startInfo.Arguments = $"\"{Uri}\" {Args}";
+            startInfo.WorkingDirectory = wd;
+            startInfo.WindowStyle = ProcessWindowStyle.Hidden;
+        }
+        else if (IsBatScript)
+        {
+            startInfo.FileName = "cmd";
+            startInfo.Arguments = $"/c \"{Uri}\" {Args}";
+            startInfo.WorkingDirectory = wd;
+        }
+        else
+        {
+            startInfo.FileName = Uri;
+            startInfo.Arguments = Args;
+            startInfo.UseShellExecute = true;
 
-            ProcessStartInfo startInfo = new()
+            if (IsAssembly && !string.IsNullOrWhiteSpace(wd))
             {
-                Verb = verb
-            };
-
-            if (IsVbScript)
-            {
-                startInfo.FileName = "cscript";
-                startInfo.Arguments = $"\"{Uri}\" {Args}";
                 startInfo.WorkingDirectory = wd;
-                startInfo.WindowStyle = ProcessWindowStyle.Hidden;
             }
-            else
+        }
+
+        Task.Run(() =>
+        {
+            try
             {
-                startInfo.FileName = Uri;
-                startInfo.Arguments = Args;
-                startInfo.UseShellExecute = true;
-
-                if (IsAssembly && !string.IsNullOrWhiteSpace(wd))
-                {
-                    startInfo.WorkingDirectory = wd;
-                }
+                Process.Start(startInfo);
             }
+            catch (Win32Exception /*w32Ex*/)
+            {
+                //if (w32Ex.NativeErrorCode == 0x000004C7) return;
+            }
+            catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show(ex.Message, "Pie launcher");
+            }
+        });
 
-            Task.Run(() => Process.Start(startInfo));
+        WeakReferenceMessenger.Default.Send(new ShortcutLaunchedMessage(this));
 
-            WeakReferenceMessenger.Default.Send(new ShortcutLaunchedMessage(this));
-        }
-        catch (Win32Exception /*w32Ex*/)
-        {
-            //if (w32Ex.NativeErrorCode == 0x000004C7) return;
-        }
-        catch (Exception ex)
-        {
-            System.Windows.MessageBox.Show(ex.Message, "Pie launcher");
-        }
     }
 
     [RelayCommand]
