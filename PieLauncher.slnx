@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="PieLauncher\PieLauncher.csproj" />
+  <Project Path="PieLauncher.Core\PieLauncher.Core.csproj" />
+  <Project Path="PieLauncher.Avalonia\PieLauncher.Avalonia.csproj" />
+</Solution>
