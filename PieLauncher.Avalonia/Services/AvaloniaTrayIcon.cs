@@ -6,6 +6,7 @@ using System;
 namespace PieLauncher.Avalonia;
 
 using global::Avalonia.Platform;
+using System.Reflection;
 
 internal class AvaloniaTrayIcon : ITrayIcon
 {
@@ -17,9 +18,10 @@ internal class AvaloniaTrayIcon : ITrayIcon
 
     public AvaloniaTrayIcon()
     {
+        var version = Assembly.GetEntryAssembly().GetName().Version;
         _trayIcon = new TrayIcon()
         {
-            ToolTipText = "PieLauncher",
+            ToolTipText = "PieLauncher " + version,
             Icon = new WindowIcon(AssetLoader.Open(new Uri("avares://PieLauncher.Avalonia/Assets/icon.ico"))),
             Command = new RelayCommand(() => Clicked?.Invoke()),
             Menu = 
